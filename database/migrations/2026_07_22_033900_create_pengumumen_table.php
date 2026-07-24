@@ -1,31 +1,61 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Http\Controllers;
 
-return new class extends Migration
+use App\Models\Pengumuman;
+use Illuminate\Http\Request;
+
+class PengumumanController extends Controller
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function index()
     {
-       Schema::create('pengumumen', function (Blueprint $table) {
-    $table->id();
-    $table->string('judul');
-    $table->text('isi');
-    $table->date('tanggal');
-    $table->boolean('aktif')->default(true);
-    $table->timestamps();
-});
+        $pengumuman = Pengumuman::latest()->get();
+        return view('pengumuman.index', compact('pengumuman'));
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function create()
     {
-        Schema::dropIfExists('pengumumen');
+        return view('pengumuman.create');
     }
-};
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'judul' => 'required',
+            'isi' => 'required',
+            'tanggal' => 'required|date',
+        ]);
+
+        Pengumuman::create($data);
+
+        return redirect()->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil ditambahkan');
+    }
+
+    public function edit(Pengumuman $pengumuman)
+    {
+        return view('pengumuman.edit', compact('pengumuman'));
+    }
+
+    public function update(Request $request, Pengumuman $pengumuman)
+    {
+        $data = $request->validate([
+            'judul' => 'required',
+            'isi' => 'required',
+            'tanggal' => 'required|date',
+        ]);
+
+        $pengumuman->update($data);
+
+        return redirect()->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil diubah');
+    }
+
+    public function destroy(Pengumuman $pengumuman)
+    {
+        $pengumuman->delete();
+
+        return redirect()->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil dihapus');
+    }
+}

@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengumuman;
+use App\Models\Pengurus;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalPengumuman = Pengumuman::count();
+        $totalPengurus = Pengurus::count();
 
-        return view('dashboard', compact('totalPengumuman'));
+        $totalPengumuman = 0;
+        $totalInventaris = 0;
+        $totalPresensi = 0;
+
+        return view('dashboard', compact(
+            'totalPengurus',
+            'totalPengumuman',
+            'totalInventaris',
+            'totalPresensi'
+        ));
     }
 }

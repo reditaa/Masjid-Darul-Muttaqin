@@ -7,59 +7,56 @@ use Illuminate\Http\Request;
 
 class PengumumanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $pengumuman = Pengumuman::latest()->get();
+
+        return view('pengumuman.index', compact('pengumuman'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('pengumuman.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'judul' => 'required',
+            'isi' => 'required',
+            'tanggal' => 'required|date',
+        ]);
+
+        Pengumuman::create($data);
+
+        return redirect()->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Pengumuman $pengumuman)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Pengumuman $pengumuman)
     {
-        //
+        return view('pengumuman.edit', compact('pengumuman'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Pengumuman $pengumuman)
     {
-        //
+        $data = $request->validate([
+            'judul' => 'required',
+            'isi' => 'required',
+            'tanggal' => 'required|date',
+        ]);
+
+        $pengumuman->update($data);
+
+        return redirect()->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil diubah');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Pengumuman $pengumuman)
     {
-        //
+        $pengumuman->delete();
+
+        return redirect()->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil dihapus');
     }
 }
