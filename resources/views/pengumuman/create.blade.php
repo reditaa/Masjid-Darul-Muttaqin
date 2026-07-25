@@ -11,7 +11,7 @@
 
             <div class="bg-white p-6 rounded shadow">
 
-                <form action="{{ route('pengumuman.store') }}" method="POST">
+                <form action="{{ route('pengumuman.store') }}" method="POST" enctype="multipart/form-data">
 
                     @csrf
 
@@ -40,6 +40,15 @@
                                name="tanggal"
                                class="w-full border rounded p-2"
                                required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label>Gambar</label>
+
+                        <input type="file"
+                               name="gambar"
+                               class="w-full border rounded p-2"
+                               accept="image/*">
                     </div>
 
                     <button

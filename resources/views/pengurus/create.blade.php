@@ -10,8 +10,17 @@
 
             <div class="bg-white shadow rounded-lg p-6">
 
-                <form action="{{ route('pengurus.store') }}" method="POST">
+                
+<form action="{{ route('pengurus.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+
+                    <div class="mb-4">
+    <label>Foto Pengurus</label>
+    <input type="file"
+           name="foto"
+           class="w-full border rounded p-2"
+           accept="image/*">
+</div> 
 
                     <div class="mb-4">
                         <label>Nama</label>

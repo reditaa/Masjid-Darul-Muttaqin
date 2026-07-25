@@ -4,12 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PengumumanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengumuman = Pengumuman::latest()->get();
+        $search = $request->search;
+
+        $pengumuman = Pengumuman::when($search, function ($query) use ($search) {
+                $query->where('judul', 'like', "%{$search}%")
+                      ->orWhere('isi', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(5)
+            ->withQueryString();
 
         return view('pengumuman.index', compact('pengumuman'));
     }
@@ -22,10 +31,18 @@ class PengumumanController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'judul' => 'required',
-            'isi' => 'required',
+            'judul'   => 'required',
+            'isi'     => 'required',
             'tanggal' => 'required|date',
+            'gambar'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
+        }
+
+        // Status otomatis aktif
+        $data['status'] = true;
 
         Pengumuman::create($data);
 
@@ -41,10 +58,20 @@ class PengumumanController extends Controller
     public function update(Request $request, Pengumuman $pengumuman)
     {
         $data = $request->validate([
-            'judul' => 'required',
-            'isi' => 'required',
+            'judul'   => 'required',
+            'isi'     => 'required',
             'tanggal' => 'required|date',
+            'gambar'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        if ($request->hasFile('gambar')) {
+
+            if ($pengumuman->gambar) {
+                Storage::disk('public')->delete($pengumuman->gambar);
+            }
+
+            $data['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
+        }
 
         $pengumuman->update($data);
 
@@ -54,9 +81,21 @@ class PengumumanController extends Controller
 
     public function destroy(Pengumuman $pengumuman)
     {
+        if ($pengumuman->gambar) {
+            Storage::disk('public')->delete($pengumuman->gambar);
+        }
+
         $pengumuman->delete();
 
         return redirect()->route('pengumuman.index')
             ->with('success', 'Pengumuman berhasil dihapus');
     }
+    public function toggleStatus(Pengumuman $pengumuman)
+{
+    $pengumuman->status = !$pengumuman->status;
+    $pengumuman->save();
+
+    return redirect()->route('pengumuman.index')
+        ->with('success', 'Status pengumuman berhasil diperbarui.');
+}
 }

@@ -12,5 +12,7 @@ class Pengumuman extends Model
         'judul',
         'isi',
         'tanggal',
+        'gambar',
+        'status',
     ];
 }

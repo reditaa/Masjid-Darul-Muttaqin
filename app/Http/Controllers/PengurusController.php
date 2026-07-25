@@ -4,14 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengurus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PengurusController extends Controller
 {
-    public function index()
-    {
-        $pengurus = Pengurus::latest()->get();
-        return view('pengurus.index', compact('pengurus'));
-    }
+   public function index(Request $request)
+{
+    $search = $request->search;
+
+    $pengurus = Pengurus::when($search, function ($query) use ($search) {
+            $query->where('nama', 'like', "%{$search}%")
+                  ->orWhere('jabatan', 'like', "%{$search}%");
+        })
+        ->latest()
+        ->paginate(10);
+
+    return view('pengurus.index', compact('pengurus', 'search'));
+}
 
     public function create()
     {
@@ -21,6 +30,7 @@ class PengurusController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'nama' => 'required',
             'jabatan' => 'required',
             'no_hp' => 'required',
@@ -29,6 +39,10 @@ class PengurusController extends Controller
             'selesai_jabatan' => 'required',
             'status' => 'required',
         ]);
+
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('pengurus', 'public');
+        }
 
         Pengurus::create($data);
 
@@ -44,6 +58,7 @@ class PengurusController extends Controller
     public function update(Request $request, Pengurus $penguru)
     {
         $data = $request->validate([
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'nama' => 'required',
             'jabatan' => 'required',
             'no_hp' => 'required',
@@ -53,6 +68,17 @@ class PengurusController extends Controller
             'status' => 'required',
         ]);
 
+        if ($request->hasFile('foto')) {
+
+            // Hapus foto lama
+            if ($penguru->foto && Storage::disk('public')->exists($penguru->foto)) {
+                Storage::disk('public')->delete($penguru->foto);
+            }
+
+            // Simpan foto baru
+            $data['foto'] = $request->file('foto')->store('pengurus', 'public');
+        }
+
         $penguru->update($data);
 
         return redirect()->route('pengurus.index')
@@ -61,6 +87,11 @@ class PengurusController extends Controller
 
     public function destroy(Pengurus $penguru)
     {
+        // Hapus foto
+        if ($penguru->foto && Storage::disk('public')->exists($penguru->foto)) {
+            Storage::disk('public')->delete($penguru->foto);
+        }
+
         $penguru->delete();
 
         return redirect()->route('pengurus.index')
