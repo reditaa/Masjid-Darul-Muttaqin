@@ -27,18 +27,13 @@
             📢 Pengumuman
         </a>
 
-        <a href="#"
-           class="block px-6 py-3 hover:bg-green-700">
-            🕌 Jadwal Imam
+        <a href="{{ route('jadwal-adzan.index') }}"
+           class="block px-6 py-3 hover:bg-green-700 {{ request()->routeIs('jadwal-adzan.*') ? 'bg-green-900' : '' }}">
+            📢 Jadwal Adzan
         </a>
 
-        <a href="#"
-           class="block px-6 py-3 hover:bg-green-700">
-            🎤 Jadwal Muazin
-        </a>
-
-        <a href="#"
-           class="block px-6 py-3 hover:bg-green-700">
+        <a href="{{ route('jadwal-piket.index') }}"
+           class="block px-6 py-3 hover:bg-green-700 {{ request()->routeIs('jadwal-piket.*') ? 'bg-green-900' : '' }}">
             🧹 Jadwal Piket
         </a>
 

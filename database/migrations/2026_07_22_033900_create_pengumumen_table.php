@@ -1,61 +1,35 @@
 <?php
 
-namespace App\Http\Controllers;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use App\Models\Pengumuman;
-use Illuminate\Http\Request;
-
-class PengumumanController extends Controller
+return new class extends Migration
 {
-    public function index()
+    public function up(): void
     {
-        $pengumuman = Pengumuman::latest()->get();
-        return view('pengumuman.index', compact('pengumuman'));
+        Schema::create('pengumuman', function (Blueprint $table) {
+
+            $table->id();
+
+            $table->string('judul');
+
+            $table->text('isi');
+
+            $table->date('tanggal');
+
+            $table->string('gambar')->nullable();
+
+            $table->enum('status', ['Aktif', 'Nonaktif'])
+                  ->default('Aktif');
+
+            $table->timestamps();
+
+        });
     }
 
-    public function create()
+    public function down(): void
     {
-        return view('pengumuman.create');
+        Schema::dropIfExists('pengumuman');
     }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'judul' => 'required',
-            'isi' => 'required',
-            'tanggal' => 'required|date',
-        ]);
-
-        Pengumuman::create($data);
-
-        return redirect()->route('pengumuman.index')
-            ->with('success', 'Pengumuman berhasil ditambahkan');
-    }
-
-    public function edit(Pengumuman $pengumuman)
-    {
-        return view('pengumuman.edit', compact('pengumuman'));
-    }
-
-    public function update(Request $request, Pengumuman $pengumuman)
-    {
-        $data = $request->validate([
-            'judul' => 'required',
-            'isi' => 'required',
-            'tanggal' => 'required|date',
-        ]);
-
-        $pengumuman->update($data);
-
-        return redirect()->route('pengumuman.index')
-            ->with('success', 'Pengumuman berhasil diubah');
-    }
-
-    public function destroy(Pengumuman $pengumuman)
-    {
-        $pengumuman->delete();
-
-        return redirect()->route('pengumuman.index')
-            ->with('success', 'Pengumuman berhasil dihapus');
-    }
-}
+};

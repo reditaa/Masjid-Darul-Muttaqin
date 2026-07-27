@@ -8,22 +8,24 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pengurus', function (Blueprint $table) {
+        Schema::create('siswas', function (Blueprint $table) {
             $table->id();
-            $table->string('foto')->nullable();
+            $table->string('nis')->unique();
             $table->string('nama');
-            $table->string('jabatan');
-            $table->string('no_hp');
+            $table->string('kelas');
+            $table->string('email')->nullable()->unique();
+            $table->string('password');
+            $table->string('no_hp')->nullable();
             $table->text('alamat')->nullable();
-            $table->date('mulai_jabatan');
-            $table->date('selesai_jabatan');
+            $table->string('foto')->nullable();
             $table->enum('status', ['Aktif', 'Nonaktif'])->default('Aktif');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('pengurus');
+        Schema::dropIfExists('siswas');
     }
 };

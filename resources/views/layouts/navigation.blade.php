@@ -11,11 +11,11 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
+                <div class="hidden sm:flex sm:items-center ml-6">
+    <h2 class="text-xl font-semibold text-gray-700">
+        Dashboard Admin
+    </h2>
+</div>
             </div>
 
             <!-- Settings Dropdown -->
