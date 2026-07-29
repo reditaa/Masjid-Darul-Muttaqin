@@ -2,7 +2,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800">
-            Data Jadwal Piket
+            Data Jadwal Imam
         </h2>
     </x-slot>
 
@@ -21,11 +21,11 @@
                 <div class="flex justify-between items-center mb-5">
 
                     <h3 class="text-xl font-bold">
-                        Daftar Jadwal Piket
+                        Daftar Jadwal Imam
                     </h3>
 
-                    <a href="{{ route('jadwal-piket.create') }}"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
+                    <a href="{{ route('jadwal-imam.create') }}"
+                       class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
 
                         Tambah Jadwal
 
@@ -41,8 +41,9 @@
 
                             <th class="border p-2">No</th>
                             <th class="border p-2">Tanggal</th>
-                            <th class="border p-2">Koordinator</th>
-                            <th class="border p-2">Anggota 1</th>
+                            <th class="border p-2">Imam</th>
+                            <th class="border p-2">Jenis</th>
+                            <th class="border p-2">Jabatan</th>
                             <th class="border p-2">Keterangan</th>
                             <th class="border p-2">Aksi</th>
 
@@ -52,7 +53,7 @@
 
                     <tbody>
 
-                        @forelse($jadwalPiket as $item)
+                        @forelse($jadwalImam as $item)
 
                             <tr>
 
@@ -66,23 +67,19 @@
 
                                 <td class="border p-2">
 
-                                    {{ $item->koordinator->nama }}
-                                    <br>
+                                    {{ $item->imam->nama }}
 
-                                    <small class="text-gray-500">
-                                        {{ $item->koordinator->anggota->jenis }}
-                                    </small>
+                                </td>
+
+                                <td class="border p-2 text-center">
+
+                                    {{ $item->imam->anggota->jenis }}
 
                                 </td>
 
                                 <td class="border p-2">
 
-                                    {{ $item->anggota1->nama }}
-                                    <br>
-
-                                    <small class="text-gray-500">
-                                        {{ $item->anggota1->anggota->jenis }}
-                                    </small>
+                                    {{ $item->imam->jabatan }}
 
                                 </td>
 
@@ -94,17 +91,16 @@
 
                                 <td class="border p-2 text-center">
 
-                                    <a href="{{ route('jadwal-piket.edit',$item->id) }}"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                                    <a href="{{ route('jadwal-imam.edit',$item->id) }}"
+                                       class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
 
                                         Edit
 
                                     </a>
 
-                                    <form
-                                        action="{{ route('jadwal-piket.destroy',$item->id) }}"
-                                        method="POST"
-                                        class="inline">
+                                    <form action="{{ route('jadwal-imam.destroy',$item->id) }}"
+                                          method="POST"
+                                          class="inline">
 
                                         @csrf
                                         @method('DELETE')
@@ -127,9 +123,9 @@
 
                             <tr>
 
-                                <td colspan="6" class="text-center p-5">
+                                <td colspan="7" class="text-center p-5">
 
-                                    Belum ada data jadwal piket.
+                                    Belum ada data jadwal imam.
 
                                 </td>
 
@@ -143,7 +139,7 @@
 
                 <div class="mt-5">
 
-                    {{ $jadwalPiket->links() }}
+                    {{ $jadwalImam->links() }}
 
                 </div>
 

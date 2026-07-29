@@ -1,78 +1,129 @@
 <x-app-layout>
+
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800">
             Tambah Pengurus DKM
         </h2>
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto">
 
             <div class="bg-white shadow rounded-lg p-6">
 
-                
-<form action="{{ route('pengurus.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('pengurus.store') }}" method="POST">
                     @csrf
 
                     <div class="mb-4">
-    <label>Foto Pengurus</label>
-    <input type="file"
-           name="foto"
-           class="w-full border rounded p-2"
-           accept="image/*">
-</div> 
+                        <label class="block mb-2 font-semibold">
+                            Pilih Anggota
+                        </label>
 
-                    <div class="mb-4">
-                        <label>Nama</label>
-                        <input type="text" name="nama" class="w-full border rounded p-2" required>
-                    </div>
+                        <select name="anggota_id"
+                            class="w-full border rounded p-2"
+                            required>
 
-                    <div class="mb-4">
-                        <label>Jabatan</label>
-                        <input type="text" name="jabatan" class="w-full border rounded p-2" required>
-                    </div>
+                            <option value="">
+                                -- Pilih Anggota --
+                            </option>
 
-                    <div class="mb-4">
-                        <label>No HP</label>
-                        <input type="text" name="no_hp" class="w-full border rounded p-2" required>
-                    </div>
+                           @foreach($anggota as $item)
 
-                    <div class="mb-4">
-                        <label>Alamat</label>
-                        <textarea name="alamat" class="w-full border rounded p-2"></textarea>
-                    </div>
+    <option value="{{ $item->id }}">
 
-                    <div class="mb-4">
-                        <label>Mulai Jabatan</label>
-                        <input type="date" name="mulai_jabatan" class="w-full border rounded p-2" required>
-                    </div>
+        @if($item->jenis == 'Guru')
 
-                    <div class="mb-4">
-                        <label>Selesai Jabatan</label>
-                        <input type="date" name="selesai_jabatan" class="w-full border rounded p-2" required>
-                    </div>
+            {{ $item->guru->nama }}
+            | {{ $item->guru->nip }}
+            | Guru
 
-                    <div class="mb-4">
-                        <label>Status</label>
+        @else
 
-                        <select name="status" class="w-full border rounded p-2">
+            {{ $item->siswa->nama }}
+            | {{ $item->siswa->nis }}
+            | Siswa
 
-                            <option value="Aktif">Aktif</option>
-                            <option value="Nonaktif">Nonaktif</option>
+        @endif
+
+    </option>
+
+@endforeach
 
                         </select>
                     </div>
 
-                    <button class="bg-blue-600 text-white px-5 py-2 rounded">
-                        Simpan
-                    </button>
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">
+                            Jabatan
+                        </label>
 
-                    <a href="{{ route('pengurus.index') }}"
-                       class="bg-gray-500 text-white px-5 py-2 rounded">
+                        <input
+                            type="text"
+                            name="jabatan"
+                            class="w-full border rounded p-2"
+                            required>
+                    </div>
 
-                        Kembali
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">
+                            Mulai Jabatan
+                        </label>
 
-                    </a>
+                        <input
+                            type="date"
+                            name="mulai_jabatan"
+                            class="w-full border rounded p-2"
+                            required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">
+                            Selesai Jabatan
+                        </label>
+
+                        <input
+                            type="date"
+                            name="selesai_jabatan"
+                            class="w-full border rounded p-2">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">
+                            Status
+                        </label>
+
+                        <select
+                            name="status"
+                            class="w-full border rounded p-2">
+
+                            <option value="Aktif">
+                                Aktif
+                            </option>
+
+                            <option value="Nonaktif">
+                                Nonaktif
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2">
+
+                        <button
+                            class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
+
+                            Simpan
+
+                        </button>
+
+                        <a href="{{ route('pengurus.index') }}"
+                            class="bg-gray-500 text-white px-5 py-2 rounded hover:bg-gray-600">
+
+                            Kembali
+
+                        </a>
+
+                    </div>
 
                 </form>
 

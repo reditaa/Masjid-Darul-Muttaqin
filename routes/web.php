@@ -8,10 +8,21 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\JadwalAdzanController;
 use App\Http\Controllers\JadwalPiketController;
 use App\Http\Controllers\Auth\AnggotaLoginController;
+use App\Http\Controllers\GuruController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\JadwalImamController;
+// 1. TAMBAHKAN IMPORT LANDING CONTROLLER DI SINI
+use App\Http\Controllers\LandingController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+|--------------------------------------------------------------------------
+| LANDING PAGE (HALAMAN UTAMA)
+|--------------------------------------------------------------------------
+*/
+// 2. UBAH ROUTE '/' YANG LAMA MENJADI INI:
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -43,9 +54,15 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::resource('guru', GuruController::class);
+
     Route::resource('pengurus', PengurusController::class);
 
     Route::resource('pengumuman', PengumumanController::class);
+
+    Route::resource('siswa', SiswaController::class);
+
+    Route::resource('anggota', AnggotaController::class);
 
     Route::patch('/pengumuman/{pengumuman}/toggle-status',
         [PengumumanController::class, 'toggleStatus'])
@@ -54,6 +71,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('jadwal-adzan', JadwalAdzanController::class);
 
     Route::resource('jadwal-piket', JadwalPiketController::class);
+
+    Route::resource('jadwal-imam', JadwalImamController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');

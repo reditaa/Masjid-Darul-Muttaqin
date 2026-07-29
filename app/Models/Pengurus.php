@@ -9,15 +9,17 @@ class Pengurus extends Model
     protected $table = 'pengurus';
 
     protected $fillable = [
-        'foto',
-        'nama',
+        'anggota_id',
         'jabatan',
-        'no_hp',
-        'alamat',
         'mulai_jabatan',
         'selesai_jabatan',
         'status',
     ];
+
+    public function anggota()
+    {
+        return $this->belongsTo(Anggota::class);
+    }
 
     public function jadwalKoordinator()
     {
@@ -38,4 +40,36 @@ class Pengurus extends Model
     {
         return $this->hasMany(JadwalPiket::class, 'anggota3_id');
     }
+
+    public function getNamaAttribute()
+    {
+        return $this->anggota?->nama;
+    }
+
+    public function getFotoAttribute()
+    {
+        if (!$this->anggota) {
+            return null;
+        }
+
+        return $this->anggota->jenis == 'Guru'
+            ? $this->anggota->guru?->foto
+            : $this->anggota->siswa?->foto;
+    }
+
+    public function getNipNisAttribute()
+    {
+        if (!$this->anggota) {
+            return '-';
+        }
+
+        return $this->anggota->jenis == 'Guru'
+            ? $this->anggota->guru?->nip
+            : $this->anggota->siswa?->nis;
+    }
+
+    public function jadwalImam()
+{
+    return $this->hasMany(JadwalImam::class, 'imam_id');
+}
 }

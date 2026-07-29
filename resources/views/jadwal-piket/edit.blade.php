@@ -1,103 +1,130 @@
 <x-app-layout>
 
-<x-slot name="header">
-<h2 class="font-semibold text-xl">
-Edit Jadwal Piket
-</h2>
-</x-slot>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800">
+            Edit Jadwal Piket
+        </h2>
+    </x-slot>
 
-<div class="py-6">
-<div class="max-w-4xl mx-auto">
+    <div class="py-8">
 
-<div class="bg-white p-6 rounded shadow">
+        <div class="max-w-5xl mx-auto">
 
-<form action="{{ route('jadwal-piket.update',$jadwalPiket->id) }}" method="POST">
+            <div class="bg-white shadow rounded-lg p-6">
 
-@csrf
-@method('PUT')
+                <form action="{{ route('jadwal-piket.update',$jadwalPiket->id) }}" method="POST">
 
-<div class="mb-4">
+                    @csrf
+                    @method('PUT')
 
-<label>Tanggal</label>
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">
+                            Tanggal
+                        </label>
 
-<input
-type="date"
-name="tanggal"
-value="{{ $jadwalPiket->tanggal }}"
-class="w-full border rounded p-2">
+                        <input
+                            type="date"
+                            name="tanggal"
+                            value="{{ old('tanggal',$jadwalPiket->tanggal) }}"
+                            class="w-full border rounded p-2"
+                            required>
+                    </div>
 
-</div>
+                    <div class="mb-4">
 
-<div class="mb-4">
+                        <label class="block mb-2 font-semibold">
+                            Koordinator
+                        </label>
 
-<label>Koordinator</label>
+                        <select
+                            name="koordinator_id"
+                            class="w-full border rounded p-2"
+                            required>
 
-<select
-name="koordinator_id"
-class="w-full border rounded p-2">
+                            @foreach($pengurus as $item)
 
-@foreach($pengurus as $p)
+                                <option
+                                    value="{{ $item->id }}"
+                                    {{ $jadwalPiket->koordinator_id == $item->id ? 'selected' : '' }}>
 
-<option
-value="{{ $p->id }}"
-{{ $jadwalPiket->koordinator_id == $p->id ? 'selected' : '' }}>
-{{ $p->nama }}
-</option>
+                                    {{ $item->nama }}
+                                    ({{ $item->anggota->jenis }})
+                                    - {{ $item->jabatan }}
 
-@endforeach
+                                </option>
 
-</select>
+                            @endforeach
 
-</div>
+                        </select>
 
-<div class="mb-4">
+                    </div>
 
-<label>Anggota</label>
+                    <div class="mb-4">
 
-<select
-name="anggota1_id"
-class="w-full border rounded p-2">
+                        <label class="block mb-2 font-semibold">
+                            Anggota 1
+                        </label>
 
-@foreach($pengurus as $p)
+                        <select
+                            name="anggota1_id"
+                            class="w-full border rounded p-2"
+                            required>
 
-<option
-value="{{ $p->id }}"
-{{ $jadwalPiket->anggota1_id == $p->id ? 'selected' : '' }}>
-{{ $p->nama }}
-</option>
+                            @foreach($pengurus as $item)
 
-@endforeach
+                                <option
+                                    value="{{ $item->id }}"
+                                    {{ $jadwalPiket->anggota1_id == $item->id ? 'selected' : '' }}>
 
-</select>
+                                    {{ $item->nama }}
+                                    ({{ $item->anggota->jenis }})
+                                    - {{ $item->jabatan }}
 
-</div>
+                                </option>
 
-<div class="mb-4">
+                            @endforeach
 
-<label>Keterangan</label>
+                        </select>
 
-<textarea
-name="keterangan"
-class="w-full border rounded p-2">{{ $jadwalPiket->keterangan }}</textarea>
+                    </div>
 
-</div>
+                    <div class="mb-4">
 
-<button
-class="bg-blue-600 text-white px-5 py-2 rounded">
-Update
-</button>
+                        <label class="block mb-2 font-semibold">
+                            Keterangan
+                        </label>
 
-<a
-href="{{ route('jadwal-piket.index') }}"
-class="bg-gray-500 text-white px-5 py-2 rounded">
-Kembali
-</a>
+                        <textarea
+                            name="keterangan"
+                            class="w-full border rounded p-2"
+                            rows="4">{{ old('keterangan',$jadwalPiket->keterangan) }}</textarea>
 
-</form>
+                    </div>
 
-</div>
+                    <div class="flex gap-2">
 
-</div>
-</div>
+                        <button
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
+
+                            Update
+
+                        </button>
+
+                        <a href="{{ route('jadwal-piket.index') }}"
+                           class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded">
+
+                            Kembali
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </x-app-layout>

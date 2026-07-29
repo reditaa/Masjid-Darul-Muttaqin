@@ -2,32 +2,31 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800">
-            Data Jadwal Piket
+            Data Anggota
         </h2>
     </x-slot>
 
     <div class="py-8">
-
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if(session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
+                <div class="mb-4 bg-green-100 border border-green-300 text-green-700 p-3 rounded">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="bg-white shadow rounded-lg p-6">
+            <div class="bg-white rounded shadow p-6">
 
-                <div class="flex justify-between items-center mb-5">
+                <div class="flex justify-between mb-5">
 
                     <h3 class="text-xl font-bold">
-                        Daftar Jadwal Piket
+                        Daftar Anggota
                     </h3>
 
-                    <a href="{{ route('jadwal-piket.create') }}"
+                    <a href="{{ route('anggota.create') }}"
                         class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
 
-                        Tambah Jadwal
+                        Tambah Anggota
 
                     </a>
 
@@ -35,15 +34,15 @@
 
                 <table class="w-full border">
 
-                    <thead class="bg-gray-100">
+                    <thead class="bg-gray-200">
 
                         <tr>
 
                             <th class="border p-2">No</th>
-                            <th class="border p-2">Tanggal</th>
-                            <th class="border p-2">Koordinator</th>
-                            <th class="border p-2">Anggota 1</th>
-                            <th class="border p-2">Keterangan</th>
+                            <th class="border p-2">Jenis</th>
+                            <th class="border p-2">Nama</th>
+                            <th class="border p-2">NIP / NIS</th>
+                            <th class="border p-2">Status</th>
                             <th class="border p-2">Aksi</th>
 
                         </tr>
@@ -52,7 +51,7 @@
 
                     <tbody>
 
-                        @forelse($jadwalPiket as $item)
+                        @forelse($anggotas as $anggota)
 
                             <tr>
 
@@ -60,41 +59,31 @@
                                     {{ $loop->iteration }}
                                 </td>
 
-                                <td class="border p-2 text-center">
-                                    {{ $item->tanggal }}
+                                <td class="border p-2">
+                                    {{ $anggota->jenis }}
+                                </td>
+
+                                <td class="border p-2">
+                                    {{ $anggota->nama }}
                                 </td>
 
                                 <td class="border p-2">
 
-                                    {{ $item->koordinator->nama }}
-                                    <br>
-
-                                    <small class="text-gray-500">
-                                        {{ $item->koordinator->anggota->jenis }}
-                                    </small>
-
-                                </td>
-
-                                <td class="border p-2">
-
-                                    {{ $item->anggota1->nama }}
-                                    <br>
-
-                                    <small class="text-gray-500">
-                                        {{ $item->anggota1->anggota->jenis }}
-                                    </small>
+                                    @if($anggota->jenis == 'Guru')
+                                        {{ $anggota->guru->nip }}
+                                    @else
+                                        {{ $anggota->siswa->nis }}
+                                    @endif
 
                                 </td>
 
                                 <td class="border p-2">
-
-                                    {{ $item->keterangan ?? '-' }}
-
+                                    {{ $anggota->status }}
                                 </td>
 
                                 <td class="border p-2 text-center">
 
-                                    <a href="{{ route('jadwal-piket.edit',$item->id) }}"
+                                    <a href="{{ route('anggota.edit',$anggota->id) }}"
                                         class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
 
                                         Edit
@@ -102,7 +91,7 @@
                                     </a>
 
                                     <form
-                                        action="{{ route('jadwal-piket.destroy',$item->id) }}"
+                                        action="{{ route('anggota.destroy',$anggota->id) }}"
                                         method="POST"
                                         class="inline">
 
@@ -110,7 +99,7 @@
                                         @method('DELETE')
 
                                         <button
-                                            onclick="return confirm('Yakin ingin menghapus data ini?')"
+                                            onclick="return confirm('Yakin ingin menghapus?')"
                                             class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
 
                                             Hapus
@@ -127,9 +116,9 @@
 
                             <tr>
 
-                                <td colspan="6" class="text-center p-5">
+                                <td colspan="6" class="text-center py-5">
 
-                                    Belum ada data jadwal piket.
+                                    Belum ada data anggota.
 
                                 </td>
 
@@ -142,15 +131,12 @@
                 </table>
 
                 <div class="mt-5">
-
-                    {{ $jadwalPiket->links() }}
-
+                    {{ $anggotas->links() }}
                 </div>
 
             </div>
 
         </div>
-
     </div>
 
 </x-app-layout>

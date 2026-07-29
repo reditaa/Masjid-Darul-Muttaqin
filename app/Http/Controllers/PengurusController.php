@@ -3,98 +3,85 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengurus;
+use App\Models\Anggota;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class PengurusController extends Controller
 {
-   public function index(Request $request)
-{
-    $search = $request->search;
+    public function index(Request $request)
+    {
+        $search = $request->search;
 
-    $pengurus = Pengurus::when($search, function ($query) use ($search) {
-            $query->where('nama', 'like', "%{$search}%")
-                  ->orWhere('jabatan', 'like', "%{$search}%");
+        $pengurus = Pengurus::with([
+            'anggota.guru',
+            'anggota.siswa'
+        ])
+        ->when($search, function ($query) use ($search) {
+            $query->where('jabatan', 'like', "%{$search}%");
         })
         ->latest()
         ->paginate(10);
 
-    return view('pengurus.index', compact('pengurus', 'search'));
-}
+        return view('pengurus.index', compact('pengurus', 'search'));
+    }
 
     public function create()
     {
-        return view('pengurus.create');
+        $anggota = Anggota::with(['guru','siswa'])->get();
+
+        return view('pengurus.create', compact('anggota'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'nama' => 'required',
+        $request->validate([
+            'anggota_id' => 'required|exists:anggotas,id',
             'jabatan' => 'required',
-            'no_hp' => 'required',
-            'alamat' => 'nullable',
-            'mulai_jabatan' => 'required',
-            'selesai_jabatan' => 'required',
+            'mulai_jabatan' => 'required|date',
+            'selesai_jabatan' => 'nullable|date',
             'status' => 'required',
         ]);
 
-        if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('pengurus', 'public');
-        }
+        Pengurus::create($request->all());
 
-        Pengurus::create($data);
-
-        return redirect()->route('pengurus.index')
-            ->with('success', 'Data berhasil ditambahkan');
+        return redirect()
+            ->route('pengurus.index')
+            ->with('success','Data berhasil ditambahkan.');
     }
 
     public function edit(Pengurus $penguru)
     {
-        return view('pengurus.edit', compact('penguru'));
+        $anggota = Anggota::with(['guru','siswa'])->get();
+
+        return view('pengurus.edit', compact(
+            'penguru',
+            'anggota'
+        ));
     }
 
     public function update(Request $request, Pengurus $penguru)
     {
-        $data = $request->validate([
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'nama' => 'required',
+        $request->validate([
+            'anggota_id' => 'required|exists:anggotas,id',
             'jabatan' => 'required',
-            'no_hp' => 'required',
-            'alamat' => 'nullable',
-            'mulai_jabatan' => 'required',
-            'selesai_jabatan' => 'required',
+            'mulai_jabatan' => 'required|date',
+            'selesai_jabatan' => 'nullable|date',
             'status' => 'required',
         ]);
 
-        if ($request->hasFile('foto')) {
+        $penguru->update($request->all());
 
-            // Hapus foto lama
-            if ($penguru->foto && Storage::disk('public')->exists($penguru->foto)) {
-                Storage::disk('public')->delete($penguru->foto);
-            }
-
-            // Simpan foto baru
-            $data['foto'] = $request->file('foto')->store('pengurus', 'public');
-        }
-
-        $penguru->update($data);
-
-        return redirect()->route('pengurus.index')
-            ->with('success', 'Data berhasil diubah');
+        return redirect()
+            ->route('pengurus.index')
+            ->with('success','Data berhasil diubah.');
     }
 
     public function destroy(Pengurus $penguru)
     {
-        // Hapus foto
-        if ($penguru->foto && Storage::disk('public')->exists($penguru->foto)) {
-            Storage::disk('public')->delete($penguru->foto);
-        }
-
         $penguru->delete();
 
-        return redirect()->route('pengurus.index')
-            ->with('success', 'Data berhasil dihapus');
+        return redirect()
+            ->route('pengurus.index')
+            ->with('success','Data berhasil dihapus.');
     }
 }

@@ -2,7 +2,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800">
-            Data Pengurus DKM
+            Data Siswa
         </h2>
     </x-slot>
 
@@ -20,34 +20,38 @@
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-5">
 
                     <h3 class="text-xl font-bold">
-                        Daftar Pengurus
+                        Daftar Siswa
                     </h3>
 
-                    <form action="{{ route('pengurus.index') }}" method="GET" class="flex gap-2">
+                    <form action="{{ route('siswa.index') }}" method="GET" class="flex gap-2">
 
                         <input
                             type="text"
                             name="search"
                             value="{{ request('search') }}"
-                            placeholder="Cari jabatan..."
+                            placeholder="Cari nama atau kelas..."
                             class="border rounded px-4 py-2">
 
                         <button
                             class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+
                             Cari
+
                         </button>
 
-                        <a href="{{ route('pengurus.index') }}"
+                        <a href="{{ route('siswa.index') }}"
                             class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+
                             Reset
+
                         </a>
 
                     </form>
 
-                    <a href="{{ route('pengurus.create') }}"
+                    <a href="{{ route('siswa.create') }}"
                         class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
 
-                        Tambah Pengurus
+                        Tambah Siswa
 
                     </a>
 
@@ -61,12 +65,11 @@
 
                             <th class="border p-2">No</th>
                             <th class="border p-2">Foto</th>
+                            <th class="border p-2">NIS</th>
                             <th class="border p-2">Nama</th>
-                            <th class="border p-2">NIP / NIS</th>
-                            <th class="border p-2">Jenis</th>
-                            <th class="border p-2">Jabatan</th>
-                            <th class="border p-2">Mulai</th>
-                            <th class="border p-2">Selesai</th>
+                            <th class="border p-2">Kelas</th>
+                            <th class="border p-2">Email</th>
+                            <th class="border p-2">No HP</th>
                             <th class="border p-2">Status</th>
                             <th class="border p-2">Aksi</th>
 
@@ -76,7 +79,7 @@
 
                     <tbody>
 
-                        @forelse($pengurus as $item)
+                        @forelse($siswas as $item)
 
                             <tr>
 
@@ -84,107 +87,55 @@
                                     {{ $loop->iteration }}
                                 </td>
 
-                                {{-- FOTO --}}
                                 <td class="border p-2 text-center">
 
-                                    @if($item->anggota->jenis == 'Guru')
+                                    @if($item->foto)
 
-                                        @if($item->anggota->guru && $item->anggota->guru->foto)
-
-                                            <img src="{{ asset('storage/'.$item->anggota->guru->foto) }}"
-                                                class="w-14 h-14 rounded-full object-cover mx-auto">
-
-                                        @else
-
-                                            -
-
-                                        @endif
+                                        <img src="{{ asset('storage/'.$item->foto) }}"
+                                            class="w-14 h-14 rounded-full object-cover mx-auto">
 
                                     @else
 
-                                        @if($item->anggota->siswa && $item->anggota->siswa->foto)
-
-                                            <img src="{{ asset('storage/'.$item->anggota->siswa->foto) }}"
-                                                class="w-14 h-14 rounded-full object-cover mx-auto">
-
-                                        @else
-
-                                            -
-
-                                        @endif
+                                        -
 
                                     @endif
 
                                 </td>
 
-                                {{-- NAMA --}}
                                 <td class="border p-2">
-
-                                    {{ $item->anggota->nama }}
-
+                                    {{ $item->nis }}
                                 </td>
 
-                                {{-- NIP / NIS --}}
-                                <td class="border p-2 text-center">
-
-                                    @if($item->anggota->jenis == 'Guru')
-
-                                        {{ $item->anggota->guru->nip }}
-
-                                    @else
-
-                                        {{ $item->anggota->siswa->nis }}
-
-                                    @endif
-
-                                </td>
-
-                                {{-- JENIS --}}
-                                <td class="border p-2 text-center">
-
-                                    {{ $item->anggota->jenis }}
-
-                                </td>
-
-                                {{-- JABATAN --}}
                                 <td class="border p-2">
-
-                                    {{ $item->jabatan }}
-
+                                    {{ $item->nama }}
                                 </td>
 
-                                {{-- MULAI --}}
-                                <td class="border p-2 text-center">
-
-                                    {{ $item->mulai_jabatan }}
-
+                                <td class="border p-2">
+                                    {{ $item->kelas }}
                                 </td>
 
-                                {{-- SELESAI --}}
-                                <td class="border p-2 text-center">
-
-                                    {{ $item->selesai_jabatan ?? '-' }}
-
+                                <td class="border p-2">
+                                    {{ $item->email }}
                                 </td>
 
-                                {{-- STATUS --}}
-                                <td class="border p-2 text-center">
+                                <td class="border p-2">
+                                    {{ $item->no_hp }}
+                                </td>
 
+                                <td class="border p-2 text-center">
                                     {{ $item->status }}
-
                                 </td>
 
-                                {{-- AKSI --}}
                                 <td class="border p-2 text-center">
 
-                                    <a href="{{ route('pengurus.edit',$item->id) }}"
+                                    <a href="{{ route('siswa.edit',$item->id) }}"
                                         class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
 
                                         Edit
 
                                     </a>
 
-                                    <form action="{{ route('pengurus.destroy',$item->id) }}"
+                                    <form action="{{ route('siswa.destroy',$item->id) }}"
                                         method="POST"
                                         class="inline">
 
@@ -192,7 +143,7 @@
                                         @method('DELETE')
 
                                         <button
-                                            onclick="return confirm('Yakin ingin menghapus data ini?')"
+                                            onclick="return confirm('Yakin ingin menghapus?')"
                                             class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
 
                                             Hapus
@@ -209,9 +160,9 @@
 
                             <tr>
 
-                                <td colspan="10" class="text-center p-5">
+                                <td colspan="9" class="text-center p-5">
 
-                                    Belum ada data pengurus.
+                                    Belum ada data siswa.
 
                                 </td>
 
@@ -225,7 +176,7 @@
 
                 <div class="mt-5">
 
-                    {{ $pengurus->withQueryString()->links() }}
+                    {{ $siswas->withQueryString()->links() }}
 
                 </div>
 
