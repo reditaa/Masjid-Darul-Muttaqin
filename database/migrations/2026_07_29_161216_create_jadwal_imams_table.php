@@ -12,19 +12,47 @@ return new class extends Migration
 
             $table->id();
 
-            $table->date('tanggal');
 
-            $table->foreignId('imam_id')
+            // Hari jadwal imam
+            $table->enum('hari', [
+                'Senin',
+                'Selasa',
+                'Rabu',
+                'Kamis'
+            ]);
+
+
+            // Waktu sholat
+            $table->enum('waktu_sholat', [
+                'Dzuhur',
+                'Ashar'
+            ]);
+
+
+            // 3 pilihan imam dari Pengurus DKM
+            $table->foreignId('imam_1')
                 ->constrained('pengurus')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            $table->text('keterangan')->nullable();
+
+            $table->foreignId('imam_2')
+                ->constrained('pengurus')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+
+
+            $table->foreignId('imam_3')
+                ->constrained('pengurus')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+
 
             $table->timestamps();
 
         });
     }
+
 
     public function down(): void
     {

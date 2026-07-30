@@ -1,237 +1,215 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Data Pengurus DKM
+        <h2 class="font-semibold text-2xl text-gray-800">
+            Pengurus DKM
         </h2>
     </x-slot>
 
+
     <div class="py-8">
+
         <div class="max-w-7xl mx-auto">
 
-            @if(session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <div class="bg-white shadow rounded-xl p-6">
 
-            <div class="bg-white shadow rounded-lg p-6">
 
-                <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-5">
+                <div class="flex justify-between items-center mb-6">
 
                     <h3 class="text-xl font-bold">
-                        Daftar Pengurus
+                        Daftar Pengurus Masjid
                     </h3>
 
-                    <form action="{{ route('pengurus.index') }}" method="GET" class="flex gap-2">
-
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            placeholder="Cari jabatan..."
-                            class="border rounded px-4 py-2">
-
-                        <button
-                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
-                            Cari
-                        </button>
-
-                        <a href="{{ route('pengurus.index') }}"
-                            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
-                            Reset
-                        </a>
-
-                    </form>
 
                     <a href="{{ route('pengurus.create') }}"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
+                        class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700">
 
-                        Tambah Pengurus
+                        + Tambah Pengurus
 
                     </a>
 
                 </div>
 
-                <table class="w-full border">
 
-                    <thead class="bg-gray-100">
 
-                        <tr>
+                <form method="GET" class="mb-6">
 
-                            <th class="border p-2">No</th>
-                            <th class="border p-2">Foto</th>
-                            <th class="border p-2">Nama</th>
-                            <th class="border p-2">NIP / NIS</th>
-                            <th class="border p-2">Jenis</th>
-                            <th class="border p-2">Jabatan</th>
-                            <th class="border p-2">Mulai</th>
-                            <th class="border p-2">Selesai</th>
-                            <th class="border p-2">Status</th>
-                            <th class="border p-2">Aksi</th>
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ $search }}"
+                        placeholder="Cari jabatan..."
+                        class="border rounded-lg p-2 w-full md:w-1/3">
 
-                        </tr>
+                </form>
 
-                    </thead>
 
-                    <tbody>
 
-                        @forelse($pengurus as $item)
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                            <tr>
 
-                                <td class="border p-2 text-center">
-                                    {{ $loop->iteration }}
-                                </td>
+                    @forelse($pengurus as $item)
 
-                                {{-- FOTO --}}
-                                <td class="border p-2 text-center">
 
-                                    @if($item->anggota->jenis == 'Guru')
+                    <div class="border rounded-xl shadow-sm p-5">
 
-                                        @if($item->anggota->guru && $item->anggota->guru->foto)
 
-                                            <img src="{{ asset('storage/'.$item->anggota->guru->foto) }}"
-                                                class="w-14 h-14 rounded-full object-cover mx-auto">
+                        <div class="flex items-center gap-4">
 
-                                        @else
 
-                                            -
+                            <img
+                                src="{{ $item->foto 
+                                    ? asset('storage/'.$item->foto) 
+                                    : asset('images/default-user.png') }}"
+                                class="w-20 h-20 rounded-full object-cover border">
 
-                                        @endif
 
-                                    @else
+                            <div>
 
-                                        @if($item->anggota->siswa && $item->anggota->siswa->foto)
+                                <h4 class="font-bold text-lg">
+                                    {{ $item->nama }}
+                                </h4>
 
-                                            <img src="{{ asset('storage/'.$item->anggota->siswa->foto) }}"
-                                                class="w-14 h-14 rounded-full object-cover mx-auto">
 
-                                        @else
+                                <p class="text-sm text-gray-600">
 
-                                            -
+                                    @if($item->anggota?->jenis == 'Guru')
 
-                                        @endif
+                                        NIP:
+                                        {{ $item->nip_nis }}
+
+                                    @elseif($item->anggota?->jenis == 'Siswa')
+
+                                        NIS:
+                                        {{ $item->nip_nis }}
 
                                     @endif
 
-                                </td>
+                                </p>
 
-                                {{-- NAMA --}}
-                                <td class="border p-2">
 
-                                    {{ $item->anggota->nama }}
+                            </div>
 
-                                </td>
 
-                                {{-- NIP / NIS --}}
-                                <td class="border p-2 text-center">
+                        </div>
 
-                                    @if($item->anggota->jenis == 'Guru')
 
-                                        {{ $item->anggota->guru->nip }}
 
-                                    @else
+                        <div class="mt-5">
 
-                                        {{ $item->anggota->siswa->nis }}
 
-                                    @endif
+                            <p>
+                                <span class="font-semibold">
+                                    Jabatan:
+                                </span>
 
-                                </td>
+                                {{ $item->jabatan }}
+                            </p>
 
-                                {{-- JENIS --}}
-                                <td class="border p-2 text-center">
 
-                                    {{ $item->anggota->jenis }}
 
-                                </td>
+                            <p>
+                                <span class="font-semibold">
+                                    Mulai:
+                                </span>
 
-                                {{-- JABATAN --}}
-                                <td class="border p-2">
+                                {{ $item->mulai_jabatan }}
+                            </p>
 
-                                    {{ $item->jabatan }}
 
-                                </td>
 
-                                {{-- MULAI --}}
-                                <td class="border p-2 text-center">
+                            <p class="mt-2">
 
-                                    {{ $item->mulai_jabatan }}
 
-                                </td>
+                                @if($item->status == 'Aktif')
 
-                                {{-- SELESAI --}}
-                                <td class="border p-2 text-center">
+                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                                        Aktif
+                                    </span>
 
-                                    {{ $item->selesai_jabatan ?? '-' }}
+                                @else
 
-                                </td>
+                                    <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                                        Nonaktif
+                                    </span>
 
-                                {{-- STATUS --}}
-                                <td class="border p-2 text-center">
+                                @endif
 
-                                    {{ $item->status }}
 
-                                </td>
+                            </p>
 
-                                {{-- AKSI --}}
-                                <td class="border p-2 text-center">
 
-                                    <a href="{{ route('pengurus.edit',$item->id) }}"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                        </div>
 
-                                        Edit
 
-                                    </a>
 
-                                    <form action="{{ route('pengurus.destroy',$item->id) }}"
-                                        method="POST"
-                                        class="inline">
 
-                                        @csrf
-                                        @method('DELETE')
+                        <div class="mt-5 flex gap-2">
 
-                                        <button
-                                            onclick="return confirm('Yakin ingin menghapus data ini?')"
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
 
-                                            Hapus
+                            <a href="{{ route('pengurus.edit',$item->id) }}"
+                                class="bg-yellow-500 text-white px-4 py-2 rounded-lg">
 
-                                        </button>
+                                Edit
 
-                                    </form>
+                            </a>
 
-                                </td>
 
-                            </tr>
+                            <form action="{{ route('pengurus.destroy',$item->id) }}"
+                                method="POST">
 
-                        @empty
+                                @csrf
+                                @method('DELETE')
 
-                            <tr>
 
-                                <td colspan="10" class="text-center p-5">
+                                <button
+                                    onclick="return confirm('Hapus data pengurus?')"
+                                    class="bg-red-600 text-white px-4 py-2 rounded-lg">
 
-                                    Belum ada data pengurus.
+                                    Hapus
 
-                                </td>
+                                </button>
 
-                            </tr>
 
-                        @endforelse
+                            </form>
 
-                    </tbody>
 
-                </table>
+                        </div>
 
-                <div class="mt-5">
 
-                    {{ $pengurus->withQueryString()->links() }}
+
+                    </div>
+
+
+                    @empty
+
+
+                    <div class="col-span-3 text-center text-gray-500">
+
+                        Belum ada data pengurus.
+
+                    </div>
+
+
+                    @endforelse
+
 
                 </div>
+
+
+
+                <div class="mt-6">
+
+                    {{ $pengurus->links() }}
+
+                </div>
+
 
             </div>
 
         </div>
+
     </div>
+
 
 </x-app-layout>

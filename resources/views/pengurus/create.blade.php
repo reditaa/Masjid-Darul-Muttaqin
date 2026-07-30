@@ -6,108 +6,171 @@
         </h2>
     </x-slot>
 
+
     <div class="py-8">
+
         <div class="max-w-5xl mx-auto">
 
             <div class="bg-white shadow rounded-lg p-6">
 
+
+                @if ($errors->any())
+                    <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+
                 <form action="{{ route('pengurus.store') }}" method="POST">
+
                     @csrf
 
+
                     <div class="mb-4">
+
                         <label class="block mb-2 font-semibold">
                             Pilih Anggota
                         </label>
+
 
                         <select name="anggota_id"
                             class="w-full border rounded p-2"
                             required>
 
+
                             <option value="">
                                 -- Pilih Anggota --
                             </option>
 
-                           @foreach($anggota as $item)
 
-    <option value="{{ $item->id }}">
+                            @foreach($anggota as $item)
 
-        @if($item->jenis == 'Guru')
+                                <option value="{{ $item->id }}">
 
-            {{ $item->guru->nama }}
-            | {{ $item->guru->nip }}
-            | Guru
 
-        @else
+                                    @if($item->jenis == 'Guru')
 
-            {{ $item->siswa->nama }}
-            | {{ $item->siswa->nis }}
-            | Siswa
+                                        Guru -
+                                        {{ $item->guru?->nama }}
+                                        |
+                                        NIP:
+                                        {{ $item->guru?->nip }}
 
-        @endif
 
-    </option>
+                                    @elseif($item->jenis == 'Siswa')
 
-@endforeach
+                                        Siswa -
+                                        {{ $item->siswa?->nama }}
+                                        |
+                                        NIS:
+                                        {{ $item->siswa?->nis }}
+
+
+                                    @else
+
+                                        Data tidak ditemukan
+
+
+                                    @endif
+
+
+                                </option>
+
+
+                            @endforeach
+
 
                         </select>
+
+
                     </div>
 
+
+
                     <div class="mb-4">
+
                         <label class="block mb-2 font-semibold">
                             Jabatan
                         </label>
+
 
                         <input
                             type="text"
                             name="jabatan"
                             class="w-full border rounded p-2"
                             required>
+
                     </div>
 
+
+
                     <div class="mb-4">
+
                         <label class="block mb-2 font-semibold">
                             Mulai Jabatan
                         </label>
+
 
                         <input
                             type="date"
                             name="mulai_jabatan"
                             class="w-full border rounded p-2"
                             required>
+
                     </div>
 
+
+
                     <div class="mb-4">
+
                         <label class="block mb-2 font-semibold">
                             Selesai Jabatan
                         </label>
+
 
                         <input
                             type="date"
                             name="selesai_jabatan"
                             class="w-full border rounded p-2">
+
                     </div>
 
+
+
                     <div class="mb-4">
+
                         <label class="block mb-2 font-semibold">
                             Status
                         </label>
+
 
                         <select
                             name="status"
                             class="w-full border rounded p-2">
 
+
                             <option value="Aktif">
                                 Aktif
                             </option>
+
 
                             <option value="Nonaktif">
                                 Nonaktif
                             </option>
 
+
                         </select>
+
                     </div>
 
+
+
                     <div class="flex gap-2">
+
 
                         <button
                             class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
@@ -116,6 +179,8 @@
 
                         </button>
 
+
+
                         <a href="{{ route('pengurus.index') }}"
                             class="bg-gray-500 text-white px-5 py-2 rounded hover:bg-gray-600">
 
@@ -123,13 +188,18 @@
 
                         </a>
 
+
                     </div>
 
+
                 </form>
+
 
             </div>
 
         </div>
+
     </div>
+
 
 </x-app-layout>

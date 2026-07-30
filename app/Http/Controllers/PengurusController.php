@@ -25,13 +25,14 @@ class PengurusController extends Controller
         return view('pengurus.index', compact('pengurus', 'search'));
     }
 
-    public function create()
-    {
-        $anggota = Anggota::with(['guru','siswa'])->get();
+public function create()
+{
+    $anggota = Anggota::with(['guru','siswa'])->get();
 
-        return view('pengurus.create', compact('anggota'));
-    }
-
+    return view('pengurus.create', [
+        'anggota' => $anggota
+    ]);
+}
     public function store(Request $request)
     {
         $request->validate([
@@ -42,12 +43,21 @@ class PengurusController extends Controller
             'status' => 'required',
         ]);
 
-        Pengurus::create($request->all());
+
+        Pengurus::create([
+            'anggota_id' => $request->anggota_id,
+            'jabatan' => $request->jabatan,
+            'mulai_jabatan' => $request->mulai_jabatan,
+            'selesai_jabatan' => $request->selesai_jabatan,
+            'status' => $request->status,
+        ]);
+
 
         return redirect()
             ->route('pengurus.index')
-            ->with('success','Data berhasil ditambahkan.');
+            ->with('success','Data pengurus berhasil ditambahkan.');
     }
+
 
     public function edit(Pengurus $penguru)
     {
@@ -59,6 +69,7 @@ class PengurusController extends Controller
         ));
     }
 
+
     public function update(Request $request, Pengurus $penguru)
     {
         $request->validate([
@@ -69,12 +80,21 @@ class PengurusController extends Controller
             'status' => 'required',
         ]);
 
-        $penguru->update($request->all());
+
+        $penguru->update([
+            'anggota_id' => $request->anggota_id,
+            'jabatan' => $request->jabatan,
+            'mulai_jabatan' => $request->mulai_jabatan,
+            'selesai_jabatan' => $request->selesai_jabatan,
+            'status' => $request->status,
+        ]);
+
 
         return redirect()
             ->route('pengurus.index')
-            ->with('success','Data berhasil diubah.');
+            ->with('success','Data pengurus berhasil diubah.');
     }
+
 
     public function destroy(Pengurus $penguru)
     {
@@ -82,6 +102,6 @@ class PengurusController extends Controller
 
         return redirect()
             ->route('pengurus.index')
-            ->with('success','Data berhasil dihapus.');
+            ->with('success','Data pengurus berhasil dihapus.');
     }
 }

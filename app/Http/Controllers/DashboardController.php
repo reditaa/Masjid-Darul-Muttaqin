@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengurus;
 use App\Models\Pengumuman;
+use App\Models\JadwalImam;
 
 class DashboardController extends Controller
 {
@@ -12,8 +13,10 @@ class DashboardController extends Controller
         $totalPengurus = Pengurus::count();
         $totalPengumuman = Pengumuman::count();
 
-        // Sementara masih 0 karena modul belum dibuat
-        $totalImam = 0;
+        // Hitung jumlah jadwal imam
+        $totalImam = JadwalImam::count();
+
+        // Modul lain sementara
         $totalMuazin = 0;
         $totalInventaris = 0;
         $totalPiket = 0;

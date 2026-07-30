@@ -12,6 +12,16 @@
                 <form action="{{ route('guru.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
+                    @if ($errors->any())
+    <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                         <div>

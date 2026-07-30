@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
+use App\Models\Anggota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -24,10 +25,12 @@ class SiswaController extends Controller
         return view('siswa.index', compact('siswas', 'search'));
     }
 
+
     public function create()
     {
         return view('siswa.create');
     }
+
 
     public function store(Request $request)
     {
@@ -43,22 +46,38 @@ class SiswaController extends Controller
             'status'   => 'required',
         ]);
 
+
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('siswa', 'public');
         }
 
+
         $data['password'] = Hash::make($data['password']);
 
-        Siswa::create($data);
 
-        return redirect()->route('siswa.index')
+        // Simpan siswa
+        $siswa = Siswa::create($data);
+
+
+        // Otomatis buat anggota
+        Anggota::create([
+            'siswa_id' => $siswa->id,
+            'jenis' => 'Siswa',
+            'status' => 'Aktif',
+        ]);
+
+
+        return redirect()
+            ->route('siswa.index')
             ->with('success', 'Data siswa berhasil ditambahkan.');
     }
+
 
     public function edit(Siswa $siswa)
     {
         return view('siswa.edit', compact('siswa'));
     }
+
 
     public function update(Request $request, Siswa $siswa)
     {
@@ -73,13 +92,16 @@ class SiswaController extends Controller
             'status'   => 'required',
         ]);
 
+
         if ($request->filled('password')) {
+
             $request->validate([
                 'password' => 'min:6'
             ]);
 
             $data['password'] = Hash::make($request->password);
         }
+
 
         if ($request->hasFile('foto')) {
 
@@ -90,11 +112,15 @@ class SiswaController extends Controller
             $data['foto'] = $request->file('foto')->store('siswa', 'public');
         }
 
+
         $siswa->update($data);
 
-        return redirect()->route('siswa.index')
+
+        return redirect()
+            ->route('siswa.index')
             ->with('success', 'Data siswa berhasil diubah.');
     }
+
 
     public function destroy(Siswa $siswa)
     {
@@ -102,9 +128,16 @@ class SiswaController extends Controller
             Storage::disk('public')->delete($siswa->foto);
         }
 
+
+        // hapus anggota terkait
+        Anggota::where('siswa_id', $siswa->id)->delete();
+
+
         $siswa->delete();
 
-        return redirect()->route('siswa.index')
+
+        return redirect()
+            ->route('siswa.index')
             ->with('success', 'Data siswa berhasil dihapus.');
     }
 }

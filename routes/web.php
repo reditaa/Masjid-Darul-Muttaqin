@@ -64,6 +64,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('anggota', AnggotaController::class);
 
+    Route::resource('jadwal-imam', JadwalImamController::class);
+
     Route::patch('/pengumuman/{pengumuman}/toggle-status',
         [PengumumanController::class, 'toggleStatus'])
         ->name('pengumuman.toggleStatus');
