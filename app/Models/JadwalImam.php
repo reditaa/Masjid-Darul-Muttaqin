@@ -6,35 +6,83 @@ use Illuminate\Database\Eloquent\Model;
 
 class JadwalImam extends Model
 {
+
     protected $table = 'jadwal_imams';
 
 
     protected $fillable = [
+
         'hari',
-        'waktu_sholat',
-        'imam_1',
-        'imam_2',
-        'imam_3',
+
+        'dzuhur_imam_1',
+        'dzuhur_imam_2',
+        'dzuhur_imam_3',
+
+        'ashar_imam_1',
+        'ashar_imam_2',
+        'ashar_imam_3',
+
     ];
 
 
-    // Imam pertama
-    public function imam1()
+
+    // DZUHUR
+
+    public function dzuhurImam1()
     {
-        return $this->belongsTo(Pengurus::class, 'imam_1');
+        return $this->belongsTo(
+            Pengurus::class,
+            'dzuhur_imam_1'
+        );
     }
 
 
-    // Imam kedua
-    public function imam2()
+    public function dzuhurImam2()
     {
-        return $this->belongsTo(Pengurus::class, 'imam_2');
+        return $this->belongsTo(
+            Pengurus::class,
+            'dzuhur_imam_2'
+        );
     }
 
 
-    // Imam ketiga
-    public function imam3()
+    public function dzuhurImam3()
     {
-        return $this->belongsTo(Pengurus::class, 'imam_3');
+        return $this->belongsTo(
+            Pengurus::class,
+            'dzuhur_imam_3'
+        );
     }
+
+
+
+    // ASHAR
+
+    public function asharImam1()
+    {
+        return $this->belongsTo(
+            Pengurus::class,
+            'ashar_imam_1'
+        );
+    }
+
+
+    public function asharImam2()
+    {
+        return $this->belongsTo(
+            Pengurus::class,
+            'ashar_imam_2'
+        );
+    }
+
+
+    public function asharImam3()
+    {
+        return $this->belongsTo(
+            Pengurus::class,
+            'ashar_imam_3'
+        );
+    }
+
+
 }

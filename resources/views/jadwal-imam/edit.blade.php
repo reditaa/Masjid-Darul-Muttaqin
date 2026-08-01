@@ -1,105 +1,236 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Edit Jadwal Imam
-        </h2>
-    </x-slot>
+<div class="py-6">
 
-    <div class="py-8">
+<div class="max-w-5xl mx-auto">
 
-        <div class="max-w-5xl mx-auto">
+<div class="bg-white shadow rounded-lg p-6">
 
-            <div class="bg-white shadow rounded-lg p-6">
 
-                <form
-                    action="{{ route('jadwal-imam.update',$jadwalImam->id) }}"
-                    method="POST">
+<h2 class="text-xl font-bold mb-5">
+Edit Jadwal Imam
+</h2>
 
-                    @csrf
-                    @method('PUT')
 
-                    <div class="mb-4">
 
-                        <label class="block mb-2 font-semibold">
-                            Tanggal
-                        </label>
+<form action="{{ route('jadwal-imam.update',$jadwalImam->id) }}" method="POST">
 
-                        <input
-                            type="date"
-                            name="tanggal"
-                            value="{{ old('tanggal',$jadwalImam->tanggal) }}"
-                            class="w-full border rounded p-2"
-                            required>
+@csrf
+@method('PUT')
 
-                    </div>
 
-                    <div class="mb-4">
 
-                        <label class="block mb-2 font-semibold">
-                            Pilih Imam
-                        </label>
+<div class="mb-4">
 
-                        <select
-                            name="imam_id"
-                            class="w-full border rounded p-2"
-                            required>
+<label class="font-semibold">
+Hari
+</label>
 
-                            @foreach($pengurus as $item)
 
-                                <option
-                                    value="{{ $item->id }}"
-                                    {{ $jadwalImam->imam_id == $item->id ? 'selected' : '' }}>
+<select 
+name="hari"
+id="hari"
+class="w-full border rounded p-2">
 
-                                    {{ $item->nama }}
-                                    ({{ $item->anggota->jenis }})
-                                    - {{ $item->jabatan }}
 
-                                </option>
+<option value="Senin"
+{{ $jadwalImam->hari == 'Senin' ? 'selected':'' }}>
+Senin
+</option>
 
-                            @endforeach
 
-                        </select>
+<option value="Selasa"
+{{ $jadwalImam->hari == 'Selasa' ? 'selected':'' }}>
+Selasa
+</option>
 
-                    </div>
 
-                    <div class="mb-4">
+<option value="Rabu"
+{{ $jadwalImam->hari == 'Rabu' ? 'selected':'' }}>
+Rabu
+</option>
 
-                        <label class="block mb-2 font-semibold">
-                            Keterangan
-                        </label>
 
-                        <textarea
-                            name="keterangan"
-                            rows="4"
-                            class="w-full border rounded p-2">{{ old('keterangan',$jadwalImam->keterangan) }}</textarea>
+<option value="Kamis"
+{{ $jadwalImam->hari == 'Kamis' ? 'selected':'' }}>
+Kamis
+</option>
 
-                    </div>
 
-                    <div class="flex gap-2">
+</select>
 
-                        <button
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
 
-                            Update
+</div>
 
-                        </button>
 
-                        <a href="{{ route('jadwal-imam.index') }}"
-                           class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded">
 
-                            Kembali
 
-                        </a>
 
-                    </div>
 
-                </form>
 
-            </div>
+<h3 class="font-bold mt-5 mb-3">
+Jadwal Dzuhur
+</h3>
 
-        </div>
 
-    </div>
+
+@for($i = 1; $i <= 3; $i++)
+
+
+<div class="mb-3">
+
+
+<label>
+Imam Dzuhur {{ $i }}
+</label>
+
+
+
+<select
+name="dzuhur_imam_{{ $i }}"
+class="w-full border rounded p-2">
+
+
+<option value="">
+-- Pilih Imam --
+</option>
+
+
+
+@foreach($pengurus as $p)
+
+
+<option 
+value="{{ $p->id }}"
+
+
+@if(
+optional($jadwalImam->{'dzuhurImam'.$i})->id == $p->id
+)
+
+selected
+
+@endif
+
+>
+
+
+{{ $p->anggota->nama ?? 'Tanpa Nama' }}
+
+
+</option>
+
+
+@endforeach
+
+
+</select>
+
+
+</div>
+
+
+@endfor
+
+
+
+
+
+
+
+<h3 class="font-bold mt-5 mb-3">
+Jadwal Ashar
+</h3>
+
+
+
+
+@for($i = 1; $i <= 3; $i++)
+
+
+<div class="mb-3">
+
+
+<label>
+Imam Ashar {{ $i }}
+</label>
+
+
+
+<select
+name="ashar_imam_{{ $i }}"
+class="w-full border rounded p-2">
+
+
+
+<option value="">
+-- Pilih Imam --
+</option>
+
+
+
+@foreach($pengurus as $p)
+
+
+<option
+
+value="{{ $p->id }}"
+
+
+@if(
+optional($jadwalImam->{'asharImam'.$i})->id == $p->id
+)
+
+selected
+
+@endif
+
+>
+
+
+{{ $p->anggota->nama ?? 'Tanpa Nama' }}
+
+
+</option>
+
+
+@endforeach
+
+
+</select>
+
+
+</div>
+
+
+@endfor
+
+
+
+
+
+
+<button
+
+class="bg-blue-600 text-white px-5 py-2 rounded"
+
+>
+
+Update
+
+</button>
+
+
+
+
+</form>
+
+
+</div>
+
+</div>
+
+</div>
+
 
 </x-app-layout>

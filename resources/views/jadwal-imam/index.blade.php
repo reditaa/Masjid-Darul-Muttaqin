@@ -1,152 +1,369 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Data Jadwal Imam
-        </h2>
-    </x-slot>
+<div class="py-6">
 
-    <div class="py-8">
+<div class="max-w-6xl mx-auto">
 
-        <div class="max-w-7xl mx-auto">
 
-            @if(session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
-                    {{ session('success') }}
-                </div>
-            @endif
+<div class="bg-white shadow rounded-lg p-6">
 
-            <div class="bg-white shadow rounded-lg p-6">
 
-                <div class="flex justify-between items-center mb-5">
+<div class="flex justify-between mb-5">
 
-                    <h3 class="text-xl font-bold">
-                        Daftar Jadwal Imam
-                    </h3>
+<h2 class="text-xl font-bold">
+Jadwal Imam Masjid
+</h2>
 
-                    <a href="{{ route('jadwal-imam.create') }}"
-                       class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
 
-                        Tambah Jadwal
+<a href="{{ route('jadwal-imam.create') }}"
+class="bg-blue-600 text-white px-4 py-2 rounded">
 
-                    </a>
++ Tambah Jadwal
 
-                </div>
+</a>
 
-                <table class="w-full border">
+</div>
 
-                    <thead class="bg-gray-100">
 
-                        <tr>
 
-                            <th class="border p-2">No</th>
-                            <th class="border p-2">Tanggal</th>
-                            <th class="border p-2">Imam</th>
-                            <th class="border p-2">Jenis</th>
-                            <th class="border p-2">Jabatan</th>
-                            <th class="border p-2">Keterangan</th>
-                            <th class="border p-2">Aksi</th>
 
-                        </tr>
 
-                    </thead>
+@if(session('success'))
 
-                    <tbody>
+<div class="bg-green-100 p-3 rounded mb-4">
 
-                        @forelse($jadwalImam as $item)
+{{ session('success') }}
 
-                            <tr>
+</div>
 
-                                <td class="border p-2 text-center">
-                                    {{ $loop->iteration }}
-                                </td>
+@endif
 
-                                <td class="border p-2 text-center">
-                                    {{ $item->tanggal }}
-                                </td>
 
-                                <td class="border p-2">
 
-                                    {{ $item->imam->nama }}
 
-                                </td>
 
-                                <td class="border p-2 text-center">
 
-                                    {{ $item->imam->anggota->jenis }}
 
-                                </td>
+<h3 class="font-bold text-lg mb-3">
+Jadwal Maktubah (Dzuhur & Ashar)
+</h3>
 
-                                <td class="border p-2">
 
-                                    {{ $item->imam->jabatan }}
 
-                                </td>
+<table class="w-full border mb-8">
 
-                                <td class="border p-2">
 
-                                    {{ $item->keterangan ?? '-' }}
+<thead class="bg-gray-100">
 
-                                </td>
 
-                                <td class="border p-2 text-center">
+<tr>
 
-                                    <a href="{{ route('jadwal-imam.edit',$item->id) }}"
-                                       class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+<th class="border p-2">
+Hari
+</th>
 
-                                        Edit
 
-                                    </a>
+<th class="border p-2">
+Dzuhur
+</th>
 
-                                    <form action="{{ route('jadwal-imam.destroy',$item->id) }}"
-                                          method="POST"
-                                          class="inline">
 
-                                        @csrf
-                                        @method('DELETE')
+<th class="border p-2">
+Ashar
+</th>
 
-                                        <button
-                                            onclick="return confirm('Yakin ingin menghapus data ini?')"
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
 
-                                            Hapus
+<th class="border p-2">
+Aksi
+</th>
 
-                                        </button>
 
-                                    </form>
+</tr>
 
-                                </td>
 
-                            </tr>
+</thead>
 
-                        @empty
 
-                            <tr>
 
-                                <td colspan="7" class="text-center p-5">
 
-                                    Belum ada data jadwal imam.
+<tbody>
 
-                                </td>
 
-                            </tr>
 
-                        @endforelse
+@forelse($jadwalImam as $j)
 
-                    </tbody>
 
-                </table>
 
-                <div class="mt-5">
+<tr>
 
-                    {{ $jadwalImam->links() }}
 
-                </div>
+<td class="border p-3 text-center">
 
-            </div>
+{{ $j->hari }}
 
-        </div>
+</td>
 
-    </div>
+
+
+
+
+<td class="border p-3">
+
+
+@for($i=1;$i<=3;$i++)
+
+
+@if($j->{'dzuhurImam'.$i})
+
+<div>
+
+{{ $i }}.
+{{ $j->{'dzuhurImam'.$i}->anggota->nama ?? 'Tanpa Nama' }}
+
+</div>
+
+@endif
+
+
+@endfor
+
+
+</td>
+
+
+
+
+
+<td class="border p-3">
+
+
+@for($i=1;$i<=3;$i++)
+
+
+@if($j->{'asharImam'.$i})
+
+<div>
+
+{{ $i }}.
+{{ $j->{'asharImam'.$i}->anggota->nama ?? 'Tanpa Nama' }}
+
+</div>
+
+@endif
+
+
+@endfor
+
+
+</td>
+
+
+
+
+
+
+<td class="border p-3 text-center">
+
+
+<a href="{{ route('jadwal-imam.edit',$j->id) }}"
+
+class="bg-yellow-500 text-white px-3 py-1 rounded">
+
+Edit
+
+</a>
+
+
+
+
+
+<form
+
+action="{{ route('jadwal-imam.destroy',$j->id) }}"
+
+method="POST"
+
+class="inline">
+
+
+@csrf
+
+@method('DELETE')
+
+
+<button
+
+onclick="return confirm('Hapus jadwal?')"
+
+class="bg-red-600 text-white px-3 py-1 rounded">
+
+Hapus
+
+</button>
+
+
+</form>
+
+
+
+</td>
+
+
+
+</tr>
+
+
+
+
+@empty
+
+
+<tr>
+
+<td colspan="4"
+
+class="border p-4 text-center">
+
+Belum ada jadwal
+
+</td>
+
+</tr>
+
+
+@endforelse
+
+
+
+</tbody>
+
+
+</table>
+
+
+
+
+
+
+
+
+
+<h3 class="font-bold text-lg mb-3">
+
+Jadwal Jumat
+
+</h3>
+
+
+
+
+<table class="w-full border">
+
+
+
+<thead class="bg-gray-100">
+
+
+<tr>
+
+
+<th class="border p-2">
+Pasaran
+</th>
+
+
+<th class="border p-2">
+Khatib
+</th>
+
+
+<th class="border p-2">
+Imam
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+
+<tbody>
+
+
+
+@forelse($jadwalJumat as $j)
+
+
+
+<tr>
+
+
+<td class="border p-3 text-center">
+
+{{ $j->pasaran }}
+
+</td>
+
+
+
+<td class="border p-3">
+
+{{ $j->khatib->anggota->nama ?? 'Belum ada' }}
+
+</td>
+
+
+
+<td class="border p-3">
+
+{{ $j->imam->anggota->nama ?? 'Belum ada' }}
+
+</td>
+
+
+</tr>
+
+
+
+
+@empty
+
+
+<tr>
+
+<td colspan="3"
+
+class="border p-4 text-center">
+
+Belum ada jadwal Jumat
+
+</td>
+
+</tr>
+
+
+@endforelse
+
+
+
+</tbody>
+
+
+</table>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 </x-app-layout>

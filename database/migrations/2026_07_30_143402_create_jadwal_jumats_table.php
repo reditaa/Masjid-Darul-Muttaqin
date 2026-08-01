@@ -13,26 +13,41 @@ return new class extends Migration
 
             $table->id();
 
+
             $table->enum('pasaran', [
+
                 'Pon',
                 'Kliwon',
                 'Pahing',
                 'Wage',
                 'Legi'
+
             ]);
 
-            $table->foreignId('imam_1')
+
+
+            // Khatib Jumat
+
+            $table->foreignId('khatib_id')
                 ->constrained('pengurus')
                 ->cascadeOnDelete();
 
-            $table->foreignId('imam_2')
+
+
+            // Imam Jumat
+
+            $table->foreignId('imam_id')
                 ->constrained('pengurus')
                 ->cascadeOnDelete();
+
+
 
             $table->timestamps();
 
+
         });
     }
+
 
 
     public function down(): void
