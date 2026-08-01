@@ -2,55 +2,83 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <meta name="csrf-token"
-        content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>SIMADI - Masjid Darul Muttaqin</title>
 
     @vite(['resources/css/app.css','resources/js/app.js'])
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 overflow-x-hidden">
 
-<div class="flex min-h-screen">
+<div
+    x-data="{ sidebar:false }"
+    class="min-h-screen flex">
+
+    {{-- Overlay --}}
+    <div
+        x-show="sidebar"
+        x-transition.opacity
+        class="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        @click="sidebar=false">
+    </div>
 
     {{-- Sidebar --}}
-    @include('layouts.sidebar')
+    <aside
+        :class="sidebar ? 'translate-x-0' : '-translate-x-full'"
+        class="fixed lg:static inset-y-0 left-0 z-50 w-72 transform transition-all duration-300 lg:translate-x-0 flex-shrink-0">
+
+        @include('layouts.sidebar')
+
+    </aside>
 
     {{-- Content --}}
-    <div class="flex-1 flex flex-col">
+    <div class="flex flex-col flex-1 w-0"></div>
+<div class="flex-1 f
+        {{-- Topbar --}}
+        <header class="bg-white shadow h-16 flex items-center px-4 lg:px-8">
 
-        {{-- Navbar --}}
-        @include('layouts.navigation')
+            <button
+                @click="sidebar=true"
+                class="lg:hidden text-2xl text-green-700 mr-4">
 
-        {{-- Header --}}
-        @isset($header)
+                <i class="fas fa-bars"></i>
 
-            <div class="bg-white shadow">
+            </button>
 
-                <div class="px-8 py-5">
+            <div class="flex-1">
 
-                    {{ $header }}
-
-                </div>
+                @include('layouts.navigation')
 
             </div>
 
+        </header>
+
+        @isset($header)
+
+        <section class="bg-white border-b">
+
+            <div class="px-4 lg:px-8 py-5">
+
+                {{ $header }}
+
+            </div>
+
+        </section>
+
         @endisset
 
-        {{-- Isi --}}
-        <main class="p-8">
-
+      <main class="flex-1 overflow-auto">
+    <div class="w-full p-4 lg:p-6">
+        {{ $slot }}
+    </div>
+</main>
             {{ $slot }}
 
         </main>

@@ -1,50 +1,88 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Darul Muttaqin</title>
 
-<meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-<title>Masjid Darul Muttaqin</title>
+    <style>
 
-<script src="https://cdn.tailwindcss.com"></script>
+        *{
+            font-family:'Poppins',sans-serif;
+            scroll-behavior:smooth;
+        }
+
+        .hero{
+            background:
+            linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+            url('https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000');
+            background-size:cover;
+            background-position:center;
+        }
+
+    </style>
 
 </head>
 
+<body class="bg-gray-100">
 
-<body class="bg-gray-50">
+<!-- ================= NAVBAR ================= -->
 
+<nav class="fixed w-full bg-white/95 backdrop-blur shadow z-50">
 
-<!-- NAVBAR -->
+<div class="max-w-7xl mx-auto flex justify-between items-center py-4 px-6">
 
-<nav class="bg-white shadow">
+<div class="flex items-center gap-3">
 
-<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+<div class="w-12 h-12 rounded-full bg-green-700 flex items-center justify-center text-white text-xl">
 
-<h1 class="text-xl font-bold text-green-700">
-Masjid Darul Muttaqin
-</h1>
+🕌
 
+</div>
 
 <div>
 
-<a href="#tentang" class="mx-3 text-gray-600">
+<h1 class="font-bold text-xl text-green-700">
+Masjid Darul Muttaqin
+</h1>
+
+<p class="text-sm text-gray-500">
+SMK Negeri 1 Bangsri
+</p>
+
+</div>
+
+</div>
+
+<div class="hidden md:flex items-center gap-8">
+
+<a href="#tentang" class="hover:text-green-700">
 Tentang
 </a>
 
+<a href="#statistik" class="hover:text-green-700">
+Statistik
+</a>
 
-<a href="#jadwal" class="mx-3 text-gray-600">
+<a href="#pengumuman" class="hover:text-green-700">
+Pengumuman
+</a>
+
+<a href="#jadwal" class="hover:text-green-700">
 Jadwal
 </a>
 
-
 <a href="{{ route('login') }}"
-class="bg-green-700 text-white px-4 py-2 rounded">
-Login Admin
-</a>
+class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
 
+Login Admin
+
+</a>
 
 </div>
 
@@ -52,43 +90,139 @@ Login Admin
 
 </nav>
 
+<!-- ================= HERO ================= -->
 
+<section class="hero h-screen flex items-center">
 
-<!-- HERO -->
+<div class="max-w-7xl mx-auto px-6 text-white">
 
-<section class="bg-green-700 text-white">
+<span class="bg-green-600 px-4 py-2 rounded-full">
 
-<div class="max-w-7xl mx-auto px-6 py-20 text-center">
+🕌 Website Resmi
 
+</span>
 
-<h2 class="text-4xl font-bold mb-5">
+<h1 class="text-6xl font-extrabold mt-6 leading-tight">
 
-Selamat Datang di
-
+Masjid
 <br>
+Darul Muttaqin
+
+</h1>
+
+<p class="mt-6 text-xl max-w-2xl">
+
+Sistem Informasi Masjid Sekolah untuk memudahkan
+pengelolaan jadwal imam, jadwal Jumat, pengurus,
+dan pengumuman kegiatan.
+
+</p>
+
+<div class="mt-10 flex gap-4">
+
+<a href="#jadwal"
+class="bg-green-600 hover:bg-green-700 px-7 py-3 rounded-xl text-lg">
+
+📅 Lihat Jadwal
+
+</a>
+
+<a href="#pengumuman"
+class="bg-white text-green-700 px-7 py-3 rounded-xl text-lg">
+
+📢 Pengumuman
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= TENTANG ================= -->
+
+<section id="tentang" class="py-20 bg-white">
+
+<div class="max-w-7xl mx-auto px-6">
+
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+
+<div>
+
+<img
+src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1200"
+class="rounded-3xl shadow-xl w-full"
+>
+
+</div>
+
+<div>
+
+<span class="text-green-700 font-semibold">
+Tentang Masjid
+</span>
+
+<h2 class="text-4xl font-bold mt-3">
 
 Masjid Darul Muttaqin
 
 </h2>
 
+<p class="text-gray-600 mt-6 leading-8">
 
-<p class="text-lg">
-
-Website informasi masjid sekolah untuk melihat
-
-jadwal imam, pengumuman, dan kegiatan masjid.
+Masjid Darul Muttaqin merupakan pusat kegiatan
+keagamaan di lingkungan sekolah.
+Website ini dibuat untuk mempermudah
+pengelolaan jadwal imam, jadwal Jumat,
+pengurus DKM, serta penyampaian
+pengumuman kepada seluruh warga sekolah.
 
 </p>
 
+<div class="grid grid-cols-2 gap-6 mt-10">
 
-<a href="#jadwal"
+<div class="bg-green-50 rounded-2xl p-5">
 
-class="inline-block mt-8 bg-white text-green-700 px-6 py-3 rounded">
+<div class="text-4xl">
+🕌
+</div>
 
-Lihat Jadwal
+<h3 class="font-bold mt-3">
+Ibadah
+</h3>
 
-</a>
+<p class="text-gray-600 text-sm mt-2">
 
+Jadwal imam selalu diperbarui.
+
+</p>
+
+</div>
+
+<div class="bg-blue-50 rounded-2xl p-5">
+
+<div class="text-4xl">
+📢
+</div>
+
+<h3 class="font-bold mt-3">
+Informasi
+</h3>
+
+<p class="text-gray-600 text-sm mt-2">
+
+Pengumuman kegiatan terbaru.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -96,286 +230,114 @@ Lihat Jadwal
 
 
 
+<!-- ================= STATISTIK ================= -->
 
-<!-- TENTANG -->
+<section id="statistik" class="py-20 bg-gray-100">
 
-<section id="tentang"
+<div class="max-w-7xl mx-auto px-6">
 
-class="max-w-6xl mx-auto px-6 py-16">
+<h2 class="text-4xl font-bold text-center">
 
-
-<h2 class="text-2xl font-bold text-center mb-6">
-
-Tentang Masjid
+Statistik Masjid
 
 </h2>
 
+<p class="text-center text-gray-500 mt-2">
 
-<p class="text-center text-gray-600">
-
-Masjid Darul Muttaqin merupakan pusat kegiatan
-
-keagamaan sekolah untuk mendukung ibadah dan
-
-pembinaan karakter warga sekolah.
+Data diperbarui secara otomatis.
 
 </p>
 
+<div class="grid md:grid-cols-4 gap-8 mt-14">
 
-</section>
+<div class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 transition">
 
+<div class="text-5xl">
+👳
+</div>
 
+<h3 class="text-5xl font-bold mt-4 text-green-700">
 
-
-
-<!-- PENGUMUMAN -->
-
-<section class="max-w-6xl mx-auto px-6 pb-10">
-
-
-<h2 class="text-2xl font-bold mb-6 text-center">
-
-Pengumuman Terbaru
-
-</h2>
-
-
-<div class="grid md:grid-cols-3 gap-5">
-
-
-@forelse($pengumuman as $p)
-
-<div class="bg-white rounded shadow p-5">
-
-
-<h3 class="font-bold text-green-700">
-
-{{ $p->judul }}
+{{ $jumlahPengurus }}
 
 </h3>
 
+<p class="mt-3 text-gray-600">
 
-<p class="text-gray-600 mt-2">
-
-{{ $p->isi }}
+Pengurus
 
 </p>
-
 
 </div>
 
 
-@empty
 
-<p class="text-center">
+<div class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 transition">
 
-Belum ada pengumuman
+<div class="text-5xl">
+👥
+</div>
+
+<h3 class="text-5xl font-bold mt-4 text-blue-700">
+
+{{ $jumlahAnggota }}
+
+</h3>
+
+<p class="mt-3 text-gray-600">
+
+Anggota
 
 </p>
-
-@endforelse
-
 
 </div>
 
 
-</section>
+
+<div class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 transition">
+
+<div class="text-5xl">
+📢
+</div>
+
+<h3 class="text-5xl font-bold mt-4 text-red-600">
+
+{{ $jumlahPengumuman }}
+
+</h3>
+
+<p class="mt-3 text-gray-600">
+
+Pengumuman
+
+</p>
+
+</div>
 
 
 
+<div class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 transition">
 
+<div class="text-5xl">
+🕌
+</div>
 
+<h3 class="text-5xl font-bold mt-4 text-yellow-600">
 
+{{ $jumlahJadwal }}
 
-<!-- JADWAL -->
+</h3>
 
-<section id="jadwal"
-
-class="bg-gray-100 py-16">
-
-
-<div class="max-w-6xl mx-auto px-6">
-
-
-<h2 class="text-2xl font-bold text-center mb-10">
+<p class="mt-3 text-gray-600">
 
 Jadwal Imam
 
-</h2>
-
-
-
-<div class="grid md:grid-cols-2 gap-6">
-
-
-
-@foreach($jadwalImam as $jadwal)
-
-
-<div class="bg-white rounded shadow p-6">
-
-
-<h3 class="font-bold text-green-700 text-lg mb-4">
-
-{{ $jadwal->hari }}
-
-</h3>
-
-
-
-<div class="mb-4">
-
-<h4 class="font-semibold">
-
-Dzuhur
-
-</h4>
-
-
-<p>
-{{ $jadwal->dzuhurImam1->nama ?? '-' }}
 </p>
-
-<p>
-{{ $jadwal->dzuhurImam2->nama ?? '-' }}
-</p>
-
-<p>
-{{ $jadwal->dzuhurImam3->nama ?? '-' }}
-</p>
-
 
 </div>
 
-
-
-
-<div>
-
-<h4 class="font-semibold">
-
-Ashar
-
-</h4>
-
-
-<p>
-{{ $jadwal->asharImam1->nama ?? '-' }}
-</p>
-
-<p>
-{{ $jadwal->asharImam2->nama ?? '-' }}
-</p>
-
-<p>
-{{ $jadwal->asharImam3->nama ?? '-' }}
-</p>
-
-
 </div>
 
-
-
 </div>
-
-
-@endforeach
-
-
-</div>
-
-
-
-
-
-<!-- JUMAT -->
-
-
-<h2 class="text-2xl font-bold text-center mt-12 mb-6">
-
-Jadwal Jumat
-
-</h2>
-
-
-
-@if($jadwalJumat)
-
-
-<div class="bg-white rounded shadow p-6 text-center">
-
-
-<p>
-
-Pasaran :
-
-<b>
-{{ $jadwalJumat->pasaran }}
-</b>
-
-</p>
-
-
-<p>
-
-Khatib :
-
-<b>
-{{ $jadwalJumat->khatib->nama ?? '-' }}
-</b>
-
-</p>
-
-
-<p>
-
-Imam :
-
-<b>
-{{ $jadwalJumat->imam->nama ?? '-' }}
-</b>
-
-</p>
-
-
-
-</div>
-
-
-@else
-
-<p class="text-center">
-
-Belum ada jadwal Jumat
-
-</p>
-
-@endif
-
-
-
-</div>
-
 
 </section>
-
-
-
-
-
-<!-- FOOTER -->
-
-
-<footer class="bg-green-700 text-white text-center py-5">
-
-
-© {{ date('Y') }} Masjid Darul Muttaqin
-
-
-</footer>
-
-
-
-</body>
-
-</html>

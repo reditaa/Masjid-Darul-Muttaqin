@@ -1,47 +1,155 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+<div class="min-h-screen flex">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+    {{-- Kiri --}}
+    <div class="hidden lg:flex lg:w-1/2 relative">
+
+        <img
+            src="https://images.unsplash.com/photo-1519817650390-64a93db511aa?q=80&w=1600&auto=format&fit=crop"
+            class="absolute inset-0 w-full h-full object-cover">
+
+        <div class="absolute inset-0 bg-green-900/70"></div>
+
+        <div class="relative z-10 flex flex-col justify-center px-16 text-white">
+
+            <i class="fas fa-mosque text-7xl mb-8"></i>
+
+            <h1 class="text-5xl font-bold">
+
+                SIMADI
+
+            </h1>
+
+            <p class="text-2xl mt-3">
+
+                Sistem Informasi Masjid
+
+            </p>
+
+            <p class="mt-8 text-lg leading-8 text-green-100">
+
+                Kelola Pengurus, Guru, Siswa, Jadwal Imam,
+                Jadwal Adzan, Jadwal Piket,
+                Pengumuman dan seluruh aktivitas masjid
+                dalam satu sistem.
+
+            </p>
+
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+    {{-- Kanan --}}
+    <div class="flex-1 flex items-center justify-center bg-gradient-to-br from-green-50 to-white p-6">
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-10">
+
+            <div class="text-center mb-8">
+
+                <div class="mx-auto w-20 h-20 rounded-full bg-green-700 flex items-center justify-center text-white text-3xl">
+
+                    <i class="fas fa-mosque"></i>
+
+                </div>
+
+                <h2 class="text-3xl font-bold mt-5">
+
+                    Login Admin
+
+                </h2>
+
+                <p class="text-gray-500 mt-2">
+
+                    Selamat datang kembali 👋
+
+                </p>
+
+            </div>
+
+            <x-auth-session-status
+                class="mb-4"
+                :status="session('status')" />
+
+            <form
+                method="POST"
+                action="{{ route('login') }}"
+                class="space-y-5">
+
+                @csrf
+
+                <div>
+
+                    <label class="font-medium">
+
+                        Email
+
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        required
+                        autofocus
+                        class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600">
+
+                    <x-input-error
+                        :messages="$errors->get('email')"
+                        class="mt-2"/>
+
+                </div>
+
+                <div>
+
+                    <label class="font-medium">
+
+                        Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        required
+                        class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600">
+
+                    <x-input-error
+                        :messages="$errors->get('password')"
+                        class="mt-2"/>
+
+                </div>
+
+                <label class="flex items-center gap-3">
+
+                    <input
+                        type="checkbox"
+                        name="remember"
+                        class="rounded text-green-700">
+
+                    <span class="text-gray-600">
+
+                        Remember Me
+
+                    </span>
+
+                </label>
+
+                <button
+                    class="w-full bg-green-700 hover:bg-green-800 transition rounded-xl py-3 text-white font-bold">
+
+                    <i class="fas fa-right-to-bracket mr-2"></i>
+
+                    LOGIN
+
+                </button>
+
+            </form>
+
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+    </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+</div>
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
 </x-guest-layout>

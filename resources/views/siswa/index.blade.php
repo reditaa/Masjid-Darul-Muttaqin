@@ -6,16 +6,15 @@
         </h2>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto">
-
+  <div class="w-full px-0">
+    <div class="w-full">
             @if(session('success'))
                 <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="bg-white shadow rounded-lg p-6">
+            <div class="w-full bg-white shadow rounded-lg p-6">
 
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-5">
 
@@ -57,122 +56,126 @@
 
                 </div>
 
-                <table class="w-full border">
+              <div class="w-full overflow-x-auto">
 
-                    <thead class="bg-gray-100">
+    <table class="min-w-full border border-gray-200">
 
-                        <tr>
-
-                            <th class="border p-2">No</th>
-                            <th class="border p-2">Foto</th>
-                            <th class="border p-2">NIS</th>
-                            <th class="border p-2">Nama</th>
-                            <th class="border p-2">Kelas</th>
-                            <th class="border p-2">Email</th>
-                            <th class="border p-2">No HP</th>
-                            <th class="border p-2">Status</th>
-                            <th class="border p-2">Aksi</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @forelse($siswas as $item)
+                        <thead class="bg-gray-100">
 
                             <tr>
 
-                                <td class="border p-2 text-center">
-                                    {{ $loop->iteration }}
-                                </td>
-
-                                <td class="border p-2 text-center">
-
-                                    @if($item->foto)
-
-                                        <img src="{{ asset('storage/'.$item->foto) }}"
-                                            class="w-14 h-14 rounded-full object-cover mx-auto">
-
-                                    @else
-
-                                        -
-
-                                    @endif
-
-                                </td>
-
-                                <td class="border p-2">
-                                    {{ $item->nis }}
-                                </td>
-
-                                <td class="border p-2">
-                                    {{ $item->nama }}
-                                </td>
-
-                                <td class="border p-2">
-                                    {{ $item->kelas }}
-                                </td>
-
-                                <td class="border p-2">
-                                    {{ $item->email }}
-                                </td>
-
-                                <td class="border p-2">
-                                    {{ $item->no_hp }}
-                                </td>
-
-                                <td class="border p-2 text-center">
-                                    {{ $item->status }}
-                                </td>
-
-                                <td class="border p-2 text-center">
-
-                                    <a href="{{ route('siswa.edit',$item->id) }}"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
-
-                                        Edit
-
-                                    </a>
-
-                                    <form action="{{ route('siswa.destroy',$item->id) }}"
-                                        method="POST"
-                                        class="inline">
-
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button
-                                            onclick="return confirm('Yakin ingin menghapus?')"
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
-
-                                            Hapus
-
-                                        </button>
-
-                                    </form>
-
-                                </td>
+                                <th class="border p-2">No</th>
+                                <th class="border p-2">Foto</th>
+                                <th class="border p-2">NIS</th>
+                                <th class="border p-2">Nama</th>
+                                <th class="border p-2">Kelas</th>
+                                <th class="border p-2">Email</th>
+                                <th class="border p-2">No HP</th>
+                                <th class="border p-2">Status</th>
+                                <th class="border p-2">Aksi</th>
 
                             </tr>
 
-                        @empty
+                        </thead>
 
-                            <tr>
+                        <tbody>
 
-                                <td colspan="9" class="text-center p-5">
+                            @forelse($siswas as $item)
 
-                                    Belum ada data siswa.
+                                <tr>
 
-                                </td>
+                                    <td class="border p-2 text-center">
+                                        {{ $loop->iteration }}
+                                    </td>
 
-                            </tr>
+                                    <td class="border p-2 text-center">
 
-                        @endforelse
+                                        @if($item->foto)
 
-                    </tbody>
+                                            <img src="{{ asset('storage/'.$item->foto) }}"
+                                                class="w-14 h-14 rounded-full object-cover mx-auto">
 
-                </table>
+                                        @else
+
+                                            -
+
+                                        @endif
+
+                                    </td>
+
+                                    <td class="border p-2">
+                                        {{ $item->nis }}
+                                    </td>
+
+                                    <td class="border p-2">
+                                        {{ $item->nama }}
+                                    </td>
+
+                                    <td class="border p-2">
+                                        {{ $item->kelas }}
+                                    </td>
+
+                                    <td class="border p-2">
+                                        {{ $item->email }}
+                                    </td>
+
+                                    <td class="border p-2">
+                                        {{ $item->no_hp }}
+                                    </td>
+
+                                    <td class="border p-2 text-center">
+                                        {{ $item->status }}
+                                    </td>
+
+                                    <td class="border p-2 text-center">
+
+                                        <a href="{{ route('siswa.edit',$item->id) }}"
+                                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+
+                                            Edit
+
+                                        </a>
+
+                                        <form action="{{ route('siswa.destroy',$item->id) }}"
+                                            method="POST"
+                                            class="inline">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button
+                                                onclick="return confirm('Yakin ingin menghapus?')"
+                                                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+
+                                                Hapus
+
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+
+                            @empty
+
+                                <tr>
+
+                                    <td colspan="9" class="text-center p-5">
+
+                                        Belum ada data siswa.
+
+                                    </td>
+
+                                </tr>
+
+                            @endforelse
+
+                        </tbody>
+
+                    </table>
+
+                </div>
 
                 <div class="mt-5">
 
@@ -181,6 +184,7 @@
                 </div>
 
             </div>
+
 
         </div>
     </div>

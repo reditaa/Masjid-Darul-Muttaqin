@@ -3,100 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengumuman;
+use App\Models\Pengurus;
+use App\Models\Anggota;
 use App\Models\JadwalImam;
 use App\Models\JadwalJumat;
-use App\Models\JadwalAdzan;
-use App\Models\JadwalPiket;
 
 class LandingController extends Controller
 {
-
     public function index()
     {
+        // Statistik
+        $jumlahPengurus = Pengurus::count();
+        $jumlahAnggota = Anggota::count();
+        $jumlahPengumuman = Pengumuman::where('status', 'Aktif')->count();
+        $jumlahJadwal = JadwalImam::count();
 
-        // ==========================
-        // PENGUMUMAN TERBARU
-        // ==========================
-
-        $pengumuman = Pengumuman::where('status','Aktif')
+        // Pengumuman terbaru
+        $pengumuman = Pengumuman::where('status', 'Aktif')
             ->latest()
             ->take(3)
             ->get();
 
-
-
-        // ==========================
-        // JADWAL IMAM
-        // DZUHUR + ASHAR
-        // ==========================
-
+        // Jadwal Imam
         $jadwalImam = JadwalImam::with([
-
-            'dzuhurImam1',
-            'dzuhurImam2',
-            'dzuhurImam3',
-
-            'asharImam1',
-            'asharImam2',
-            'asharImam3',
-
+            'dzuhurImam1.anggota',
+            'dzuhurImam2.anggota',
+            'dzuhurImam3.anggota',
+            'asharImam1.anggota',
+            'asharImam2.anggota',
+            'asharImam3.anggota',
         ])
         ->latest()
         ->take(5)
         ->get();
 
-
-
-        // ==========================
-        // JADWAL JUMAT
-        // KHATIB + IMAM
-        // ==========================
-
+        // Jadwal Jumat
         $jadwalJumat = JadwalJumat::with([
-
-            'khatib',
-            'imam',
-
+            'khatib.anggota',
+            'imam.anggota',
         ])
         ->latest()
         ->first();
 
-
-
-        // ==========================
-        // JADWAL ADZAN
-        // ==========================
-
-        $jadwalAdzan = JadwalAdzan::latest()
-            ->take(5)
-            ->get();
-
-
-
-        // ==========================
-        // JADWAL PIKET
-        // ==========================
-
-        $jadwalPiket = JadwalPiket::latest()
-            ->take(5)
-            ->get();
-
-
-
         return view('landing', compact(
-
             'pengumuman',
-
             'jadwalImam',
-
             'jadwalJumat',
-
-            'jadwalAdzan',
-
-            'jadwalPiket'
-
+            'jumlahPengurus',
+            'jumlahAnggota',
+            'jumlahPengumuman',
+            'jumlahJadwal'
         ));
-
     }
-
 }

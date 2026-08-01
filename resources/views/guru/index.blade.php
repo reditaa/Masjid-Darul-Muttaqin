@@ -1,202 +1,236 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-800">
-            👨‍🏫 Data Guru
-        </h2>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">
+                    👨‍🏫 Data Guru
+                </h2>
+
+                <p class="text-gray-500 text-sm mt-1">
+                    Kelola seluruh data guru SIMADI
+                </p>
+            </div>
+
+            <a href="{{ route('guru.create') }}"
+                class="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-xl shadow font-semibold text-center transition">
+                <i class="fas fa-plus mr-2"></i>
+                Tambah Guru
+            </a>
+        </div>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto">
+    <div class="w-full">
 
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-5">
-                    {{ session('success') }}
-                </div>
-            @endif
+        @if(session('success'))
 
-            <div class="bg-white shadow rounded-lg p-6">
+            <div class="mb-6 rounded-xl bg-green-100 border border-green-300 text-green-700 px-5 py-4">
 
-                <div class="flex justify-between items-center mb-5">
+                {{ session('success') }}
 
-                    <form action="{{ route('guru.index') }}" method="GET" class="flex">
+            </div>
 
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            placeholder="Cari Nama / NIP..."
-                            class="border rounded-l-lg px-4 py-2 w-72">
+        @endif
 
-                        <button
-                            class="bg-blue-600 text-white px-5 rounded-r-lg hover:bg-blue-700">
-                            Cari
-                        </button>
+        <div class="bg-white rounded-2xl shadow-lg p-5">
 
-                    </form>
+            {{-- Search --}}
+            <form
+                action="{{ route('guru.index') }}"
+                method="GET"
+                class="flex flex-col md:flex-row gap-3 mb-6">
 
-                    <a href="{{ route('guru.create') }}"
-                        class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Cari Nama / NIP..."
+                    class="flex-1 border rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500">
 
-                        + Tambah Guru
+                <button
+                    class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 py-3 font-semibold transition">
 
-                    </a>
+                    <i class="fas fa-search mr-2"></i>
+                    Cari
 
-                </div>
+                </button>
 
-                <div class="overflow-x-auto">
+            </form>
 
-                    <table class="w-full border">
+            {{-- Table --}}
+            <div class="overflow-x-auto rounded-xl border">
 
-                        <thead class="bg-gray-100">
+                <table class="min-w-full">
 
-                            <tr>
+                    <thead class="bg-green-700 text-white">
 
-                                <th class="border px-3 py-2">No</th>
+                        <tr>
 
-                                <th class="border px-3 py-2">Foto</th>
+                            <th class="px-4 py-3 text-left">No</th>
 
-                                <th class="border px-3 py-2">NIP</th>
+                            <th class="px-4 py-3 text-left">Foto</th>
 
-                                <th class="border px-3 py-2">Nama</th>
+                            <th class="px-4 py-3 text-left">NIP</th>
 
-                                <th class="border px-3 py-2">Email</th>
+                            <th class="px-4 py-3 text-left">Nama</th>
 
-                                <th class="border px-3 py-2">No HP</th>
+                            <th class="px-4 py-3 text-left">Email</th>
 
-                                <th class="border px-3 py-2">Status</th>
+                            <th class="px-4 py-3 text-left">No HP</th>
 
-                                <th class="border px-3 py-2 text-center">
-                                    Aksi
-                                </th>
+                            <th class="px-4 py-3 text-center">Status</th>
 
-                            </tr>
+                            <th class="px-4 py-3 text-center">Aksi</th>
 
-                        </thead>
+                        </tr>
 
-                        <tbody>
+                    </thead>
 
-                            @forelse($guru as $item)
+                    <tbody>
 
-                                <tr>
+                        @forelse($guru as $item)
 
-                                    <td class="border px-3 py-2">
-                                        {{ $loop->iteration }}
-                                    </td>
+                            <tr class="border-b hover:bg-green-50 transition">
 
-                                    <td class="border px-3 py-2 text-center">
+                                <td class="px-4 py-3">
 
-                                        @if($item->foto)
+                                    {{ $loop->iteration }}
 
-                                            <img src="{{ asset('storage/'.$item->foto) }}"
-                                                class="w-14 h-14 rounded-full object-cover mx-auto">
+                                </td>
 
-                                        @else
+                                <td class="px-4 py-3">
 
-                                            -
+                                    @if($item->foto)
 
-                                        @endif
+                                        <img
+                                            src="{{ asset('storage/'.$item->foto) }}"
+                                            class="w-14 h-14 rounded-full object-cover">
 
-                                    </td>
+                                    @else
 
-                                    <td class="border px-3 py-2">
-                                        {{ $item->nip }}
-                                    </td>
+                                        <div class="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center">
 
-                                    <td class="border px-3 py-2">
-                                        {{ $item->nama }}
-                                    </td>
+                                            <i class="fas fa-user text-gray-500"></i>
 
-                                    <td class="border px-3 py-2">
-                                        {{ $item->email }}
-                                    </td>
+                                        </div>
 
-                                    <td class="border px-3 py-2">
-                                        {{ $item->no_hp }}
-                                    </td>
+                                    @endif
 
-                                    <td class="border px-3 py-2">
+                                </td>
 
-                                        @if($item->status=="Aktif")
+                                <td class="px-4 py-3">
 
-                                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded">
+                                    {{ $item->nip }}
 
-                                                Aktif
+                                </td>
 
-                                            </span>
+                                <td class="px-4 py-3 font-semibold">
 
-                                        @else
+                                    {{ $item->nama }}
 
-                                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded">
+                                </td>
 
-                                                Nonaktif
+                                <td class="px-4 py-3 whitespace-nowrap">
 
-                                            </span>
+                                    {{ $item->email }}
 
-                                        @endif
+                                </td>
 
-                                    </td>
+                                <td class="px-4 py-3">
 
-                                    <td class="border px-3 py-2 text-center">
+                                    {{ $item->no_hp ?: '-' }}
 
-                                        <a href="{{ route('guru.edit',$item->id) }}"
-                                            class="bg-yellow-400 text-white px-3 py-1 rounded">
+                                </td>
 
-                                            Edit
+                                <td class="px-4 py-3 text-center">
+
+                                    @if($item->status=="Aktif")
+
+                                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+
+                                            Aktif
+
+                                        </span>
+
+                                    @else
+
+                                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+
+                                            Nonaktif
+
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td class="px-4 py-3">
+
+                                    <div class="flex justify-center gap-2">
+
+                                        <a
+                                            href="{{ route('guru.edit',$item->id) }}"
+                                            class="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg">
+
+                                            <i class="fas fa-edit"></i>
 
                                         </a>
 
-                                        <form action="{{ route('guru.destroy',$item->id) }}"
-                                            method="POST"
-                                            class="inline">
+                                        <form
+                                            action="{{ route('guru.destroy',$item->id) }}"
+                                            method="POST">
 
                                             @csrf
+
                                             @method('DELETE')
 
                                             <button
                                                 onclick="return confirm('Yakin ingin menghapus data ini?')"
-                                                class="bg-red-600 text-white px-3 py-1 rounded">
+                                                class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
 
-                                                Hapus
+                                                <i class="fas fa-trash"></i>
 
                                             </button>
 
                                         </form>
 
-                                    </td>
+                                    </div>
 
-                                </tr>
+                                </td>
 
-                            @empty
+                            </tr>
 
-                                <tr>
+                        @empty
 
-                                    <td colspan="8"
-                                        class="text-center py-5">
+                            <tr>
 
-                                        Belum ada data guru.
+                                <td
+                                    colspan="8"
+                                    class="py-10 text-center text-gray-500">
 
-                                    </td>
+                                    Belum ada data guru.
 
-                                </tr>
+                                </td>
 
-                            @endforelse
+                            </tr>
 
-                        </tbody>
+                        @endforelse
 
-                    </table>
+                    </tbody>
 
-                </div>
+                </table>
 
-                <div class="mt-5">
+            </div>
 
-                    {{ $guru->links() }}
+            {{-- Pagination --}}
+            <div class="mt-6">
 
-                </div>
+                {{ $guru->links() }}
 
             </div>
 
         </div>
+
     </div>
 
 </x-app-layout>

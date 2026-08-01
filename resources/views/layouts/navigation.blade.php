@@ -1,37 +1,61 @@
-<nav class="bg-white shadow-md h-20 flex items-center justify-between px-8">
+<nav class="h-full">
 
-    {{-- Judul Halaman --}}
-    <div>
+    <div class="flex items-center justify-between h-full">
 
-        <h1 class="text-2xl font-bold text-gray-800">
-            Dashboard Admin
-        </h1>
+        {{-- Kiri --}}
+        <div class="min-w-0">
 
-        <p class="text-sm text-gray-500">
-            Sistem Informasi Masjid Darul Muttaqin
-        </p>
+            <h1 class="text-xl lg:text-2xl font-bold text-gray-800 truncate">
+                Dashboard Admin
+            </h1>
 
-    </div>
-
-    {{-- Profil Admin --}}
-    <div class="flex items-center gap-4">
-
-        <div class="text-right">
-
-            <h4 class="font-semibold text-gray-800">
-                {{ Auth::user()->name }}
-            </h4>
-
-            <small class="text-gray-500">
-                Administrator
-            </small>
+            <p class="hidden md:block text-sm text-gray-500">
+                Sistem Informasi Masjid Darul Muttaqin
+            </p>
 
         </div>
 
-        <div
-            class="w-12 h-12 rounded-full bg-green-700 flex items-center justify-center text-white text-xl">
+        {{-- Kanan --}}
+        <div class="flex items-center gap-3 lg:gap-5">
 
-            <i class="fas fa-user"></i>
+            {{-- Notifikasi --}}
+            <button
+                class="relative w-11 h-11 rounded-xl bg-gray-100 hover:bg-green-100 transition flex items-center justify-center">
+
+                <i class="fas fa-bell text-gray-600"></i>
+
+                <span
+                    class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-red-500"></span>
+
+            </button>
+
+            {{-- User --}}
+            <div class="flex items-center gap-3">
+
+                <div class="hidden sm:block text-right">
+
+                    <h4 class="font-semibold text-gray-800 leading-none">
+
+                        {{ Auth::user()->name }}
+
+                    </h4>
+
+                    <span class="text-xs text-gray-500">
+
+                        Administrator
+
+                    </span>
+
+                </div>
+
+                <div
+                    class="w-11 h-11 rounded-full bg-gradient-to-r from-green-600 to-green-800 text-white flex items-center justify-center shadow-lg">
+
+                    <i class="fas fa-user"></i>
+
+                </div>
+
+            </div>
 
         </div>
 
