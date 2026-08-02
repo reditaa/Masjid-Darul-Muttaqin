@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Models\Guru;
 use App\Models\Siswa;
+use App\Models\Anggota;
 
 return [
 
@@ -31,6 +32,12 @@ return [
             'provider' => 'siswas',
         ],
 
+        // ANGGOTA
+        'anggota' => [
+            'driver' => 'session',
+            'provider' => 'anggotas',
+        ],
+
     ],
 
     'providers' => [
@@ -48,6 +55,11 @@ return [
         'siswas' => [
             'driver' => 'eloquent',
             'model' => Siswa::class,
+        ],
+
+        'anggotas' => [
+            'driver' => 'eloquent',
+            'model' => Anggota::class,
         ],
 
     ],
@@ -70,6 +82,13 @@ return [
 
         'siswas' => [
             'provider' => 'siswas',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'anggotas' => [
+            'provider' => 'anggotas',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

@@ -1,6 +1,6 @@
 <x-guest-layout>
 
-<div class="min-h-screen flex">
+<div x-data="{ tab: '{{ old('login_type', 'admin') }}' }" class="min-h-screen flex">
 
     {{-- Kiri --}}
     <div class="hidden lg:flex lg:w-1/2 relative">
@@ -45,7 +45,7 @@
 
         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-10">
 
-            <div class="text-center mb-8">
+            <div class="text-center mb-6">
 
                 <div class="mx-auto w-20 h-20 rounded-full bg-green-700 flex items-center justify-center text-white text-3xl">
 
@@ -55,7 +55,7 @@
 
                 <h2 class="text-3xl font-bold mt-5">
 
-                    Login Admin
+                    Login SIMADI
 
                 </h2>
 
@@ -67,16 +67,41 @@
 
             </div>
 
+            {{-- Tab switcher --}}
+            <div class="grid grid-cols-2 gap-2 bg-gray-100 rounded-xl p-1 mb-6">
+
+                <button
+                    type="button"
+                    @click="tab = 'admin'"
+                    :class="tab === 'admin' ? 'bg-white shadow text-green-700' : 'text-gray-500'"
+                    class="py-2 rounded-lg font-semibold transition">
+                    Admin
+                </button>
+
+                <button
+                    type="button"
+                    @click="tab = 'anggota'"
+                    :class="tab === 'anggota' ? 'bg-white shadow text-green-700' : 'text-gray-500'"
+                    class="py-2 rounded-lg font-semibold transition">
+                    Anggota
+                </button>
+
+            </div>
+
             <x-auth-session-status
                 class="mb-4"
                 :status="session('status')" />
 
+            {{-- Form Login Admin --}}
             <form
+                x-show="tab === 'admin'"
                 method="POST"
                 action="{{ route('login') }}"
                 class="space-y-5">
 
                 @csrf
+
+                <input type="hidden" name="login_type" value="admin">
 
                 <div>
 
@@ -89,14 +114,14 @@
                     <input
                         type="email"
                         name="email"
-                        value="{{ old('email') }}"
-                        required
-                        autofocus
+                        value="{{ old('login_type', 'admin') === 'admin' ? old('email') : '' }}"
                         class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600">
 
-                    <x-input-error
-                        :messages="$errors->get('email')"
-                        class="mt-2"/>
+                    @if(old('login_type', 'admin') === 'admin')
+                        <x-input-error
+                            :messages="$errors->get('email')"
+                            class="mt-2"/>
+                    @endif
 
                 </div>
 
@@ -111,12 +136,13 @@
                     <input
                         type="password"
                         name="password"
-                        required
                         class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600">
 
-                    <x-input-error
-                        :messages="$errors->get('password')"
-                        class="mt-2"/>
+                    @if(old('login_type', 'admin') === 'admin')
+                        <x-input-error
+                            :messages="$errors->get('password')"
+                            class="mt-2"/>
+                    @endif
 
                 </div>
 
@@ -140,7 +166,87 @@
 
                     <i class="fas fa-right-to-bracket mr-2"></i>
 
-                    LOGIN
+                    LOGIN ADMIN
+
+                </button>
+
+            </form>
+
+            {{-- Form Login Anggota --}}
+            <form
+                x-show="tab === 'anggota'"
+                method="POST"
+                action="{{ route('anggota.login.store') }}"
+                class="space-y-5">
+
+                @csrf
+
+                <input type="hidden" name="login_type" value="anggota">
+
+                <div>
+
+                    <label class="font-medium">
+
+                        Email
+
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        value="{{ old('login_type') === 'anggota' ? old('email') : '' }}"
+                        class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600">
+
+                    @if(old('login_type') === 'anggota')
+                        <x-input-error
+                            :messages="$errors->get('email')"
+                            class="mt-2"/>
+                    @endif
+
+                </div>
+
+                <div>
+
+                    <label class="font-medium">
+
+                        Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600">
+
+                    @if(old('login_type') === 'anggota')
+                        <x-input-error
+                            :messages="$errors->get('password')"
+                            class="mt-2"/>
+                    @endif
+
+                </div>
+
+                <label class="flex items-center gap-3">
+
+                    <input
+                        type="checkbox"
+                        name="remember"
+                        class="rounded text-green-700">
+
+                    <span class="text-gray-600">
+
+                        Remember Me
+
+                    </span>
+
+                </label>
+
+                <button
+                    class="w-full bg-green-700 hover:bg-green-800 transition rounded-xl py-3 text-white font-bold">
+
+                    <i class="fas fa-right-to-bracket mr-2"></i>
+
+                    LOGIN ANGGOTA
 
                 </button>
 

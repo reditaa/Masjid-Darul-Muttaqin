@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Anggota extends Model
+class Anggota extends Authenticatable
 {
+    use Notifiable;
+
     protected $table = 'anggotas';
 
     protected $fillable = [
@@ -13,6 +16,17 @@ class Anggota extends Model
         'siswa_id',
         'jenis',
         'status',
+        'email',
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'password' => 'hashed',
     ];
 
     public function guru()
