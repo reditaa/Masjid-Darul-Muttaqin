@@ -2,7 +2,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl">
-            Jadwal Piket Kebersihan
+            Jadwal Adzan
         </h2>
     </x-slot>
 
@@ -19,13 +19,13 @@
 
                 <div class="flex justify-between items-center mb-5">
 
-                    <form action="{{ route('jadwal-piket.index') }}" method="GET" class="flex gap-2">
+                    <form action="{{ route('jadwal-adzan.index') }}" method="GET" class="flex gap-2">
 
                         <input
                             type="text"
                             name="search"
                             value="{{ request('search') }}"
-                            placeholder="Cari tanggal..."
+                            placeholder="Cari nama muadzin..."
                             class="border rounded-lg px-4 py-2 w-72">
 
                         <button
@@ -33,14 +33,14 @@
                             Cari
                         </button>
 
-                        <a href="{{ route('jadwal-piket.index') }}"
+                        <a href="{{ route('jadwal-adzan.index') }}"
                            class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
                             Reset
                         </a>
 
                     </form>
 
-                    <a href="{{ route('jadwal-piket.create') }}"
+                    <a href="{{ route('jadwal-adzan.create') }}"
                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
                         + Tambah Jadwal
                     </a>
@@ -55,12 +55,9 @@
 
                             <tr>
                                 <th class="border p-3">No</th>
-                                <th class="border">Tanggal</th>
-                                <th class="border">Koordinator</th>
-                                <th class="border">Anggota 1</th>
-                                <th class="border">Anggota 2</th>
-                                <th class="border">Anggota 3</th>
-                                <th class="border">Keterangan</th>
+                                <th class="border">Hari</th>
+                                <th class="border">Dzuhur</th>
+                                <th class="border">Asar</th>
                                 <th class="border">Aksi</th>
                             </tr>
 
@@ -68,62 +65,55 @@
 
                         <tbody>
 
-                        @forelse($jadwalPiket as $item)
+                        @forelse($jadwalAdzan as $item)
 
                             <tr>
 
                                 <td class="border text-center">
-                                    {{ $jadwalPiket->firstItem() + $loop->index }}
+                                    {{ $jadwalAdzan->firstItem() + $loop->index }}
                                 </td>
 
                                 <td class="border p-2">
-                                    {{ $item->tanggal }}
+                                    {{ $item->hari }}
                                 </td>
 
                                 <td class="border p-2">
-                                    {{ $item->koordinator->nama ?? '-' }}
+                                    {{ $item->dzuhurMuadzin->nama ?? '-' }}
                                 </td>
 
                                 <td class="border p-2">
-                                    {{ $item->anggota1->nama ?? '-' }}
-                                </td>
-
-                                <td class="border p-2">
-                                    {{ $item->anggota2->nama ?? '-' }}
-                                </td>
-
-                                <td class="border p-2">
-                                    {{ $item->anggota3->nama ?? '-' }}
-                                </td>
-
-                                <td class="border p-2">
-                                    {{ $item->keterangan }}
+                                    {{ $item->asharMuadzin->nama ?? '-' }}
                                 </td>
 
                                 <td class="border text-center">
 
-                                    <a href="{{ route('jadwal-piket.edit',$item->id) }}"
-                                       class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded">
-                                        Edit
-                                    </a>
+                                    <div class="flex items-center justify-center gap-2">
 
-                                    <form
-                                        action="{{ route('jadwal-piket.destroy',$item->id) }}"
-                                        method="POST"
-                                        class="inline">
+                                        <a href="{{ route('jadwal-adzan.edit',$item->id) }}"
+                                           title="Edit"
+                                           class="bg-yellow-500 hover:bg-yellow-600 text-white w-9 h-9 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-pen-to-square"></i>
+                                        </a>
 
-                                        @csrf
-                                        @method('DELETE')
+                                        <form
+                                            action="{{ route('jadwal-adzan.destroy',$item->id) }}"
+                                            method="POST"
+                                            class="inline">
 
-                                        <button
-                                            onclick="return confirm('Yakin ingin menghapus?')"
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
+                                            @csrf
+                                            @method('DELETE')
 
-                                            Hapus
+                                            <button
+                                                type="submit"
+                                                title="Hapus"
+                                                onclick="return confirm('Yakin ingin menghapus?')"
+                                                class="bg-red-600 hover:bg-red-700 text-white w-9 h-9 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
 
-                                        </button>
+                                        </form>
 
-                                    </form>
+                                    </div>
 
                                 </td>
 
@@ -133,10 +123,10 @@
 
                             <tr>
 
-                                <td colspan="8"
+                                <td colspan="5"
                                     class="text-center py-5 text-gray-500">
 
-                                    Belum ada jadwal piket.
+                                    Belum ada jadwal adzan.
 
                                 </td>
 
@@ -152,7 +142,7 @@
 
                 <div class="mt-5">
 
-                    {{ $jadwalPiket->links() }}
+                    {{ $jadwalAdzan->links() }}
 
                 </div>
 

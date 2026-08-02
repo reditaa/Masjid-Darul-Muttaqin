@@ -11,12 +11,12 @@ return new class extends Migration
         Schema::create('jadwal_adzans', function (Blueprint $table) {
             $table->id();
 
-            $table->date('tanggal');
+            $table->enum('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis']);
 
             $table->foreignId('dzuhur_imam_id')
+                ->nullable()
                 ->constrained('pengurus')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
             $table->foreignId('dzuhur_muadzin_id')
                 ->constrained('pengurus')
@@ -24,9 +24,9 @@ return new class extends Migration
                 ->restrictOnDelete();
 
             $table->foreignId('ashar_imam_id')
+                ->nullable()
                 ->constrained('pengurus')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
             $table->foreignId('ashar_muadzin_id')
                 ->constrained('pengurus')

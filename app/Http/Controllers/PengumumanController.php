@@ -9,7 +9,8 @@ class PengumumanController extends Controller
 {
     public function index()
     {
-        $pengumuman = Pengumuman::latest()->get();
+        $pengumuman = Pengumuman::latest()->paginate(10);
+
         return view('pengumuman.index', compact('pengumuman'));
     }
 
@@ -24,7 +25,12 @@ class PengumumanController extends Controller
             'judul' => 'required',
             'isi' => 'required',
             'tanggal' => 'required|date',
+            'gambar' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
+        }
 
         Pengumuman::create($data);
 
@@ -43,7 +49,17 @@ class PengumumanController extends Controller
             'judul' => 'required',
             'isi' => 'required',
             'tanggal' => 'required|date',
+            'gambar' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('gambar')) {
+            // hapus gambar lama kalau ada, biar tidak menumpuk file tak terpakai
+            if ($pengumuman->gambar) {
+                \Storage::disk('public')->delete($pengumuman->gambar);
+            }
+
+            $data['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
+        }
 
         $pengumuman->update($data);
 
@@ -53,10 +69,13 @@ class PengumumanController extends Controller
 
     public function destroy(Pengumuman $pengumuman)
     {
+        if ($pengumuman->gambar) {
+            \Storage::disk('public')->delete($pengumuman->gambar);
+        }
+
         $pengumuman->delete();
 
         return redirect()->route('pengumuman.index')
             ->with('success', 'Pengumuman berhasil dihapus');
     }
 }
-

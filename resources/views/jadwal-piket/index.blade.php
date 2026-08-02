@@ -1,17 +1,16 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Data Jadwal Piket
+        <h2 class="font-semibold text-xl">
+            Jadwal Piket Kebersihan
         </h2>
     </x-slot>
 
-    <div class="py-8">
-
+    <div class="py-6">
         <div class="max-w-7xl mx-auto">
 
             @if(session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
                 </div>
             @endif
@@ -20,104 +19,121 @@
 
                 <div class="flex justify-between items-center mb-5">
 
-                    <h3 class="text-xl font-bold">
-                        Daftar Jadwal Piket
-                    </h3>
+                    <form action="{{ route('jadwal-piket.index') }}" method="GET" class="flex gap-2">
+
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="Cari nama..."
+                            class="border rounded-lg px-4 py-2 w-72">
+
+                        <button
+                            class="bg-green-600 hover:bg-green-700 text-white px-5 rounded-lg">
+                            Cari
+                        </button>
+
+                        <a href="{{ route('jadwal-piket.index') }}"
+                           class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+                            Reset
+                        </a>
+
+                    </form>
 
                     <a href="{{ route('jadwal-piket.create') }}"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">
-
-                        Tambah Jadwal
-
+                       class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+                        + Tambah Jadwal
                     </a>
 
                 </div>
 
-                <table class="w-full border">
+                <div class="overflow-x-auto">
 
-                    <thead class="bg-gray-100">
+                    <table class="w-full border">
 
-                        <tr>
+                        <thead class="bg-gray-200">
 
-                            <th class="border p-2">No</th>
-                            <th class="border p-2">Tanggal</th>
-                            <th class="border p-2">Koordinator</th>
-                            <th class="border p-2">Anggota 1</th>
-                            <th class="border p-2">Keterangan</th>
-                            <th class="border p-2">Aksi</th>
+                            <tr>
+                                <th class="border p-3">No</th>
+                                <th class="border">Hari</th>
+                                <th class="border">Koordinator</th>
+                                <th class="border">Anggota 1</th>
+                                <th class="border">Anggota 2</th>
+                                <th class="border">Anggota 3</th>
+                                <th class="border">Anggota 4</th>
+                                <th class="border">Keterangan</th>
+                                <th class="border">Aksi</th>
+                            </tr>
 
-                        </tr>
+                        </thead>
 
-                    </thead>
-
-                    <tbody>
+                        <tbody>
 
                         @forelse($jadwalPiket as $item)
 
                             <tr>
 
-                                <td class="border p-2 text-center">
-                                    {{ $loop->iteration }}
-                                </td>
-
-                                <td class="border p-2 text-center">
-                                    {{ $item->tanggal }}
+                                <td class="border text-center">
+                                    {{ $jadwalPiket->firstItem() + $loop->index }}
                                 </td>
 
                                 <td class="border p-2">
-
-                                    {{ $item->koordinator->nama }}
-                                    <br>
-
-                                    <small class="text-gray-500">
-                                        {{ $item->koordinator->anggota->jenis }}
-                                    </small>
-
+                                    {{ $item->hari }}
                                 </td>
 
                                 <td class="border p-2">
-
-                                    {{ $item->anggota1->nama }}
-                                    <br>
-
-                                    <small class="text-gray-500">
-                                        {{ $item->anggota1->anggota->jenis }}
-                                    </small>
-
+                                    {{ $item->koordinator->nama ?? '-' }}
                                 </td>
 
                                 <td class="border p-2">
-
-                                    {{ $item->keterangan ?? '-' }}
-
+                                    {{ $item->anggota1->nama ?? '-' }}
                                 </td>
 
-                                <td class="border p-2 text-center">
+                                <td class="border p-2">
+                                    {{ $item->anggota2->nama ?? '-' }}
+                                </td>
 
-                                    <a href="{{ route('jadwal-piket.edit',$item->id) }}"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                                <td class="border p-2">
+                                    {{ $item->anggota3->nama ?? '-' }}
+                                </td>
 
-                                        Edit
+                                <td class="border p-2">
+                                    {{ $item->anggota4->nama ?? '-' }}
+                                </td>
 
-                                    </a>
+                                <td class="border p-2">
+                                    {{ $item->keterangan }}
+                                </td>
 
-                                    <form
-                                        action="{{ route('jadwal-piket.destroy',$item->id) }}"
-                                        method="POST"
-                                        class="inline">
+                                <td class="border text-center">
 
-                                        @csrf
-                                        @method('DELETE')
+                                    <div class="flex items-center justify-center gap-2">
 
-                                        <button
-                                            onclick="return confirm('Yakin ingin menghapus data ini?')"
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                                        <a href="{{ route('jadwal-piket.edit',$item->id) }}"
+                                           title="Edit"
+                                           class="bg-yellow-500 hover:bg-yellow-600 text-white w-9 h-9 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-pen-to-square"></i>
+                                        </a>
 
-                                            Hapus
+                                        <form
+                                            action="{{ route('jadwal-piket.destroy',$item->id) }}"
+                                            method="POST"
+                                            class="inline">
 
-                                        </button>
+                                            @csrf
+                                            @method('DELETE')
 
-                                    </form>
+                                            <button
+                                                type="submit"
+                                                title="Hapus"
+                                                onclick="return confirm('Yakin ingin menghapus?')"
+                                                class="bg-red-600 hover:bg-red-700 text-white w-9 h-9 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+
+                                        </form>
+
+                                    </div>
 
                                 </td>
 
@@ -127,9 +143,10 @@
 
                             <tr>
 
-                                <td colspan="6" class="text-center p-5">
+                                <td colspan="9"
+                                    class="text-center py-5 text-gray-500">
 
-                                    Belum ada data jadwal piket.
+                                    Belum ada jadwal piket.
 
                                 </td>
 
@@ -137,9 +154,11 @@
 
                         @endforelse
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
+
+                </div>
 
                 <div class="mt-5">
 
@@ -150,7 +169,6 @@
             </div>
 
         </div>
-
     </div>
 
 </x-app-layout>

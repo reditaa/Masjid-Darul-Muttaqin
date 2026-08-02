@@ -49,12 +49,9 @@ class JadwalAdzanController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'tanggal' => 'required|date',
-            'dzuhur_imam_id' => 'required|exists:pengurus,id',
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis',
             'dzuhur_muadzin_id' => 'required|exists:pengurus,id',
-            'ashar_imam_id' => 'required|exists:pengurus,id',
             'ashar_muadzin_id' => 'required|exists:pengurus,id',
-            'keterangan' => 'nullable',
         ]);
 
         JadwalAdzan::create($data);
@@ -78,12 +75,9 @@ class JadwalAdzanController extends Controller
     public function update(Request $request, JadwalAdzan $jadwalAdzan)
     {
         $data = $request->validate([
-            'tanggal' => 'required|date',
-            'dzuhur_imam_id' => 'required|exists:pengurus,id',
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis',
             'dzuhur_muadzin_id' => 'required|exists:pengurus,id',
-            'ashar_imam_id' => 'required|exists:pengurus,id',
             'ashar_muadzin_id' => 'required|exists:pengurus,id',
-            'keterangan' => 'nullable',
         ]);
 
         $jadwalAdzan->update($data);

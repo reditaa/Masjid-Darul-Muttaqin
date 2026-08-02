@@ -8,6 +8,19 @@ use Illuminate\Http\Request;
 
 class JadwalPiketController extends Controller
 {
+    protected function rules(): array
+    {
+        return [
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis',
+            'koordinator_id' => 'required|exists:pengurus,id',
+            'anggota1_id' => 'required|exists:pengurus,id',
+            'anggota2_id' => 'required|exists:pengurus,id',
+            'anggota3_id' => 'required|exists:pengurus,id',
+            'anggota4_id' => 'required|exists:pengurus,id',
+            'keterangan' => 'nullable',
+        ];
+    }
+
     public function index()
     {
         $jadwalPiket = JadwalPiket::with([
@@ -15,6 +28,12 @@ class JadwalPiketController extends Controller
             'koordinator.anggota.siswa',
             'anggota1.anggota.guru',
             'anggota1.anggota.siswa',
+            'anggota2.anggota.guru',
+            'anggota2.anggota.siswa',
+            'anggota3.anggota.guru',
+            'anggota3.anggota.siswa',
+            'anggota4.anggota.guru',
+            'anggota4.anggota.siswa',
         ])->latest()->paginate(10);
 
         return view('jadwal-piket.index', compact('jadwalPiket'));
@@ -32,14 +51,9 @@ class JadwalPiketController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'tanggal' => 'required|date',
-            'koordinator_id' => 'required|exists:pengurus,id',
-            'anggota1_id' => 'required|exists:pengurus,id',
-            'keterangan' => 'nullable'
-        ]);
+        $data = $request->validate($this->rules());
 
-        JadwalPiket::create($request->all());
+        JadwalPiket::create($data);
 
         return redirect()
             ->route('jadwal-piket.index')
@@ -61,14 +75,9 @@ class JadwalPiketController extends Controller
 
     public function update(Request $request, JadwalPiket $jadwalPiket)
     {
-        $request->validate([
-            'tanggal' => 'required|date',
-            'koordinator_id' => 'required|exists:pengurus,id',
-            'anggota1_id' => 'required|exists:pengurus,id',
-            'keterangan' => 'nullable'
-        ]);
+        $data = $request->validate($this->rules());
 
-        $jadwalPiket->update($request->all());
+        $jadwalPiket->update($data);
 
         return redirect()
             ->route('jadwal-piket.index')

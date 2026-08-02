@@ -1,5 +1,4 @@
 <div class="flex flex-col h-screen w-72 bg-gradient-to-b from-green-800 via-green-900 to-green-950 text-white shadow-2xl">
-
     {{-- Logo --}}
     <div class="px-6 py-7 border-b border-green-700">
 

@@ -12,22 +12,32 @@ return new class extends Migration
 
             $table->id();
 
-            $table->foreignId('anggota_id')
-                ->constrained('anggotas')
+            $table->enum('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis']);
+
+            $table->foreignId('koordinator_id')
+                ->constrained('pengurus')
                 ->cascadeOnDelete();
 
-            $table->string('hari');
+            $table->foreignId('anggota1_id')
+                ->constrained('pengurus')
+                ->cascadeOnDelete();
 
-            $table->date('tanggal');
+            $table->foreignId('anggota2_id')
+                ->nullable()
+                ->constrained('pengurus')
+                ->nullOnDelete();
 
-            $table->time('jam_mulai');
+            $table->foreignId('anggota3_id')
+                ->nullable()
+                ->constrained('pengurus')
+                ->nullOnDelete();
 
-            $table->time('jam_selesai');
+            $table->foreignId('anggota4_id')
+                ->nullable()
+                ->constrained('pengurus')
+                ->nullOnDelete();
 
-            $table->text('tugas')->nullable();
-
-            $table->enum('status', ['Aktif','Selesai'])
-                ->default('Aktif');
+            $table->text('keterangan')->nullable();
 
             $table->timestamps();
 

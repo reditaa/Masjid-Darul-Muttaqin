@@ -1,84 +1,87 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl">Tambah Guru</h2>
+        <h2 class="font-semibold text-xl">
+            Tambah Jadwal Adzan
+        </h2>
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-5xl mx-auto">
 
-            <div class="bg-white shadow rounded-xl p-6">
+            <div class="bg-white p-6 rounded-lg shadow">
 
-                <form action="{{ route('guru.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('jadwal-adzan.store') }}" method="POST">
+
                     @csrf
 
-                    @if ($errors->any())
-    <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">Tanggal</label>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <input
+                            type="date"
+                            name="tanggal"
+                            id="tanggal"
+                            value="{{ old('tanggal') }}"
+                            class="w-full border rounded-lg p-2"
+                            required>
 
-                        <div>
-                            <label class="block mb-1">NIP</label>
-                            <input type="text" name="nip" class="w-full border rounded-lg p-2" required>
-                        </div>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Hanya boleh memilih hari Senin s.d. Kamis.
+                        </p>
 
-                        <div>
-                            <label class="block mb-1">Nama Guru</label>
-                            <input type="text" name="nama" class="w-full border rounded-lg p-2" required>
-                        </div>
-
-                        <div>
-                            <label class="block mb-1">Email</label>
-                            <input type="email" name="email" class="w-full border rounded-lg p-2">
-                        </div>
-
-                        <div>
-                            <label class="block mb-1">Password</label>
-                            <input type="password" name="password" class="w-full border rounded-lg p-2" required>
-                        </div>
-
-                        <div>
-                            <label class="block mb-1">No HP</label>
-                            <input type="text" name="no_hp" class="w-full border rounded-lg p-2">
-                        </div>
-
-                        <div>
-                            <label class="block mb-1">Status</label>
-                            <select name="status" class="w-full border rounded-lg p-2">
-                                <option value="Aktif">Aktif</option>
-                                <option value="Nonaktif">Nonaktif</option>
-                            </select>
-                        </div>
-
+                        @error('tanggal')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <div class="mt-5">
-                        <label class="block mb-1">Alamat</label>
-                        <textarea name="alamat" rows="3" class="w-full border rounded-lg p-2"></textarea>
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">Muadzin Dzuhur</label>
+
+                        <select
+                            name="dzuhur_muadzin_id"
+                            class="w-full border rounded-lg p-2"
+                            required>
+
+                            <option value="">-- Pilih Muadzin Dzuhur --</option>
+
+                            @foreach($pengurus as $item)
+                                <option value="{{ $item->id }}" {{ old('dzuhur_muadzin_id') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama }}
+                                </option>
+                            @endforeach
+
+                        </select>
                     </div>
 
-                    <div class="mt-5">
-                        <label class="block mb-1">Foto</label>
-                        <input type="file" name="foto" class="w-full border rounded-lg p-2">
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">Muadzin Ashar</label>
+
+                        <select
+                            name="ashar_muadzin_id"
+                            class="w-full border rounded-lg p-2"
+                            required>
+
+                            <option value="">-- Pilih Muadzin Ashar --</option>
+
+                            @foreach($pengurus as $item)
+                                <option value="{{ $item->id }}" {{ old('ashar_muadzin_id') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama }}
+                                </option>
+                            @endforeach
+
+                        </select>
                     </div>
 
-                    <div class="mt-6 flex gap-3">
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
-                            Simpan
-                        </button>
+                    <button
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+                        Simpan
+                    </button>
 
-                        <a href="{{ route('guru.index') }}"
-                           class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
-                            Kembali
-                        </a>
-                    </div>
+                    <a href="{{ route('jadwal-adzan.index') }}"
+                       class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+                        Kembali
+                    </a>
 
                 </form>
 
@@ -86,5 +89,19 @@
 
         </div>
     </div>
+
+    <script>
+        document.getElementById('tanggal').addEventListener('change', function () {
+            if (!this.value) return;
+
+            // getDay(): 0=Minggu, 1=Senin, 2=Selasa, 3=Rabu, 4=Kamis, 5=Jumat, 6=Sabtu
+            const hari = new Date(this.value + 'T00:00:00').getDay();
+
+            if (hari < 1 || hari > 4) {
+                alert('Tanggal harus jatuh pada hari Senin sampai Kamis.');
+                this.value = '';
+            }
+        });
+    </script>
 
 </x-app-layout>

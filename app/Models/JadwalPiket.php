@@ -9,9 +9,12 @@ class JadwalPiket extends Model
     protected $table = 'jadwal_pikets';
 
     protected $fillable = [
-        'tanggal',
+        'hari',
         'koordinator_id',
         'anggota1_id',
+        'anggota2_id',
+        'anggota3_id',
+        'anggota4_id',
         'keterangan',
     ];
 
@@ -23,5 +26,20 @@ class JadwalPiket extends Model
     public function anggota1()
     {
         return $this->belongsTo(Pengurus::class, 'anggota1_id');
+    }
+
+    public function anggota2()
+    {
+        return $this->belongsTo(Pengurus::class, 'anggota2_id');
+    }
+
+    public function anggota3()
+    {
+        return $this->belongsTo(Pengurus::class, 'anggota3_id');
+    }
+
+    public function anggota4()
+    {
+        return $this->belongsTo(Pengurus::class, 'anggota4_id');
     }
 }
