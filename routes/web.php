@@ -8,23 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\PengumumanController;
 
-use App\Http\Controllers\JadwalAdzanController;
-use App\Http\Controllers\JadwalPiketController;
-
-use App\Http\Controllers\GuruController;
-use App\Http\Controllers\SiswaController;
-use App\Http\Controllers\AnggotaController;
-
-use App\Http\Controllers\JadwalImamController;
-use App\Http\Controllers\JadwalJumatController;
-
-use App\Http\Controllers\AnggotaDashboardController;
-
-use App\Http\Controllers\Auth\AnggotaLoginController;
-
 use App\Http\Controllers\LandingController;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -34,30 +18,6 @@ use App\Http\Controllers\LandingController;
 
 Route::get('/', [LandingController::class, 'index'])
     ->name('landing');
-
-
-
-/*
-|--------------------------------------------------------------------------
-| LOGIN ANGGOTA (guard: anggota)
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware('guest:anggota')->group(function () {
-
-    Route::get('/login-anggota', [AnggotaLoginController::class, 'create'])
-        ->name('anggota.login');
-
-    Route::post('/login-anggota', [AnggotaLoginController::class, 'store'])
-        ->name('anggota.login.store');
-
-});
-
-Route::post('/logout-anggota', [AnggotaLoginController::class, 'destroy'])
-    ->middleware('auth:anggota')
-    ->name('anggota.logout');
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -69,96 +29,24 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth:web', 'verified'])
     ->name('dashboard');
 
-
-
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD ANGGOTA (guard: anggota)
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware('auth:anggota')->group(function () {
-
-    Route::get('/anggota/dashboard', [AnggotaDashboardController::class, 'index'])
-        ->name('anggota.dashboard');
-
-});
-
-
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN AREA (guard: web only — anggota tidak bisa akses)
+| ADMIN AREA (guard: web only)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('auth:web')->group(function () {
 
-
-    // Data Guru
-    Route::resource('guru', GuruController::class);
-
-
-
-    // Data Siswa
-    Route::resource('siswa', SiswaController::class);
-
-
-
-    // Data Anggota
-    Route::resource('anggota', AnggotaController::class);
-
-
-
     // Data Pengurus DKM
     Route::resource('pengurus', PengurusController::class);
-
-
 
     // Pengumuman
     Route::resource('pengumuman', PengumumanController::class);
 
-
-
     Route::patch(
         '/pengumuman/{pengumuman}/toggle-status',
-        [PengumumanController::class,'toggleStatus']
-    )
-    ->name('pengumuman.toggleStatus');
-
-
-
-    // Jadwal Imam Dzuhur Ashar + Jumat
-    Route::resource(
-        'jadwal-imam',
-        JadwalImamController::class
-    );
-
-
-
-    // Jadwal Jumat
-    Route::resource(
-        'jadwal-jumat',
-        JadwalJumatController::class
-    );
-
-
-
-    // Jadwal Adzan
-    Route::resource(
-        'jadwal-adzan',
-        JadwalAdzanController::class
-    );
-
-
-
-    // Jadwal Piket Kebersihan
-    Route::resource(
-        'jadwal-piket',
-        JadwalPiketController::class
-    );
-
-
+        [PengumumanController::class, 'toggleStatus']
+    )->name('pengumuman.toggleStatus');
 
     /*
     |--------------------------------------------------------------------------
@@ -166,21 +54,15 @@ Route::middleware('auth:web')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/profile', [ProfileController::class,'edit'])
+    Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
-
-    Route::patch('/profile', [ProfileController::class,'update'])
+    Route::patch('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
 
-
-    Route::delete('/profile', [ProfileController::class,'destroy'])
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
-
-
 });
-
-
 
 require __DIR__.'/auth.php';

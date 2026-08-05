@@ -3,73 +3,65 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pengurus extends Model
 {
-    protected $table = 'pengurus';
-
     protected $fillable = [
-        'anggota_id',
-        'jabatan',
-        'mulai_jabatan',
-        'selesai_jabatan',
-        'status',
+        'jabatan_id', 'nama', 'nik', 'jenis_kelamin', 'tempat_lahir',
+        'tanggal_lahir', 'no_hp', 'email', 'alamat', 'foto', 'bio',
+        'periode_mulai', 'periode_selesai', 'status', 'user_id',
     ];
 
-    public function anggota()
+    protected $casts = [
+        'tanggal_lahir'   => 'date',
+        'periode_mulai'   => 'date',
+        'periode_selesai' => 'date',
+    ];
+
+    public function jabatan(): BelongsTo
     {
-        return $this->belongsTo(Anggota::class);
+        return $this->belongsTo(Jabatan::class);
     }
 
-    public function jadwalKoordinator()
+    public function user(): BelongsTo
     {
-        return $this->hasMany(JadwalPiket::class, 'koordinator_id');
+        return $this->belongsTo(User::class);
     }
 
-    public function jadwalAnggota1()
+    public function jadwalSebagaiImam(): HasMany
     {
-        return $this->hasMany(JadwalPiket::class, 'anggota1_id');
+        return $this->hasMany(JadwalImamMuazin::class, 'imam_id');
     }
 
-    public function jadwalAnggota2()
+    public function jadwalSebagaiMuazin(): HasMany
     {
-        return $this->hasMany(JadwalPiket::class, 'anggota2_id');
+        return $this->hasMany(JadwalImamMuazin::class, 'muazin_id');
     }
 
-    public function jadwalAnggota3()
+    public function jadwalBilal(): HasMany
     {
-        return $this->hasMany(JadwalPiket::class, 'anggota3_id');
+        return $this->hasMany(JadwalBilal::class);
     }
 
-    public function getNamaAttribute()
+    public function jadwalPiket(): HasMany
     {
-        return $this->anggota?->nama;
+        return $this->hasMany(JadwalPiketAnggota::class);
     }
 
-    public function getFotoAttribute()
+    public function kegiatanDitangani(): HasMany
     {
-        if (!$this->anggota) {
-            return null;
-        }
-
-        return $this->anggota->jenis == 'Guru'
-            ? $this->anggota->guru?->foto
-            : $this->anggota->siswa?->foto;
+        return $this->hasMany(Kegiatan::class, 'penanggung_jawab_id');
     }
 
-    public function getNipNisAttribute()
+    public function presensis(): HasMany
     {
-        if (!$this->anggota) {
-            return '-';
-        }
-
-        return $this->anggota->jenis == 'Guru'
-            ? $this->anggota->guru?->nip
-            : $this->anggota->siswa?->nis;
+        return $this->hasMany(Presensi::class);
     }
 
-    public function jadwalImam()
-{
-    return $this->hasMany(JadwalImam::class, 'imam_id');
-}
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif');
+    }
 }
