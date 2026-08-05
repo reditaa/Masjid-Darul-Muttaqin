@@ -2,83 +2,142 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl">
-            Tambah Jadwal Adzan
+            Tambah Guru
         </h2>
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-3xl mx-auto">
 
             <div class="bg-white p-6 rounded-lg shadow">
 
-                <form action="{{ route('jadwal-adzan.store') }}" method="POST">
+                <form
+                    action="{{ route('guru.store') }}"
+                    method="POST"
+                    enctype="multipart/form-data">
 
                     @csrf
 
                     <div class="mb-4">
-                        <label class="block mb-2 font-semibold">Tanggal</label>
+                        <label class="block mb-2 font-semibold">NIP</label>
 
                         <input
-                            type="date"
-                            name="tanggal"
-                            id="tanggal"
-                            value="{{ old('tanggal') }}"
-                            class="w-full border rounded-lg p-2"
-                            required>
+                            type="text"
+                            name="nip"
+                            value="{{ old('nip') }}"
+                            class="w-full border rounded-lg p-2">
 
-                        <p class="text-xs text-gray-500 mt-1">
-                            Hanya boleh memilih hari Senin s.d. Kamis.
-                        </p>
-
-                        @error('tanggal')
+                        @error('nip')
                             <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="mb-4">
-                        <label class="block mb-2 font-semibold">Muadzin Dzuhur</label>
+                        <label class="block mb-2 font-semibold">Nama</label>
 
-                        <select
-                            name="dzuhur_muadzin_id"
-                            class="w-full border rounded-lg p-2"
-                            required>
+                        <input
+                            type="text"
+                            name="nama"
+                            value="{{ old('nama') }}"
+                            class="w-full border rounded-lg p-2">
 
-                            <option value="">-- Pilih Muadzin Dzuhur --</option>
-
-                            @foreach($pengurus as $item)
-                                <option value="{{ $item->id }}" {{ old('dzuhur_muadzin_id') == $item->id ? 'selected' : '' }}>
-                                    {{ $item->nama }}
-                                </option>
-                            @endforeach
-
-                        </select>
+                        @error('nama')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
-                        <label class="block mb-2 font-semibold">Muadzin Ashar</label>
+                        <label class="block mb-2 font-semibold">Email</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            class="w-full border rounded-lg p-2">
+
+                        @error('email')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">Password</label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            class="w-full border rounded-lg p-2">
+
+                        @error('password')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">No HP</label>
+
+                        <input
+                            type="text"
+                            name="no_hp"
+                            value="{{ old('no_hp') }}"
+                            class="w-full border rounded-lg p-2">
+
+                        @error('no_hp')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">Alamat</label>
+
+                        <textarea
+                            name="alamat"
+                            rows="3"
+                            class="w-full border rounded-lg p-2">{{ old('alamat') }}</textarea>
+
+                        @error('alamat')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">Status</label>
 
                         <select
-                            name="ashar_muadzin_id"
-                            class="w-full border rounded-lg p-2"
-                            required>
+                            name="status"
+                            class="w-full border rounded-lg p-2">
 
-                            <option value="">-- Pilih Muadzin Ashar --</option>
-
-                            @foreach($pengurus as $item)
-                                <option value="{{ $item->id }}" {{ old('ashar_muadzin_id') == $item->id ? 'selected' : '' }}>
-                                    {{ $item->nama }}
-                                </option>
-                            @endforeach
+                            <option value="">-- Pilih Status --</option>
+                            <option value="Aktif" {{ old('status') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                            <option value="Nonaktif" {{ old('status') == 'Nonaktif' ? 'selected' : '' }}>Nonaktif</option>
 
                         </select>
+
+                        @error('status')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-2 font-semibold">Foto</label>
+
+                        <input
+                            type="file"
+                            name="foto"
+                            accept="image/*"
+                            class="w-full border rounded-lg p-2">
+
+                        @error('foto')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <button
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+                        class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg font-semibold">
                         Simpan
                     </button>
 
-                    <a href="{{ route('jadwal-adzan.index') }}"
+                    <a href="{{ route('guru.index') }}"
                        class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
                         Kembali
                     </a>
@@ -89,19 +148,5 @@
 
         </div>
     </div>
-
-    <script>
-        document.getElementById('tanggal').addEventListener('change', function () {
-            if (!this.value) return;
-
-            // getDay(): 0=Minggu, 1=Senin, 2=Selasa, 3=Rabu, 4=Kamis, 5=Jumat, 6=Sabtu
-            const hari = new Date(this.value + 'T00:00:00').getDay();
-
-            if (hari < 1 || hari > 4) {
-                alert('Tanggal harus jatuh pada hari Senin sampai Kamis.');
-                this.value = '';
-            }
-        });
-    </script>
 
 </x-app-layout>

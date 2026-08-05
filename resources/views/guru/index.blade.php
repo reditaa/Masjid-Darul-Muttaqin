@@ -91,12 +91,9 @@
                         @forelse($guru as $item)
 
                             <tr class="border-b hover:bg-green-50 transition">
-
-                                <td class="px-4 py-3">
-
-                                    {{ $loop->iteration }}
-
-                                </td>
+<td class="px-4 py-3">
+    {{ $guru->firstItem() + $loop->index }}
+</td>
 
                                 <td class="px-4 py-3">
 

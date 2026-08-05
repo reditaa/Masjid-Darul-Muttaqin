@@ -1,100 +1,90 @@
 <?php
 
-use App\Models\User;
-use App\Models\Guru;
-use App\Models\Siswa;
-use App\Models\Anggota;
-
 return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Defaults
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default authentication "guard" and password
+    | reset options for your application. You may change these defaults
+    | as required, but they're a perfect start for most applications.
+    |
+    */
 
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
     ],
 
-    'guards' => [
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Guards
+    |--------------------------------------------------------------------------
+    |
+    | Guard "web"     -> untuk Admin (model User)
+    | Guard "anggota" -> untuk Anggota / Guru / Siswa (model Anggota)
+    |
+    */
 
-        // ADMIN
+    'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
 
-        // GURU
-        'guru' => [
-            'driver' => 'session',
-            'provider' => 'gurus',
-        ],
-
-        // SISWA
-        'siswa' => [
-            'driver' => 'session',
-            'provider' => 'siswas',
-        ],
-
-        // ANGGOTA
         'anggota' => [
             'driver' => 'session',
             'provider' => 'anggotas',
         ],
-
     ],
 
-    'providers' => [
+    /*
+    |--------------------------------------------------------------------------
+    | User Providers
+    |--------------------------------------------------------------------------
+    */
 
+    'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => User::class,
-        ],
-
-        'gurus' => [
-            'driver' => 'eloquent',
-            'model' => Guru::class,
-        ],
-
-        'siswas' => [
-            'driver' => 'eloquent',
-            'model' => Siswa::class,
+            'model' => App\Models\User::class,
         ],
 
         'anggotas' => [
             'driver' => 'eloquent',
-            'model' => Anggota::class,
+            'model' => App\Models\Anggota::class,
         ],
-
     ],
 
-    'passwords' => [
+    /*
+    |--------------------------------------------------------------------------
+    | Resetting Passwords
+    |--------------------------------------------------------------------------
+    */
 
+    'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-
-        'gurus' => [
-            'provider' => 'gurus',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-
-        'siswas' => [
-            'provider' => 'siswas',
-            'table' => 'password_reset_tokens',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
 
         'anggotas' => [
             'provider' => 'anggotas',
-            'table' => 'password_reset_tokens',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
-
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password Confirmation Timeout
+    |--------------------------------------------------------------------------
+    */
 
     'password_timeout' => 10800,
 

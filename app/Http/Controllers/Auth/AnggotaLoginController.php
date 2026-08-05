@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AnggotaLoginController extends Controller
 {
     /**
      * Menampilkan halaman login anggota
      */
-    public function create()
+    public function create(): View
     {
         return view('auth.login-anggota');
     }
@@ -18,18 +21,34 @@ class AnggotaLoginController extends Controller
     /**
      * Proses login anggota
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'username' => 'required',
+        $credentials = $request->validate([
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Nanti kita isi proses login Guru & Siswa di sini
+        if (Auth::guard('anggota')->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
 
-        return back()->with(
-            'success',
-            'Halaman Login Anggota berhasil dibuat. Selanjutnya kita akan membuat proses login menggunakan NIP/NIS.'
-        );
+            return redirect()->intended(route('anggota.dashboard'));
+        }
+
+        return back()
+            ->withErrors(['email' => 'Email atau password salah.'])
+            ->withInput($request->only('email', 'login_type'));
+    }
+
+    /**
+     * Logout anggota
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        Auth::guard('anggota')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('anggota.login');
     }
 }

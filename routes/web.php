@@ -18,6 +18,8 @@ use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\JadwalImamController;
 use App\Http\Controllers\JadwalJumatController;
 
+use App\Http\Controllers\AnggotaDashboardController;
+
 use App\Http\Controllers\Auth\AnggotaLoginController;
 
 use App\Http\Controllers\LandingController;
@@ -37,38 +39,60 @@ Route::get('/', [LandingController::class, 'index'])
 
 /*
 |--------------------------------------------------------------------------
-| LOGIN ANGGOTA
+| LOGIN ANGGOTA (guard: anggota)
 |--------------------------------------------------------------------------
 */
 
-Route::get('/login-anggota', [AnggotaLoginController::class, 'create'])
-    ->name('anggota.login');
+Route::middleware('guest:anggota')->group(function () {
 
+    Route::get('/login-anggota', [AnggotaLoginController::class, 'create'])
+        ->name('anggota.login');
 
-Route::post('/login-anggota', [AnggotaLoginController::class, 'store'])
-    ->name('anggota.login.store');
+    Route::post('/login-anggota', [AnggotaLoginController::class, 'store'])
+        ->name('anggota.login.store');
+
+});
+
+Route::post('/logout-anggota', [AnggotaLoginController::class, 'destroy'])
+    ->middleware('auth:anggota')
+    ->name('anggota.logout');
 
 
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD ADMIN
+| DASHBOARD ADMIN (guard: web)
 |--------------------------------------------------------------------------
 */
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth:web', 'verified'])
     ->name('dashboard');
 
 
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN AREA
+| DASHBOARD ANGGOTA (guard: anggota)
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:anggota')->group(function () {
+
+    Route::get('/anggota/dashboard', [AnggotaDashboardController::class, 'index'])
+        ->name('anggota.dashboard');
+
+});
+
+
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN AREA (guard: web only — anggota tidak bisa akses)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth:web')->group(function () {
 
 
     // Data Guru
