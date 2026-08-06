@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengurus;
 use App\Models\Pengumuman;
-use App\Models\JadwalImam;
+use App\Models\JadwalImamMuazin;
+use App\Models\Inventaris;
+use App\Models\JadwalPiketKebersihan;
 
 class DashboardController extends Controller
 {
@@ -13,13 +15,18 @@ class DashboardController extends Controller
         $totalPengurus = Pengurus::count();
         $totalPengumuman = Pengumuman::count();
 
-        // Hitung jumlah jadwal imam
-        $totalImam = JadwalImam::count();
+        // Jumlah pengurus yang bertugas sebagai imam (tidak dobel hitung)
+        $totalImam = JadwalImamMuazin::whereNotNull('imam_id')
+            ->distinct('imam_id')
+            ->count('imam_id');
 
-        // Modul lain sementara
-        $totalMuazin = 0;
-        $totalInventaris = 0;
-        $totalPiket = 0;
+        // Jumlah pengurus yang bertugas sebagai muazin (tidak dobel hitung)
+        $totalMuazin = JadwalImamMuazin::whereNotNull('muazin_id')
+            ->distinct('muazin_id')
+            ->count('muazin_id');
+
+        $totalInventaris = Inventaris::count();
+        $totalPiket = JadwalPiketKebersihan::count();
 
         return view('dashboard', compact(
             'totalPengurus',

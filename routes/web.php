@@ -38,7 +38,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::middleware('auth:web')->group(function () {
 
     // Data Pengurus DKM
-    Route::resource('pengurus', PengurusController::class);
+    Route::resource('pengurus', PengurusController::class)
+    ->parameters(['pengurus' => 'pengurus']);
 
     // Pengumuman
     Route::resource('pengumuman', PengumumanController::class);

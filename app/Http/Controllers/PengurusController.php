@@ -2,106 +2,111 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jabatan;
 use App\Models\Pengurus;
-use App\Models\Anggota;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PengurusController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $search = $request->search;
+        $pengurus = Pengurus::with('jabatan')
+            ->orderBy('jabatan_id')
+            ->orderBy('nama')
+            ->paginate(15);
 
-        $pengurus = Pengurus::with([
-            'anggota.guru',
-            'anggota.siswa'
-        ])
-        ->when($search, function ($query) use ($search) {
-            $query->where('jabatan', 'like', "%{$search}%");
-        })
-        ->latest()
-        ->paginate(10);
-
-        return view('pengurus.index', compact('pengurus', 'search'));
+        return view('pengurus.index', compact('pengurus'));
     }
 
-public function create()
-{
-    $anggota = Anggota::with(['guru','siswa'])->get();
+    public function create()
+    {
+        $jabatans = Jabatan::orderBy('urutan')->get();
 
-    return view('pengurus.create', [
-        'anggota' => $anggota
-    ]);
-}
+        return view('pengurus.create', compact('jabatans'));
+    }
+
     public function store(Request $request)
     {
-        $request->validate([
-            'anggota_id' => 'required|exists:anggotas,id',
-            'jabatan' => 'required',
-            'mulai_jabatan' => 'required|date',
-            'selesai_jabatan' => 'nullable|date',
-            'status' => 'required',
-        ]);
+        $validated = $this->validateData($request);
 
+        if ($request->hasFile('foto')) {
+            $validated['foto'] = $request->file('foto')->store('pengurus', 'public');
+        }
 
-        Pengurus::create([
-            'anggota_id' => $request->anggota_id,
-            'jabatan' => $request->jabatan,
-            'mulai_jabatan' => $request->mulai_jabatan,
-            'selesai_jabatan' => $request->selesai_jabatan,
-            'status' => $request->status,
-        ]);
-
+        Pengurus::create($validated);
 
         return redirect()
             ->route('pengurus.index')
-            ->with('success','Data pengurus berhasil ditambahkan.');
+            ->with('success', 'Data pengurus berhasil ditambahkan.');
     }
 
-
-    public function edit(Pengurus $penguru)
+    public function show(Pengurus $pengurus)
     {
-        $anggota = Anggota::with(['guru','siswa'])->get();
+        $pengurus->load('jabatan');
 
-        return view('pengurus.edit', compact(
-            'penguru',
-            'anggota'
-        ));
+        return view('pengurus.show', compact('pengurus'));
     }
 
-
-    public function update(Request $request, Pengurus $penguru)
+    public function edit(Pengurus $pengurus)
     {
-        $request->validate([
-            'anggota_id' => 'required|exists:anggotas,id',
-            'jabatan' => 'required',
-            'mulai_jabatan' => 'required|date',
-            'selesai_jabatan' => 'nullable|date',
-            'status' => 'required',
-        ]);
+        $jabatans = Jabatan::orderBy('urutan')->get();
 
+        return view('pengurus.edit', compact('pengurus', 'jabatans'));
+    }
 
-        $penguru->update([
-            'anggota_id' => $request->anggota_id,
-            'jabatan' => $request->jabatan,
-            'mulai_jabatan' => $request->mulai_jabatan,
-            'selesai_jabatan' => $request->selesai_jabatan,
-            'status' => $request->status,
-        ]);
+    public function update(Request $request, Pengurus $pengurus)
+    {
+        $validated = $this->validateData($request, $pengurus->id);
 
+        if ($request->hasFile('foto')) {
+            if ($pengurus->foto) {
+                Storage::disk('public')->delete($pengurus->foto);
+            }
+            $validated['foto'] = $request->file('foto')->store('pengurus', 'public');
+        }
+
+        $pengurus->update($validated);
 
         return redirect()
             ->route('pengurus.index')
-            ->with('success','Data pengurus berhasil diubah.');
+            ->with('success', 'Data pengurus berhasil diperbarui.');
     }
 
-
-    public function destroy(Pengurus $penguru)
+    public function destroy(Pengurus $pengurus)
     {
-        $penguru->delete();
+        if ($pengurus->foto) {
+            Storage::disk('public')->delete($pengurus->foto);
+        }
+
+        $pengurus->delete();
 
         return redirect()
             ->route('pengurus.index')
-            ->with('success','Data pengurus berhasil dihapus.');
+            ->with('success', 'Data pengurus berhasil dihapus.');
+    }
+
+    private function validateData(Request $request, ?int $ignoreId = null): array
+    {
+        return $request->validate([
+            private function validateData(Request $request, ?int $ignoreId = null): array
+    {
+        return $request->validate([
+            'jabatan_id'       => 'nullable|exists:jabatans,id',
+            'asal'             => 'nullable|in:guru,siswa,umum',
+            'nama'             => 'required|string|max:255',
+            'nik'              => 'nullable|string|max:20',
+            'jenis_kelamin'    => 'required|in:L,P',
+            'tempat_lahir'     => 'nullable|string|max:255',
+            'tanggal_lahir'    => 'nullable|date',
+            'no_hp'            => 'nullable|string|max:20',
+            'email'            => 'nullable|email|max:255',
+            'alamat'           => 'nullable|string',
+            'foto'             => 'nullable|image|max:2048',
+            'bio'              => 'nullable|string',
+            'periode_mulai'    => 'nullable|date',
+            'periode_selesai'  => 'nullable|date|after_or_equal:periode_mulai',
+            'status'           => 'required|in:aktif,nonaktif',
+        ]);
     }
 }

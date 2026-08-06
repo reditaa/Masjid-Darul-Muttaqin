@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pengurus extends Model
 {
+    protected $table = 'pengurus';
     protected $fillable = [
-        'jabatan_id', 'nama', 'nik', 'jenis_kelamin', 'tempat_lahir',
+        'jabatan_id', 'asal', 'nama', 'nik', 'jenis_kelamin', 'tempat_lahir',
         'tanggal_lahir', 'no_hp', 'email', 'alamat', 'foto', 'bio',
         'periode_mulai', 'periode_selesai', 'status', 'user_id',
     ];
