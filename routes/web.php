@@ -7,6 +7,10 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\PengumumanController;
+use App\Http\Controllers\JadwalImamMuazinController;
+use App\Http\Controllers\JadwalBilalController;
+use App\Http\Controllers\JadwalPiketKebersihanController;
+use App\Http\Controllers\KegiatanController;
 
 use App\Http\Controllers\LandingController;
 
@@ -44,6 +48,19 @@ Route::middleware('auth:web')->group(function () {
     // Pengumuman
     Route::resource('pengumuman', PengumumanController::class);
 
+    // Jadwal Imam & Muazin
+    Route::resource('jadwal-imam-muazin', JadwalImamMuazinController::class)
+        ->parameters(['jadwal-imam-muazin' => 'jadwal_imam_muazin']);
+        // Jadwal Bilal
+    Route::resource('jadwal-bilal', JadwalBilalController::class);
+
+    // Jadwal Piket Kebersihan
+    Route::resource('jadwal-piket-kebersihan', JadwalPiketKebersihanController::class)
+        ->parameters(['jadwal-piket-kebersihan' => 'jadwal_piket_kebersihan']);
+
+
+        // Kegiatan (Kalender & Riwayat)
+    Route::resource('kegiatan', KegiatanController::class);
     Route::patch(
         '/pengumuman/{pengumuman}/toggle-status',
         [PengumumanController::class, 'toggleStatus']

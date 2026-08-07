@@ -10,21 +10,16 @@ class JabatanSeeder extends Seeder
     public function run(): void
     {
         $jabatans = [
-            'Ketua DKM',
-            'Wakil Ketua DKM',
+            'Ketua',
+            'Wakil Ketua',
             'Sekretaris',
-            'Wakil Sekretaris',
             'Bendahara',
-            'Wakil Bendahara',
-            'Koordinator Bidang Ibadah',
-            'Koordinator Bidang Pendidikan & Dakwah',
-            'Koordinator Bidang Kebersihan & Sarana',
-            'Koordinator Bidang Sosial & Kemasyarakatan',
-            'Imam Tetap',
-            'Muazin',
-            'Anggota',
+            'Humas',
+            'Dokumentasi',
+            'Kegiatan',
+            'Perlengkapan',
+            'Pembina',
         ];
-
         foreach ($jabatans as $urutan => $nama) {
             Jabatan::firstOrCreate(
                 ['nama_jabatan' => $nama],

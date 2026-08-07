@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PengumumanController extends Controller
 {
     public function index()
     {
-        $pengumuman = Pengumuman::latest()->paginate(10);
+        $pengumuman = Pengumuman::latest('tanggal_publish')->paginate(10);
 
         return view('pengumuman.index', compact('pengumuman'));
     }
@@ -21,21 +22,24 @@ class PengumumanController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'judul' => 'required',
-            'isi' => 'required',
-            'tanggal' => 'required|date',
-            'gambar' => 'nullable|image|max:2048',
-        ]);
+        $validated = $this->validateData($request);
 
         if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
+            $validated['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
         }
 
-        Pengumuman::create($data);
+        Pengumuman::create($validated);
 
-        return redirect()->route('pengumuman.index')
-            ->with('success', 'Pengumuman berhasil ditambahkan');
+        return redirect()
+            ->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil ditambahkan.');
+    }
+
+    public function show(Pengumuman $pengumuman)
+    {
+        $pengumuman->tambahDilihat();
+
+        return view('pengumuman.show', compact('pengumuman'));
     }
 
     public function edit(Pengumuman $pengumuman)
@@ -45,37 +49,56 @@ class PengumumanController extends Controller
 
     public function update(Request $request, Pengumuman $pengumuman)
     {
-        $data = $request->validate([
-            'judul' => 'required',
-            'isi' => 'required',
-            'tanggal' => 'required|date',
-            'gambar' => 'nullable|image|max:2048',
-        ]);
+        $validated = $this->validateData($request, $pengumuman->id);
 
         if ($request->hasFile('gambar')) {
-            // hapus gambar lama kalau ada, biar tidak menumpuk file tak terpakai
             if ($pengumuman->gambar) {
-                \Storage::disk('public')->delete($pengumuman->gambar);
+                Storage::disk('public')->delete($pengumuman->gambar);
             }
-
-            $data['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
+            $validated['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
         }
 
-        $pengumuman->update($data);
+        $pengumuman->update($validated);
 
-        return redirect()->route('pengumuman.index')
-            ->with('success', 'Pengumuman berhasil diubah');
+        return redirect()
+            ->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil diperbarui.');
     }
 
     public function destroy(Pengumuman $pengumuman)
     {
         if ($pengumuman->gambar) {
-            \Storage::disk('public')->delete($pengumuman->gambar);
+            Storage::disk('public')->delete($pengumuman->gambar);
         }
 
         $pengumuman->delete();
 
-        return redirect()->route('pengumuman.index')
-            ->with('success', 'Pengumuman berhasil dihapus');
+        return redirect()
+            ->route('pengumuman.index')
+            ->with('success', 'Pengumuman berhasil dihapus.');
+    }
+
+    public function toggleStatus(Pengumuman $pengumuman)
+    {
+        $pengumuman->update([
+            'status' => $pengumuman->status === 'published' ? 'arsip' : 'published',
+        ]);
+
+        return redirect()
+            ->route('pengumuman.index')
+            ->with('success', 'Status pengumuman berhasil diubah.');
+    }
+
+    private function validateData(Request $request, ?int $ignoreId = null): array
+    {
+        return $request->validate([
+            'judul'             => 'required|string|max:255',
+            'isi'               => 'required|string',
+            'kategori'          => 'required|in:umum,kegiatan,keuangan,sosial,lainnya',
+            'gambar'            => 'nullable|image|max:2048',
+            'tanggal_publish'   => 'required|date',
+            'tanggal_berakhir'  => 'nullable|date|after_or_equal:tanggal_publish',
+            'status'            => 'required|in:draft,published,arsip',
+        ]);
     }
 }

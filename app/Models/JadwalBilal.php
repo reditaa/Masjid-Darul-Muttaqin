@@ -4,7 +4,8 @@ namespace App\Models;
 
 use App\Models\Concerns\HasPresensi;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class JadwalBilal extends Model
 {
@@ -12,19 +13,25 @@ class JadwalBilal extends Model
 
     protected $table = 'jadwal_bilals';
 
-    protected $fillable = ['tanggal', 'pengurus_id', 'keterangan'];
+    protected $fillable = ['pasaran'];
 
-    protected $casts = [
-        'tanggal' => 'date',
-    ];
+    public const PASARAN_URUTAN = ['legi', 'pahing', 'pon', 'wage', 'kliwon'];
 
-    public function pengurus(): BelongsTo
+    public function anggotaPivot(): HasMany
     {
-        return $this->belongsTo(Pengurus::class);
+        return $this->hasMany(JadwalBilalAnggota::class);
     }
 
-    public function scopeAkanDatang($query)
+    public function anggota(): BelongsToMany
     {
-        return $query->where('tanggal', '>=', now()->toDateString());
+        return $this->belongsToMany(
+            Pengurus::class,
+            'jadwal_bilal_anggotas'
+        )->withTimestamps();
+    }
+
+    public function getLabelPasaranAttribute(): string
+    {
+        return ucfirst($this->pasaran);
     }
 }

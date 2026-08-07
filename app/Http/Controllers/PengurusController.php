@@ -89,9 +89,6 @@ class PengurusController extends Controller
     private function validateData(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([
-            private function validateData(Request $request, ?int $ignoreId = null): array
-    {
-        return $request->validate([
             'jabatan_id'       => 'nullable|exists:jabatans,id',
             'asal'             => 'nullable|in:guru,siswa,umum',
             'nama'             => 'required|string|max:255',

@@ -37,18 +37,24 @@
         </a>
 
         <p class="px-4 pt-4 pb-1 text-xs uppercase text-green-300 tracking-wider">Segera Hadir</p>
-
-        <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition">
+<a href="{{ route('jadwal-imam-muazin.index') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
+            {{ request()->routeIs('jadwal-imam-muazin.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-mosque w-6 text-center"></i>
             <span>Jadwal Imam & Muazin</span>
         </a>
-
-        <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition">
+        
+<a href="{{ route('jadwal-bilal.index') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
+            {{ request()->routeIs('jadwal-bilal.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-microphone w-6 text-center"></i>
             <span>Jadwal Bilal</span>
         </a>
+        
 
-        <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition">
+        <a href="{{ route('jadwal-piket-kebersihan.index') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
+            {{ request()->routeIs('jadwal-piket-kebersihan.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-broom w-6 text-center"></i>
             <span>Jadwal Piket Kebersihan</span>
         </a>

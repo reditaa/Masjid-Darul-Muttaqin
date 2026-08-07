@@ -40,12 +40,10 @@ class Pengurus extends Model
     {
         return $this->hasMany(JadwalImamMuazin::class, 'muazin_id');
     }
-
-    public function jadwalBilal(): HasMany
+public function jadwalBilal(): HasMany
     {
-        return $this->hasMany(JadwalBilal::class);
+        return $this->hasMany(JadwalBilalAnggota::class);
     }
-
     public function jadwalPiket(): HasMany
     {
         return $this->hasMany(JadwalPiketAnggota::class);
