@@ -12,6 +12,9 @@ use App\Http\Controllers\JadwalBilalController;
 use App\Http\Controllers\JadwalPiketKebersihanController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\KeuanganController;
+use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\LandingController;
 
 /*
@@ -64,6 +67,18 @@ Route::middleware('auth:web')->group(function () {
 
     // Galeri
     Route::resource('galeri', GaleriController::class);
+
+    // Inventaris
+    Route::resource('inventaris', InventarisController::class)
+        ->parameters(['inventaris' => 'inventaris']);
+
+        // Keuangan
+    Route::resource('keuangan', KeuanganController::class);
+
+    // Presensi
+    Route::resource('presensi', PresensiController::class)
+        ->except(['show', 'edit', 'update']);
+
 
     Route::patch(
         '/pengumuman/{pengumuman}/toggle-status',
