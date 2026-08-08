@@ -47,14 +47,31 @@ class Kegiatan extends Model
     {
         return $this->hasMany(TransaksiKeuangan::class);
     }
-
-    public function scopeAkanDatang($query)
+public function scopeAkanDatang($query)
     {
-        return $query->whereIn('status', ['akan_datang', 'berlangsung']);
+        return $query->where('status', '!=', 'dibatalkan')
+            ->where(function ($q) {
+                $q->where(function ($q2) {
+                    $q2->whereNotNull('tanggal_selesai')
+                       ->whereDate('tanggal_selesai', '>=', now()->toDateString());
+                })->orWhere(function ($q2) {
+                    $q2->whereNull('tanggal_selesai')
+                       ->whereDate('tanggal_mulai', '>=', now()->toDateString());
+                });
+            });
     }
 
     public function scopeRiwayat($query)
     {
-        return $query->whereIn('status', ['selesai', 'dibatalkan']);
+        return $query->where(function ($q) {
+            $q->where('status', 'dibatalkan')
+                ->orWhere(function ($q2) {
+                    $q2->whereNotNull('tanggal_selesai')
+                       ->whereDate('tanggal_selesai', '<', now()->toDateString());
+                })->orWhere(function ($q2) {
+                    $q2->whereNull('tanggal_selesai')
+                       ->whereDate('tanggal_mulai', '<', now()->toDateString());
+                });
+        });
     }
 }

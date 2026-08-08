@@ -58,12 +58,12 @@
             <i class="fas fa-broom w-6 text-center"></i>
             <span>Jadwal Piket Kebersihan</span>
         </a>
-
-        <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition">
+<a href="{{ route('kegiatan.index') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
+            {{ request()->routeIs('kegiatan.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-calendar-days w-6 text-center"></i>
             <span>Kalender Kegiatan</span>
         </a>
-
         <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition">
             <i class="fas fa-images w-6 text-center"></i>
             <span>Galeri</span>

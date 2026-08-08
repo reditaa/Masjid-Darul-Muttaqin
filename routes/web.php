@@ -11,7 +11,7 @@ use App\Http\Controllers\JadwalImamMuazinController;
 use App\Http\Controllers\JadwalBilalController;
 use App\Http\Controllers\JadwalPiketKebersihanController;
 use App\Http\Controllers\KegiatanController;
-
+use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\LandingController;
 
 /*
@@ -61,6 +61,10 @@ Route::middleware('auth:web')->group(function () {
 
         // Kegiatan (Kalender & Riwayat)
     Route::resource('kegiatan', KegiatanController::class);
+
+    // Galeri
+    Route::resource('galeri', GaleriController::class);
+
     Route::patch(
         '/pengumuman/{pengumuman}/toggle-status',
         [PengumumanController::class, 'toggleStatus']

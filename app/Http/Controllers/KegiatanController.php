@@ -101,7 +101,7 @@ class KegiatanController extends Controller
             'penanggung_jawab_id'  => 'nullable|exists:pengurus,id',
             'status'               => 'required|in:akan_datang,berlangsung,selesai,dibatalkan',
             'poster'               => 'nullable|image|max:2048',
-            'anggaran'             => 'nullable|numeric|min:0',
+            'anggaran'             => 'nullable|numeric|min:0|max:9999999999999.99',
             'jumlah_peserta'       => 'nullable|integer|min:0',
             'laporan_hasil'        => 'nullable|string',
         ]);

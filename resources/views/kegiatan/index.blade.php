@@ -54,12 +54,27 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">{{ $item->tanggal_mulai->translatedFormat('d M Y') }}</td>
+                              @php
+                                    $tanggalAcuan = $item->tanggal_selesai ?? $item->tanggal_mulai;
+                                    $sudahLewat = $tanggalAcuan && $tanggalAcuan->lt(now()->startOfDay());
+                                    $sudahSelesai = $item->status === 'selesai' || $sudahLewat;
+
+                                    if ($item->status === 'dibatalkan') {
+                                        $labelStatus = 'Dibatalkan';
+                                        $warnaStatus = 'bg-red-100 text-red-800';
+                                    } elseif ($sudahSelesai) {
+                                        $labelStatus = 'Selesai';
+                                        $warnaStatus = 'bg-green-100 text-green-800';
+                                    } else {
+                                        $labelStatus = ucfirst(str_replace('_', ' ', $item->status));
+                                        $warnaStatus = 'bg-blue-100 text-blue-800';
+                                    }
+                                @endphp
                                 <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-xs rounded-full
-                                        {{ $item->status === 'selesai' ? 'bg-green-100 text-green-800' : ($item->status === 'dibatalkan' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800') }}">
-                                        {{ ucfirst(str_replace('_', ' ', $item->status)) }}
+                                    <span class="px-2 py-1 text-xs rounded-full {{ $warnaStatus }}">
+                                        {{ $labelStatus }}
                                     </span>
-                                </td>
+                                </td> 
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center gap-3">
                                         <a href="{{ route('kegiatan.show', $item) }}"
