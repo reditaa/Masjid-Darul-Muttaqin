@@ -84,11 +84,12 @@
             <i class="fas fa-wallet w-6 text-center"></i>
             <span>Keuangan</span>
         </a>
-        <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition">
+        <a href="{{ route('presensi.index') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
+            {{ request()->routeIs('presensi.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-clipboard-check w-6 text-center"></i>
             <span>Presensi</span>
         </a>
-
     </div>
 
     {{-- User --}}
