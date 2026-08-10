@@ -15,6 +15,8 @@ use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\AnggotaDashboardController;
+use App\Http\Controllers\AnggotaPresensiController;
 use App\Http\Controllers\LandingController;
 
 /*
@@ -36,17 +38,40 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth:web', 'verified'])
     ->name('dashboard');
 
+
+    /*
+|--------------------------------------------------------------------------
+| AREA ANGGOTA (role: anggota)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth:web', 'role:anggota'])->prefix('anggota')->name('anggota.')->group(function () {
+
+    Route::get('/dashboard', [AnggotaDashboardController::class, 'index'])
+        ->name('dashboard');
+
+    Route::post('/presensi', [AnggotaPresensiController::class, 'store'])
+        ->name('presensi.store');
+
+});
+
 /*
 |--------------------------------------------------------------------------
 | ADMIN AREA (guard: web only)
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth:web')->group(function () {
+Route::middleware(['auth:web', 'role:admin'])->group(function () {
 
     // Data Pengurus DKM
     Route::resource('pengurus', PengurusController::class)
     ->parameters(['pengurus' => 'pengurus']);
+
+    Route::post('/pengurus/{pengurus}/buat-akun', [PengurusController::class, 'buatAkun'])
+        ->name('pengurus.buatAkun');
+
+    Route::delete('/pengurus/{pengurus}/hapus-akun', [PengurusController::class, 'hapusAkun'])
+        ->name('pengurus.hapusAkun');
 
     // Pengumuman
     Route::resource('pengumuman', PengumumanController::class);

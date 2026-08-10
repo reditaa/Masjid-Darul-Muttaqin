@@ -29,4 +29,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pengurus()
+    {
+        return $this->hasOne(\App\Models\Pengurus::class);
+    }
 }
