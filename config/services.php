@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'sipintu' => [
+        'base_url' => env('SIPINTU_API_URL', 'http://localhost:8000'),
+        'client_id' => env('SIPINTU_CLIENT_ID', 'app_xnrwviku7m2j'),
+        'client_secret' => env('SIPINTU_CLIENT_SECRET', 'sec_Bo0TeqmN4Wgzjf6Cagtr6xFg0iK7sS8bn'),
+    ],
+
 ];
+
