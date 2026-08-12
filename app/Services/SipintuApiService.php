@@ -11,14 +11,11 @@ class SipintuApiService
     protected string $clientId;
     protected string $clientSecret;
 
-    public function __construct(
-        ?string $baseUrl = null,
-        ?string $clientId = null,
-        ?string $clientSecret = null
-    ) {
-        $this->baseUrl = rtrim($baseUrl ?? config('services.sipintu.base_url', 'http://localhost:8000'), '/');
-        $this->clientId = $clientId ?? config('services.sipintu.client_id', 'app_xnrwviku7m2j');
-        $this->clientSecret = $clientSecret ?? config('services.sipintu.client_secret', 'sec_Bo0TeqmN4Wgzjf6Cagtr6xFg0iK7sS8bn');
+  public function __construct()
+    {
+        $this->baseUrl = rtrim(config('sipintu.base_url'), '/');
+        $this->clientId = config('sipintu.client_id');
+        $this->clientSecret = config('sipintu.client_secret');
     }
 
     /**

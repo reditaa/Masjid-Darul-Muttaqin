@@ -1,52 +1,70 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-white p-6">
+
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-10">
+
+        <div class="text-center mb-6">
+            <div class="mx-auto w-20 h-20 rounded-full bg-green-700 flex items-center justify-center text-white text-3xl">
+                <i class="fas fa-mosque"></i>
+            </div>
+            <h2 class="text-3xl font-bold mt-5">Daftar Akun</h2>
+            <p class="text-gray-500 mt-2">Khusus Pengurus DKM yang sudah terdaftar</p>
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('register') }}" class="space-y-5">
+            @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <div>
+                <label class="font-medium">Pilih Nama Anda</label>
+                <select name="pengurus_id" class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600" required>
+                    <option value="">-- Pilih Nama --</option>
+                    @foreach ($pengurus as $p)
+                        <option value="{{ $p->id }}" {{ old('pengurus_id') == $p->id ? 'selected' : '' }}>
+                            {{ $p->nama }}
+                        </option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('pengurus_id')" class="mt-2" />
+                @if ($pengurus->isEmpty())
+                    <p class="text-xs text-red-500 mt-2">
+                        Semua data Pengurus sudah punya akun, atau belum ada data Pengurus. Hubungi admin.
+                    </p>
+                @endif
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <div>
+                <label class="font-medium">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}"
+                    class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600" required>
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <div>
+                <label class="font-medium">Password</label>
+                <input type="password" name="password"
+                    class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600" required>
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <div>
+                <label class="font-medium">Konfirmasi Password</label>
+                <input type="password" name="password_confirmation"
+                    class="mt-2 w-full rounded-xl border-gray-300 focus:ring-green-600 focus:border-green-600" required>
+            </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <button class="w-full bg-green-700 hover:bg-green-800 transition rounded-xl py-3 text-white font-bold">
+                <i class="fas fa-user-plus mr-2"></i> DAFTAR
+            </button>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+            <p class="text-center text-sm text-gray-500">
+                Sudah punya akun?
+                <a href="{{ route('login') }}" class="text-green-700 font-semibold hover:underline">Login di sini</a>
+            </p>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+        </form>
+    </div>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
+</div>
+
 </x-guest-layout>

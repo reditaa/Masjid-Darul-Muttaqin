@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pengurus;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +21,11 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $pengurus = Pengurus::whereNull('user_id')
+            ->orderBy('nama')
+            ->get();
+
+        return view('auth.register', compact('pengurus'));
     }
 
     /**
@@ -31,21 +36,26 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'pengurus_id' => ['required', 'exists:pengurus,id'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $pengurus = Pengurus::whereNull('user_id')->findOrFail($request->pengurus_id);
+
         $user = User::create([
-            'name' => $request->name,
+            'name' => $pengurus->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'anggota',
         ]);
+
+        $pengurus->update(['user_id' => $user->id]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('anggota.dashboard', absolute: false));
     }
 }

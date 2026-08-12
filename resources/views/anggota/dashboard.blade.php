@@ -41,6 +41,19 @@
             </div>
         @endif
 
+        @if (! empty($tugasHariIni))
+            <div class="p-4 bg-blue-600 text-white rounded-xl shadow">
+                <p class="font-bold flex items-center gap-2">
+                    <i class="fas fa-bell"></i> Anda ada tugas hari ini!
+                </p>
+                <ul class="mt-2 space-y-1 text-sm">
+                    @foreach ($tugasHariIni as $tugas)
+                        <li><i class="fas fa-check-circle mr-1"></i> {{ $tugas }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         {{-- Jadwal Tugas --}}
         <div class="bg-white rounded-xl shadow p-5">
             <h2 class="font-bold text-lg mb-3">Jadwal Tugas Saya</h2>

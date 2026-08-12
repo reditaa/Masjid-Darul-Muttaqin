@@ -17,6 +17,8 @@ use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\AnggotaDashboardController;
 use App\Http\Controllers\AnggotaPresensiController;
+use App\Http\Controllers\Auth\SipintuAuthController;
+use App\Http\Controllers\SipintuController;
 use App\Http\Controllers\LandingController;
 
 /*
@@ -27,6 +29,17 @@ use App\Http\Controllers\LandingController;
 
 Route::get('/', [LandingController::class, 'index'])
     ->name('landing');
+    /*
+|--------------------------------------------------------------------------
+| LOGIN VIA SIPINTU (OAuth SSO)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/login/sipintu', [SipintuAuthController::class, 'redirect'])
+    ->name('sipintu.redirect');
+
+Route::get('/login/sipintu/callback', [SipintuAuthController::class, 'callback'])
+    ->name('sipintu.callback');
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +116,13 @@ Route::middleware(['auth:web', 'role:admin'])->group(function () {
     // Presensi
     Route::resource('presensi', PresensiController::class)
         ->except(['show', 'edit', 'update']);
+
+        // Pencarian SiPintu (dipakai di form Jadwal Imam/Muazin, Bilal, Piket)
+    Route::get('/sipintu/cari', [SipintuController::class, 'cari'])
+        ->name('sipintu.cari');
+
+    Route::post('/sipintu/simpan-atau-ambil', [SipintuController::class, 'simpanAtauAmbil'])
+        ->name('sipintu.simpanAtauAmbil');
 
 
     Route::patch(

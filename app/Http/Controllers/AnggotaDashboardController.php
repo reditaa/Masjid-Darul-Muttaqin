@@ -33,8 +33,43 @@ class AnggotaDashboardController extends Controller
         $pengumuman = Pengumuman::published()->latest('tanggal_publish')->take(5)->get();
         $kegiatan = Kegiatan::akanDatang()->orderBy('tanggal_mulai')->take(5)->get();
 
+        // Cek apakah ada tugas hari ini
+        $hariIni = strtolower(now()->translatedFormat('l'));
+        $pasaranIni = $this->pasaranHariIni();
+
+        $tugasHariIni = [];
+
+        foreach ($jadwalImam as $j) {
+            if ($j->hari === $hariIni) {
+                $tugasHariIni[] = 'Imam/Muazin - ' . ucfirst($j->waktu_sholat);
+            }
+        }
+
+        foreach ($jadwalBilal as $jb) {
+            if ($jb->jadwalBilal && $jb->jadwalBilal->pasaran === $pasaranIni) {
+                $tugasHariIni[] = 'Bilal - Pasaran ' . ucfirst($pasaranIni);
+            }
+        }
+
+        foreach ($jadwalPiket as $jp) {
+            if ($jp->jadwalPiket && $jp->jadwalPiket->hari === $hariIni) {
+                $tugasHariIni[] = 'Piket Kebersihan';
+            }
+        }
+
         return view('anggota.dashboard', compact(
-            'pengurus', 'jadwalImam', 'jadwalBilal', 'jadwalPiket', 'pengumuman', 'kegiatan'
+            'pengurus', 'jadwalImam', 'jadwalBilal', 'jadwalPiket',
+            'pengumuman', 'kegiatan', 'tugasHariIni'
         ));
+    }
+
+    private function pasaranHariIni(): string
+    {
+        $tanggal = now();
+        $jdn = gregoriantojd((int) $tanggal->format('n'), (int) $tanggal->format('j'), (int) $tanggal->format('Y'));
+
+        $urutanPasaran = ['legi', 'pahing', 'pon', 'wage', 'kliwon'];
+
+        return $urutanPasaran[$jdn % 5];
     }
 }

@@ -86,7 +86,7 @@
                     <span class="text-gray-600">Remember Me</span>
                 </label>
 
-                <button
+            <button
                     class="w-full bg-green-700 hover:bg-green-800 transition rounded-xl py-3 text-white font-bold">
                     <i class="fas fa-right-to-bracket mr-2"></i>
                     LOGIN
@@ -94,6 +94,22 @@
 
             </form>
 
+            <div class="flex items-center gap-3 my-5">
+                <div class="flex-1 h-px bg-gray-200"></div>
+                <span class="text-xs text-gray-400">ATAU</span>
+                <div class="flex-1 h-px bg-gray-200"></div>
+            </div>
+
+            <a href="{{ route('sipintu.redirect') }}"
+               class="w-full flex items-center justify-center gap-2 border-2 border-green-700 text-green-700 hover:bg-green-50 transition rounded-xl py-3 font-bold">
+                <i class="fas fa-school"></i>
+                LOGIN VIA SIPINTU
+            </a>
+
+            <p class="text-center text-sm text-gray-500 mt-5">
+                Pengurus DKM belum punya akun?
+                <a href="{{ route('register') }}" class="text-green-700 font-semibold hover:underline">Daftar di sini</a>
+            </p>
         </div>
 
     </div>
