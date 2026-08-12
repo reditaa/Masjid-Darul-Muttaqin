@@ -220,6 +220,68 @@
     </div>
 </section>
 
+<!-- ================= JADWAL BILAL ================= -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center">Jadwal Bilal</h2>
+        <p class="text-center text-gray-500 mt-2">Petugas bilal berdasarkan siklus pasaran.</p>
+
+        <div class="overflow-x-auto mt-14 bg-gray-50 rounded-3xl shadow">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-green-700 text-white">
+                    <tr>
+                        <th class="px-6 py-4 text-left">Pasaran</th>
+                        <th class="px-6 py-4 text-left">Petugas</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @forelse ($jadwalBilal as $item)
+                        <tr>
+                            <td class="px-6 py-4 capitalize font-medium">{{ $item->pasaran }}</td>
+                            <td class="px-6 py-4">{{ $item->anggota->pluck('nama')->join(', ') ?: '-' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2" class="px-6 py-8 text-center text-gray-400">Belum ada jadwal bilal.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ================= JADWAL PIKET KEBERSIHAN ================= -->
+<section class="py-20 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center">Jadwal Piket Kebersihan</h2>
+        <p class="text-center text-gray-500 mt-2">Petugas kebersihan masjid setiap harinya.</p>
+
+        <div class="overflow-x-auto mt-14 bg-white rounded-3xl shadow">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-green-700 text-white">
+                    <tr>
+                        <th class="px-6 py-4 text-left">Hari</th>
+                        <th class="px-6 py-4 text-left">Petugas</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @forelse ($jadwalPiket as $item)
+                        <tr>
+                            <td class="px-6 py-4 capitalize font-medium">{{ $item->hari }}</td>
+                            <td class="px-6 py-4">{{ $item->anggota->pluck('nama')->join(', ') ?: '-' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2" class="px-6 py-8 text-center text-gray-400">Belum ada jadwal piket.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
 <!-- ================= FOOTER ================= -->
 <footer class="bg-green-900 text-green-100 py-10">
     <div class="max-w-7xl mx-auto px-6 text-center">
