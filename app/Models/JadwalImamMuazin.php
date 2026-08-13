@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\HasPresensi;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class JadwalImamMuazin extends Model
 {
@@ -12,23 +12,14 @@ class JadwalImamMuazin extends Model
 
     protected $table = 'jadwal_imam_muazins';
 
-    protected $fillable = [
-        'hari', 'waktu_sholat', 'imam_id', 'khatib_id', 'muazin_id', 'keterangan',
-    ];
+    protected $fillable = ['hari', 'waktu_sholat', 'keterangan'];
 
-    public function imam(): BelongsTo
+    public function anggota(): BelongsToMany
     {
-        return $this->belongsTo(Pengurus::class, 'imam_id');
-    }
-
-    public function khatib(): BelongsTo
-    {
-        return $this->belongsTo(Pengurus::class, 'khatib_id');
-    }
-
-    public function muazin(): BelongsTo
-    {
-        return $this->belongsTo(Pengurus::class, 'muazin_id');
+        return $this->belongsToMany(
+            Pengurus::class,
+            'jadwal_imam_muazin_anggotas'
+        )->withPivot('urutan')->orderByPivot('urutan')->withTimestamps();
     }
 
     public function scopeHari($query, string $hari)

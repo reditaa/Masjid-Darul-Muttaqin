@@ -26,9 +26,7 @@
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hari</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Waktu Sholat</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Imam</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Khatib</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Muazin</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Imam (Urutan Cadangan)</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                         </tr>
                     </thead>
@@ -41,9 +39,11 @@
                                         {{ $item->waktu_sholat }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">{{ $item->imam->nama ?? '-' }}</td>
-                                <td class="px-6 py-4">{{ $item->khatib->nama ?? '-' }}</td>
-                                <td class="px-6 py-4">{{ $item->muazin->nama ?? '-' }}</td>
+                                <td class="px-6 py-4">
+                                    @foreach ($item->anggota as $imam)
+                                        <span class="text-sm">{{ $imam->pivot->urutan }}. {{ $imam->nama }}</span>@if (!$loop->last)<br>@endif
+                                    @endforeach
+                                </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center gap-3">
                                         <a href="{{ route('jadwal-imam-muazin.edit', $item) }}"
@@ -65,7 +65,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-8 text-center text-gray-400">
+                                <td colspan="4" class="px-6 py-8 text-center text-gray-400">
                                     Belum ada jadwal imam & muazin.
                                 </td>
                             </tr>
