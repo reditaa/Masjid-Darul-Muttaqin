@@ -93,7 +93,7 @@ class SipintuApiService
                 'search' => $search,
             ]);
 
-            $response = Http::timeout(5)->withHeaders($this->getHeaders())
+            $response = Http::timeout(120)->withHeaders($this->getHeaders())
                 ->get("{$this->baseUrl}/api/v1/sijuna/students", $params);
 
             return [
@@ -122,7 +122,7 @@ class SipintuApiService
                 'search' => $search,
             ]);
 
-            $response = Http::timeout(5)->withHeaders($this->getHeaders())
+            $response = Http::timeout(120)->withHeaders($this->getHeaders())
                 ->get("{$this->baseUrl}/api/v1/sijuna/teachers", $params);
 
             return [

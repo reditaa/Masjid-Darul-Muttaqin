@@ -77,6 +77,9 @@ Route::middleware(['auth:web', 'role:anggota'])->prefix('anggota')->name('anggot
 Route::middleware(['auth:web', 'role:admin'])->group(function () {
 
     // Data Pengurus DKM
+    Route::post('/pengurus/sync-sipintu', [PengurusController::class, 'syncSipintu'])
+        ->name('pengurus.syncSipintu');
+
     Route::resource('pengurus', PengurusController::class)
     ->parameters(['pengurus' => 'pengurus']);
 

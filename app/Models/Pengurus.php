@@ -31,14 +31,12 @@ class Pengurus extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function jadwalSebagaiImam(): HasMany
+    public function jadwalImamMuazin(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(JadwalImamMuazin::class, 'imam_id');
-    }
-
-    public function jadwalSebagaiMuazin(): HasMany
-    {
-        return $this->hasMany(JadwalImamMuazin::class, 'muazin_id');
+        return $this->belongsToMany(
+            JadwalImamMuazin::class,
+            'jadwal_imam_muazin_anggotas'
+        )->withPivot('urutan')->withTimestamps();
     }
 public function jadwalBilal(): HasMany
     {

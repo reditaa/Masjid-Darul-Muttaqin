@@ -4,10 +4,19 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Data Pengurus DKM
             </h2>
-            <a href="{{ route('pengurus.create') }}"
-               class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
-                <i class="fas fa-plus mr-1"></i> Tambah Pengurus
-            </a>
+            <div class="flex items-center space-x-2">
+                <form action="{{ route('pengurus.syncSipintu') }}" method="POST" onsubmit="return confirm('Proses sinkronisasi akan mengunduh data Guru & Siswa terbaru dari SiPintu Gateway. Lanjutkan?')">
+                    @csrf
+                    <button type="submit"
+                            class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 text-sm font-medium shadow-sm transition">
+                        <i class="fas fa-sync-alt mr-1"></i> Sinkronkan SiPintu
+                    </button>
+                </form>
+                <a href="{{ route('pengurus.create') }}"
+                   class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium shadow-sm transition">
+                    <i class="fas fa-plus mr-1"></i> Tambah Pengurus
+                </a>
+            </div>
         </div>
     </x-slot>
 

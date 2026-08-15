@@ -41,7 +41,14 @@
                                 <label class="flex items-center gap-2 text-sm">
                                     <input type="checkbox" name="anggota_ids[]" value="{{ $p->id }}"
                                         {{ collect(old('anggota_ids'))->contains($p->id) ? 'checked' : '' }}>
-                                    {{ $p->nama }}
+                                    <span>{{ $p->nama }}</span>
+                                    @if ($p->asal === 'guru')
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">Guru</span>
+                                    @elseif ($p->asal === 'siswa')
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">Siswa</span>
+                                    @elseif ($p->jabatan)
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{{ $p->jabatan->nama_jabatan }}</span>
+                                    @endif
                                 </label>
                             @endforeach
                         </div>

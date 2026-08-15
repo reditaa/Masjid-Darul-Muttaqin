@@ -125,6 +125,21 @@ class PengurusController extends Controller
             ->with('success', 'Akun login berhasil dihapus.');
     }
 
+    public function syncSipintu()
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('sipintu:sync');
+
+            return redirect()
+                ->route('pengurus.index')
+                ->with('success', 'Proses sinkronisasi data Guru & Siswa dari SiPintu Gateway telah selesai.');
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('pengurus.index')
+                ->with('error', 'Gagal menyinkronkan data SiPintu: ' . $e->getMessage());
+        }
+    }
+
     private function validateData(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([

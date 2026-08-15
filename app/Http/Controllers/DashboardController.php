@@ -15,15 +15,14 @@ class DashboardController extends Controller
         $totalPengurus = Pengurus::count();
         $totalPengumuman = Pengumuman::count();
 
-        // Jumlah pengurus yang bertugas sebagai imam (tidak dobel hitung)
-        $totalImam = JadwalImamMuazin::whereNotNull('imam_id')
-            ->distinct('imam_id')
-            ->count('imam_id');
+        // Jumlah personel bertugas imam & bilal
+        $totalImam = \Illuminate\Support\Facades\DB::table('jadwal_imam_muazin_anggotas')
+            ->distinct()
+            ->count('pengurus_id');
 
-        // Jumlah pengurus yang bertugas sebagai muazin (tidak dobel hitung)
-        $totalMuazin = JadwalImamMuazin::whereNotNull('muazin_id')
-            ->distinct('muazin_id')
-            ->count('muazin_id');
+        $totalMuazin = \Illuminate\Support\Facades\DB::table('jadwal_bilal_anggotas')
+            ->distinct()
+            ->count('pengurus_id');
 
         $totalInventaris = Inventaris::count();
         $totalPiket = JadwalPiketKebersihan::count();

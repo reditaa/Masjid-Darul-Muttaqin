@@ -16,10 +16,9 @@ class AnggotaDashboardController extends Controller
         $pengurus = Auth::user()->pengurus;
 
         $jadwalImam = $pengurus
-            ? JadwalImamMuazin::where('imam_id', $pengurus->id)
-                ->orWhere('muazin_id', $pengurus->id)
-                ->orWhere('khatib_id', $pengurus->id)
-                ->get()
+            ? JadwalImamMuazin::whereHas('anggota', function ($query) use ($pengurus) {
+                $query->where('pengurus_id', $pengurus->id);
+            })->get()
             : collect();
 
         $jadwalBilal = $pengurus

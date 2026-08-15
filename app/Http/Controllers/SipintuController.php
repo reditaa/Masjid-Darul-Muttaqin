@@ -22,24 +22,34 @@ class SipintuController extends Controller
         $hasil = [];
 
         if ($siswa['success']) {
-            foreach (($siswa['data']['data'] ?? []) as $item) {
-                $hasil[] = [
-                    'nama'  => $item['name'] ?? $item['nama'] ?? '-',
-                    'nik'   => $item['nis'] ?? '-',
-                    'asal'  => 'siswa',
-                    'label' => ($item['name'] ?? $item['nama'] ?? '-') . ' — Siswa (NIS: ' . ($item['nis'] ?? '-') . ')',
-                ];
+            $siswaList = $siswa['data']['data']['data'] ?? $siswa['data']['data'] ?? $siswa['data'] ?? [];
+            if (is_array($siswaList)) {
+                foreach ($siswaList as $item) {
+                    $nama = $item['nama'] ?? $item['name'] ?? '-';
+                    $nik = $item['nis'] ?? $item['nisn'] ?? '-';
+                    $hasil[] = [
+                        'nama'  => $nama,
+                        'nik'   => $nik,
+                        'asal'  => 'siswa',
+                        'label' => $nama . ' — Siswa (NIS: ' . $nik . ')',
+                    ];
+                }
             }
         }
 
         if ($guru['success']) {
-            foreach (($guru['data']['data'] ?? []) as $item) {
-                $hasil[] = [
-                    'nama'  => $item['name'] ?? $item['nama'] ?? '-',
-                    'nik'   => $item['nip'] ?? '-',
-                    'asal'  => 'guru',
-                    'label' => ($item['name'] ?? $item['nama'] ?? '-') . ' — Guru (NIP: ' . ($item['nip'] ?? '-') . ')',
-                ];
+            $guruList = $guru['data']['data']['data'] ?? $guru['data']['data'] ?? $guru['data'] ?? [];
+            if (is_array($guruList)) {
+                foreach ($guruList as $item) {
+                    $nama = $item['nama'] ?? $item['name'] ?? '-';
+                    $nik = $item['nip'] ?? '-';
+                    $hasil[] = [
+                        'nama'  => $nama,
+                        'nik'   => $nik,
+                        'asal'  => 'guru',
+                        'label' => $nama . ' — Guru (NIP: ' . $nik . ')',
+                    ];
+                }
             }
         }
         $keywordLower = strtolower($keyword);
