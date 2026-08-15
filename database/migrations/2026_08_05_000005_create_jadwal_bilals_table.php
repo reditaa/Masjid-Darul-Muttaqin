@@ -10,12 +10,9 @@ return new class extends Migration
     {
         Schema::create('jadwal_bilals', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal');
-            $table->foreignId('pengurus_id')->constrained('pengurus')->cascadeOnDelete();
+            $table->enum('pasaran', ['legi', 'pahing', 'pon', 'wage', 'kliwon'])->unique();
             $table->text('keterangan')->nullable();
             $table->timestamps();
-
-            $table->unique('tanggal');
         });
     }
 

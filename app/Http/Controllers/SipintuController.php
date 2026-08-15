@@ -42,12 +42,20 @@ class SipintuController extends Controller
                 ];
             }
         }
-$keywordLower = strtolower($keyword);
+        $keywordLower = strtolower($keyword);
         $hasil = array_values(array_filter($hasil, function ($item) use ($keywordLower) {
             return str_contains(strtolower($item['nama']), $keywordLower);
         }));
 
-        return response()->json(['results' => $hasil]);
+        $grouped = [
+            'guru'  => array_values(array_filter($hasil, fn($item) => $item['asal'] === 'guru')),
+            'siswa' => array_values(array_filter($hasil, fn($item) => $item['asal'] === 'siswa')),
+        ];
+
+        return response()->json([
+            'results' => $hasil,
+            'grouped' => $grouped,
+        ]);
     }
 
     public function simpanAtauAmbil(Request $request)

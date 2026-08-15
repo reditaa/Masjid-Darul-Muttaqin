@@ -12,8 +12,6 @@ return new class extends Migration
             $table->id();
             $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
             $table->enum('waktu_sholat', ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya', 'jumat']);
-            $table->foreignId('imam_id')->constrained('pengurus')->cascadeOnDelete();
-            $table->foreignId('muazin_id')->nullable()->constrained('pengurus')->nullOnDelete();
             $table->text('keterangan')->nullable();
             $table->timestamps();
 

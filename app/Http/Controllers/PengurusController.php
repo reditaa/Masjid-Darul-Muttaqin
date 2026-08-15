@@ -9,12 +9,18 @@ use Illuminate\Support\Facades\Storage;
 
 class PengurusController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengurus = Pengurus::with('jabatan')
-            ->orderBy('jabatan_id')
+        $query = Pengurus::with('jabatan');
+
+        if ($request->filled('asal')) {
+            $query->where('asal', $request->asal);
+        }
+
+        $pengurus = $query->orderBy('jabatan_id')
             ->orderBy('nama')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return view('pengurus.index', compact('pengurus'));
     }

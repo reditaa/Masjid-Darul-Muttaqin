@@ -22,6 +22,7 @@ return new class extends Migration
             ])->default('hadir');
 
             $table->time('waktu_presensi')->nullable();
+            $table->string('foto')->nullable();
             $table->string('metode', 20)->default('manual');
 
             $table->foreignId('pengganti_id')->nullable()->constrained('pengurus')->nullOnDelete();

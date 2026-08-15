@@ -10,7 +10,8 @@ return new class extends Migration
     {
         Schema::create('pengurus', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('jabatan_id')->constrained('jabatans')->cascadeOnDelete();
+            $table->foreignId('jabatan_id')->nullable()->constrained('jabatans')->nullOnDelete();
+            $table->enum('asal', ['guru', 'siswa', 'umum'])->nullable();
             $table->string('nama');
             $table->string('nik', 20)->nullable();
             $table->enum('jenis_kelamin', ['L', 'P']);

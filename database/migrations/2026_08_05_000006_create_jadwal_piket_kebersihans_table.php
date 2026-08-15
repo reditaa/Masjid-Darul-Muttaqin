@@ -10,9 +10,7 @@ return new class extends Migration
     {
         Schema::create('jadwal_piket_kebersihans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_regu');
-            $table->date('tanggal_mulai');
-            $table->date('tanggal_selesai');
+            $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'])->unique();
             $table->text('area_tugas')->nullable();
             $table->text('keterangan')->nullable();
             $table->timestamps();

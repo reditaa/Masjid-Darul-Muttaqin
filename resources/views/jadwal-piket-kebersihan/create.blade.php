@@ -91,16 +91,53 @@
 
                 hasilBox.innerHTML = '';
 
-                if (json.results.length === 0) {
+                const hasGuru = json.grouped?.guru?.length > 0;
+                const hasSiswa = json.grouped?.siswa?.length > 0;
+
+                if (!hasGuru && !hasSiswa) {
                     hasilBox.innerHTML = '<div class="p-3 text-sm text-gray-400">Tidak ditemukan.</div>';
                 } else {
-                    json.results.forEach(item => {
-                        const div = document.createElement('div');
-                        div.className = 'p-3 text-sm hover:bg-blue-50 cursor-pointer border-b last:border-0';
-                        div.textContent = item.label;
-                        div.addEventListener('click', () => tambahPetugas(item));
-                        hasilBox.appendChild(div);
-                    });
+                    if (hasGuru) {
+                        const headerGuru = document.createElement('div');
+                        headerGuru.className = 'px-3 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 border-b flex items-center gap-1.5 sticky top-0';
+                        headerGuru.innerHTML = '<span>👨‍🏫</span> <span>DATA GURU (NIP)</span>';
+                        hasilBox.appendChild(headerGuru);
+
+                        json.grouped.guru.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'p-3 text-sm hover:bg-blue-50 cursor-pointer border-b flex justify-between items-center';
+                            div.innerHTML = `
+                                <div>
+                                    <span class="font-medium text-gray-800">${item.nama}</span>
+                                    <span class="text-xs text-gray-500 block">NIP: ${item.nik}</span>
+                                </div>
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 font-semibold">Guru</span>
+                            `;
+                            div.addEventListener('click', () => tambahPetugas(item));
+                            hasilBox.appendChild(div);
+                        });
+                    }
+
+                    if (hasSiswa) {
+                        const headerSiswa = document.createElement('div');
+                        headerSiswa.className = 'px-3 py-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border-b flex items-center gap-1.5 sticky top-0';
+                        headerSiswa.innerHTML = '<span>🎓</span> <span>DATA SISWA (NIS)</span>';
+                        hasilBox.appendChild(headerSiswa);
+
+                        json.grouped.siswa.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'p-3 text-sm hover:bg-emerald-50 cursor-pointer border-b last:border-0 flex justify-between items-center';
+                            div.innerHTML = `
+                                <div>
+                                    <span class="font-medium text-gray-800">${item.nama}</span>
+                                    <span class="text-xs text-gray-500 block">NIS: ${item.nik}</span>
+                                </div>
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-semibold">Siswa</span>
+                            `;
+                            div.addEventListener('click', () => tambahPetugas(item));
+                            hasilBox.appendChild(div);
+                        });
+                    }
                 }
 
                 hasilBox.classList.remove('hidden');

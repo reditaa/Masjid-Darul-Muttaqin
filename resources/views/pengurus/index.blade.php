@@ -14,6 +14,29 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
+            <!-- Filter Kelompok Asal (Guru, Siswa, Umum) -->
+            <div class="mb-6 flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-semibold text-gray-700 mr-2"><i class="fas fa-filter text-gray-400 mr-1"></i> Filter Kelompok:</span>
+                    <a href="{{ route('pengurus.index') }}"
+                       class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ !request('asal') ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                        Semua
+                    </a>
+                    <a href="{{ route('pengurus.index', ['asal' => 'guru']) }}"
+                       class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ request('asal') == 'guru' ? 'bg-blue-600 text-white shadow-sm' : 'bg-blue-50 text-blue-700 hover:bg-blue-100' }}">
+                        👨‍🏫 Data Guru
+                    </a>
+                    <a href="{{ route('pengurus.index', ['asal' => 'siswa']) }}"
+                       class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ request('asal') == 'siswa' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' }}">
+                        🎓 Data Siswa
+                    </a>
+                    <a href="{{ route('pengurus.index', ['asal' => 'umum']) }}"
+                       class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ request('asal') == 'umum' ? 'bg-purple-600 text-white shadow-sm' : 'bg-purple-50 text-purple-700 hover:bg-purple-100' }}">
+                        🏛️ Umum
+                    </a>
+                </div>
+            </div>
+
             @if (session('success'))
                 <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
                     {{ session('success') }}
@@ -26,6 +49,7 @@
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Foto</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Asal</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. HP</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
@@ -43,7 +67,27 @@
                                         <div class="w-10 h-10 rounded-full bg-gray-200"></div>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 font-medium">{{ $item->nama }}</td>
+                                <td class="px-6 py-4 font-medium">
+                                    {{ $item->nama }}
+                                    @if($item->nik)
+                                        <span class="block text-xs text-gray-400">ID/NIP/NIS: {{ $item->nik }}</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if ($item->asal === 'guru')
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            👨‍🏫 Guru
+                                        </span>
+                                    @elseif ($item->asal === 'siswa')
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">
+                                            🎓 Siswa
+                                        </span>
+                                    @else
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700">
+                                            🏛️ Umum
+                                        </span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">{{ $item->jabatan->nama_jabatan ?? '-' }}</td>
                                 <td class="px-6 py-4">{{ $item->no_hp ?? '-' }}</td>
                                 <td class="px-6 py-4">
