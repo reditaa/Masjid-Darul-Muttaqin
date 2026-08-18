@@ -45,45 +45,42 @@
                                 <option value="ashar" {{ old('waktu_sholat') == 'ashar' ? 'selected' : '' }}>Ashar</option>
                                 <option value="maghrib" {{ old('waktu_sholat') == 'maghrib' ? 'selected' : '' }}>Maghrib</option>
                                 <option value="isya" {{ old('waktu_sholat') == 'isya' ? 'selected' : '' }}>Isya</option>
-                                <option value="jumat" {{ old('waktu_sholat') == 'jumat' ? 'selected' : '' }}>Jumat (Sholat Jumat)</option>
                             </select>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Imam</label>
-                        <select name="imam_id" class="mt-1 block w-full border-gray-300 rounded-md" required>
-                            <option value="">-- Pilih Imam --</option>
-                            @foreach ($pengurus as $p)
-                                <option value="{{ $p->id }}" {{ old('imam_id') == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Imam (urutan cadangan)</label>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Khatib (khusus Jumat, opsional)</label>
-                        <select name="khatib_id" class="mt-1 block w-full border-gray-300 rounded-md">
-                            <option value="">-- Tidak ada / bukan Jumat --</option>
-                            @foreach ($pengurus as $p)
-                                <option value="{{ $p->id }}" {{ old('khatib_id') == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Muazin (opsional)</label>
-                        <select name="muazin_id" class="mt-1 block w-full border-gray-300 rounded-md">
-                            <option value="">-- Tidak ada --</option>
-                            @foreach ($pengurus as $p)
-                                <option value="{{ $p->id }}" {{ old('muazin_id') == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 text-sm text-gray-500">1.</span>
+                                <select name="imam_ids[]" class="block w-full border-gray-300 rounded-md" required>
+                                    <option value="">-- Imam Utama --</option>
+                                    @foreach ($pengurus as $p)
+                                        <option value="{{ $p->id }}">{{ $p->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 text-sm text-gray-500">2.</span>
+                                <select name="imam_ids[]" class="block w-full border-gray-300 rounded-md">
+                                    <option value="">-- Cadangan 1 (opsional) --</option>
+                                    @foreach ($pengurus as $p)
+                                        <option value="{{ $p->id }}">{{ $p->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 text-sm text-gray-500">3.</span>
+                                <select name="imam_ids[]" class="block w-full border-gray-300 rounded-md">
+                                    <option value="">-- Cadangan 2 (opsional) --</option>
+                                    @foreach ($pengurus as $p)
+                                        <option value="{{ $p->id }}">{{ $p->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div>

@@ -19,6 +19,10 @@
                     </div>
                 @endif
 
+                @php
+                    $imamTerpilih = $jadwal->anggota->sortBy('pivot.urutan')->values();
+                @endphp
+
                 <form action="{{ route('jadwal-imam-muazin.update', $jadwal) }}" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
@@ -27,61 +31,65 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Hari</label>
                             <select name="hari" class="mt-1 block w-full border-gray-300 rounded-md" required>
-                                <option value="senin" {{ old('hari', $jadwal->hari) == 'senin' ? 'selected' : '' }}>Senin</option>
-                                <option value="selasa" {{ old('hari', $jadwal->hari) == 'selasa' ? 'selected' : '' }}>Selasa</option>
-                                <option value="rabu" {{ old('hari', $jadwal->hari) == 'rabu' ? 'selected' : '' }}>Rabu</option>
-                                <option value="kamis" {{ old('hari', $jadwal->hari) == 'kamis' ? 'selected' : '' }}>Kamis</option>
-                                <option value="jumat" {{ old('hari', $jadwal->hari) == 'jumat' ? 'selected' : '' }}>Jumat</option>
-                                <option value="sabtu" {{ old('hari', $jadwal->hari) == 'sabtu' ? 'selected' : '' }}>Sabtu</option>
-                                <option value="minggu" {{ old('hari', $jadwal->hari) == 'minggu' ? 'selected' : '' }}>Minggu</option>
+                                <option value="senin" {{ $jadwal->hari == 'senin' ? 'selected' : '' }}>Senin</option>
+                                <option value="selasa" {{ $jadwal->hari == 'selasa' ? 'selected' : '' }}>Selasa</option>
+                                <option value="rabu" {{ $jadwal->hari == 'rabu' ? 'selected' : '' }}>Rabu</option>
+                                <option value="kamis" {{ $jadwal->hari == 'kamis' ? 'selected' : '' }}>Kamis</option>
+                                <option value="jumat" {{ $jadwal->hari == 'jumat' ? 'selected' : '' }}>Jumat</option>
+                                <option value="sabtu" {{ $jadwal->hari == 'sabtu' ? 'selected' : '' }}>Sabtu</option>
+                                <option value="minggu" {{ $jadwal->hari == 'minggu' ? 'selected' : '' }}>Minggu</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Waktu Sholat</label>
                             <select name="waktu_sholat" class="mt-1 block w-full border-gray-300 rounded-md" required>
-                                <option value="subuh" {{ old('waktu_sholat', $jadwal->waktu_sholat) == 'subuh' ? 'selected' : '' }}>Subuh</option>
-                                <option value="dzuhur" {{ old('waktu_sholat', $jadwal->waktu_sholat) == 'dzuhur' ? 'selected' : '' }}>Dzuhur</option>
-                                <option value="ashar" {{ old('waktu_sholat', $jadwal->waktu_sholat) == 'ashar' ? 'selected' : '' }}>Ashar</option>
-                                <option value="maghrib" {{ old('waktu_sholat', $jadwal->waktu_sholat) == 'maghrib' ? 'selected' : '' }}>Maghrib</option>
-                                <option value="isya" {{ old('waktu_sholat', $jadwal->waktu_sholat) == 'isya' ? 'selected' : '' }}>Isya</option>
-                                <option value="jumat" {{ old('waktu_sholat', $jadwal->waktu_sholat) == 'jumat' ? 'selected' : '' }}>Jumat (Sholat Jumat)</option>
+                                <option value="subuh" {{ $jadwal->waktu_sholat == 'subuh' ? 'selected' : '' }}>Subuh</option>
+                                <option value="dzuhur" {{ $jadwal->waktu_sholat == 'dzuhur' ? 'selected' : '' }}>Dzuhur</option>
+                                <option value="ashar" {{ $jadwal->waktu_sholat == 'ashar' ? 'selected' : '' }}>Ashar</option>
+                                <option value="maghrib" {{ $jadwal->waktu_sholat == 'maghrib' ? 'selected' : '' }}>Maghrib</option>
+                                <option value="isya" {{ $jadwal->waktu_sholat == 'isya' ? 'selected' : '' }}>Isya</option>
                             </select>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Imam</label>
-                        <select name="imam_id" class="mt-1 block w-full border-gray-300 rounded-md" required>
-                            @foreach ($pengurus as $p)
-                                <option value="{{ $p->id }}" {{ old('imam_id', $jadwal->imam_id) == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Imam (urutan cadangan)</label>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Khatib (khusus Jumat, opsional)</label>
-                        <select name="khatib_id" class="mt-1 block w-full border-gray-300 rounded-md">
-                            <option value="">-- Tidak ada / bukan Jumat --</option>
-                            @foreach ($pengurus as $p)
-                                <option value="{{ $p->id }}" {{ old('khatib_id', $jadwal->khatib_id) == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Muazin (opsional)</label>
-                        <select name="muazin_id" class="mt-1 block w-full border-gray-300 rounded-md">
-                            <option value="">-- Tidak ada --</option>
-                            @foreach ($pengurus as $p)
-                                <option value="{{ $p->id }}" {{ old('muazin_id', $jadwal->muazin_id) == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 text-sm text-gray-500">1.</span>
+                                <select name="imam_ids[]" class="block w-full border-gray-300 rounded-md" required>
+                                    <option value="">-- Imam Utama --</option>
+                                    @foreach ($pengurus as $p)
+                                        <option value="{{ $p->id }}" {{ ($imamTerpilih->get(0)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 text-sm text-gray-500">2.</span>
+                                <select name="imam_ids[]" class="block w-full border-gray-300 rounded-md">
+                                    <option value="">-- Cadangan 1 (opsional) --</option>
+                                    @foreach ($pengurus as $p)
+                                        <option value="{{ $p->id }}" {{ ($imamTerpilih->get(1)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 text-sm text-gray-500">3.</span>
+                                <select name="imam_ids[]" class="block w-full border-gray-300 rounded-md">
+                                    <option value="">-- Cadangan 2 (opsional) --</option>
+                                    @foreach ($pengurus as $p)
+                                        <option value="{{ $p->id }}" {{ ($imamTerpilih->get(2)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
