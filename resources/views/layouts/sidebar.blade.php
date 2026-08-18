@@ -1,6 +1,6 @@
-<div class="flex flex-col h-screen w-72 bg-gradient-to-b from-green-800 via-green-900 to-green-950 text-white shadow-2xl">
+<div class="flex flex-col h-full w-72 bg-gradient-to-b from-green-800 via-green-900 to-green-950 text-white shadow-2xl">
     {{-- Logo --}}
-    <div class="px-6 py-7 border-b border-green-700">
+    <div class="px-6 py-6 border-b border-green-700 flex-shrink-0">
         <div class="flex items-center gap-4">
             <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
                 <i class="fas fa-mosque text-3xl text-green-300"></i>
@@ -13,7 +13,7 @@
     </div>
 
     {{-- Menu --}}
-    <div class="flex-1 overflow-y-auto px-3 py-5 space-y-2">
+    <div class="flex-1 min-h-0 overflow-y-auto px-3 py-5 space-y-2">
 
         <a href="{{ route('dashboard') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
@@ -22,12 +22,40 @@
             <span class="font-medium">Dashboard</span>
         </a>
 
-        <a href="{{ route('pengurus.index') }}"
-            class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
-            {{ request()->routeIs('pengurus.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
-            <i class="fas fa-user-tie w-6 text-center"></i>
-            <span>Pengurus DKM</span>
-        </a>
+        {{-- Menu Dropdown Keanggotaan & SiPintu (Native HTML5 Details & Summary) --}}
+        <details class="group" {{ request()->routeIs('pengurus.*', 'sipintu.data') ? 'open' : '' }}>
+            <summary class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 cursor-pointer list-none [&::-webkit-details-marker]:hidden select-none
+                {{ request()->routeIs('pengurus.*', 'sipintu.data') ? 'bg-white/15 text-white font-semibold' : 'hover:bg-white/10 text-green-100' }}">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-users-gear w-6 text-center text-green-300"></i>
+                    <span>Data Keanggotaan</span>
+                </div>
+                <i class="fas fa-chevron-down text-xs transition-transform duration-300 group-open:rotate-180"></i>
+            </summary>
+
+            {{-- Sub-Menu Dropdown --}}
+            <div class="pl-4 pr-1 mt-1.5 space-y-1">
+                <a href="{{ route('pengurus.index') }}"
+                    class="flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-200
+                    {{ request()->routeIs('pengurus.*') ? 'bg-white text-green-900 shadow-md font-bold' : 'text-green-200 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fas fa-user-tie text-emerald-300 w-4 text-center"></i>
+                        <span>Anggota DKM</span>
+                    </div>
+                    <span class="text-[9px] bg-emerald-700/80 text-emerald-100 px-2 py-0.5 rounded-full font-semibold">Anggota</span>
+                </a>
+
+                <a href="{{ route('sipintu.data') }}"
+                    class="flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-200
+                    {{ request()->routeIs('sipintu.data') ? 'bg-white text-blue-900 shadow-md font-bold' : 'text-green-200 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fas fa-school text-blue-300 w-4 text-center"></i>
+                        <span>Data SiPintu</span>
+                    </div>
+                    <span class="text-[9px] bg-blue-600/80 text-blue-100 px-2 py-0.5 rounded-full font-semibold">Bukan Anggota</span>
+                </a>
+            </div>
+        </details>
 
         <a href="{{ route('pengumuman.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
@@ -93,7 +121,7 @@
     </div>
 
     {{-- User --}}
-    <div class="border-t border-green-700 p-4">
+    <div class="border-t border-green-700 p-4 flex-shrink-0">
         <div class="flex items-center gap-3 mb-4">
             <div class="w-12 h-12 rounded-full bg-green-600 flex items-center justify-center">
                 <i class="fas fa-user text-white"></i>

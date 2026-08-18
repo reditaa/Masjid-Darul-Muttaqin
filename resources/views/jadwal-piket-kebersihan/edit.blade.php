@@ -41,13 +41,33 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Petugas Piket</label>
-                        <div class="grid grid-cols-2 gap-2 border rounded-md p-3 max-h-64 overflow-y-auto">
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Petugas Piket Kebersihan</label>
+
+                        {{-- Live Search Box --}}
+                        <div class="relative mb-2">
+                            <input type="text" id="search-piket" placeholder="🔍 Ketik nama untuk mencari petugas Piket..."
+                                   class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 border rounded-md p-3 max-h-64 overflow-y-auto bg-white" id="container-piket">
                             @foreach ($pengurus as $p)
-                                <label class="flex items-center gap-2 text-sm">
-                                    <input type="checkbox" name="anggota_ids[]" value="{{ $p->id }}"
-                                        {{ in_array($p->id, $anggotaTerpilih) ? 'checked' : '' }}>
-                                    {{ $p->nama }}
+                                <label class="item-piket flex items-center justify-between p-2 rounded hover:bg-emerald-50 cursor-pointer text-sm border border-gray-100 transition"
+                                       data-nama="{{ strtolower($p->nama) }}">
+                                    <div class="flex items-center gap-2 min-w-0">
+                                        <input type="checkbox" name="anggota_ids[]" value="{{ $p->id }}"
+                                            class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                            {{ in_array($p->id, $anggotaTerpilih) ? 'checked' : '' }}>
+                                        <span class="truncate">{{ $p->nama }}</span>
+                                    </div>
+                                    @if ($p->asal === 'guru')
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold flex-shrink-0">Guru</span>
+                                    @elseif ($p->asal === 'siswa')
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-semibold flex-shrink-0">Siswa</span>
+                                    @elseif ($p->jabatan)
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 font-semibold flex-shrink-0 truncate max-w-[100px]">{{ $p->jabatan->nama_jabatan }}</span>
+                                    @else
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-semibold flex-shrink-0">Anggota</span>
+                                    @endif
                                 </label>
                             @endforeach
                         </div>
@@ -65,4 +85,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('search-piket').addEventListener('input', function () {
+            const keyword = this.value.toLowerCase().trim();
+            const items = document.querySelectorAll('.item-piket');
+            items.forEach(item => {
+                const name = item.getAttribute('data-nama') || '';
+                if (name.includes(keyword)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </x-app-layout>

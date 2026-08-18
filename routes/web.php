@@ -120,7 +120,11 @@ Route::middleware(['auth:web', 'role:admin'])->group(function () {
     Route::resource('presensi', PresensiController::class)
         ->except(['show', 'edit', 'update']);
 
-        // Pencarian SiPintu (dipakai di form Jadwal Imam/Muazin, Bilal, Piket)
+    // Data SiPintu (Bukan Anggota)
+    Route::get('/sipintu-data', [SipintuController::class, 'dataIndex'])
+        ->name('sipintu.data');
+
+    // Pencarian SiPintu (dipakai di form Jadwal Imam/Muazin, Bilal, Piket)
     Route::get('/sipintu/cari', [SipintuController::class, 'cari'])
         ->name('sipintu.cari');
 

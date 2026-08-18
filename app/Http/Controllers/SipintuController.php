@@ -68,6 +68,34 @@ class SipintuController extends Controller
         ]);
     }
 
+    public function dataIndex(Request $request)
+    {
+        $query = Pengurus::whereIn('asal', ['guru', 'siswa']);
+
+        if ($request->filled('asal') && in_array($request->asal, ['guru', 'siswa'])) {
+            $query->where('asal', $request->asal);
+        }
+
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama', 'like', "%{$keyword}%")
+                  ->orWhere('nik', 'like', "%{$keyword}%")
+                  ->orWhere('email', 'like', "%{$keyword}%");
+            });
+        }
+
+        $dataSipintu = $query->orderBy('asal')
+            ->orderBy('nama')
+            ->paginate(15)
+            ->withQueryString();
+
+        $totalGuru = Pengurus::where('asal', 'guru')->count();
+        $totalSiswa = Pengurus::where('asal', 'siswa')->count();
+
+        return view('sipintu.index', compact('dataSipintu', 'totalGuru', 'totalSiswa'));
+    }
+
     public function simpanAtauAmbil(Request $request)
     {
         $validated = $request->validate([

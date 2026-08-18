@@ -37,13 +37,13 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Cari Petugas (Data Sekolah - SiPintu)</label>
+                        <label class="block text-sm font-medium text-gray-700">🔍 Cari Nama Petugas (Anggota DKM & SiPintu)</label>
                         <div class="relative">
-                            <input type="text" id="cari-sipintu" placeholder="Ketik minimal 3 huruf nama..."
-                                   class="mt-1 block w-full border-gray-300 rounded-md">
+                            <input type="text" id="cari-sipintu" placeholder="Ketik nama petugas untuk mencari..."
+                                   class="mt-1 block w-full border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             <div id="hasil-sipintu" class="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1 hidden max-h-48 overflow-y-auto"></div>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">Cari nama guru/siswa dari data sekolah, klik untuk menambahkan ke daftar petugas.</p>
+                        <p class="text-xs text-gray-500 mt-1">Cari nama petugas, klik opsi yang muncul untuk menambahkan ke daftar.</p>
                     </div>
 
                     <div>
@@ -80,7 +80,7 @@
             clearTimeout(timer);
             const keyword = this.value.trim();
 
-            if (keyword.length < 3) {
+            if (keyword.length < 1) {
                 hasilBox.classList.add('hidden');
                 return;
             }

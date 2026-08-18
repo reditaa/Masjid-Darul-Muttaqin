@@ -15,6 +15,11 @@ class PengurusController extends Controller
 
         if ($request->filled('asal')) {
             $query->where('asal', $request->asal);
+        } else {
+            // Default to internal DKM anggota (asal = umum or null)
+            $query->where(function ($q) {
+                $q->where('asal', 'umum')->orWhereNull('asal');
+            });
         }
 
         $pengurus = $query->orderBy('jabatan_id')
@@ -131,11 +136,11 @@ class PengurusController extends Controller
             \Illuminate\Support\Facades\Artisan::call('sipintu:sync');
 
             return redirect()
-                ->route('pengurus.index')
+                ->route('sipintu.data')
                 ->with('success', 'Proses sinkronisasi data Guru & Siswa dari SiPintu Gateway telah selesai.');
         } catch (\Throwable $e) {
             return redirect()
-                ->route('pengurus.index')
+                ->route('sipintu.data')
                 ->with('error', 'Gagal menyinkronkan data SiPintu: ' . $e->getMessage());
         }
     }

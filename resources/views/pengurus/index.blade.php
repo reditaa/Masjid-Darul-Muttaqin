@@ -1,120 +1,114 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Data Pengurus DKM
-            </h2>
-            <div class="flex items-center space-x-2">
-                <form action="{{ route('pengurus.syncSipintu') }}" method="POST" onsubmit="return confirm('Proses sinkronisasi akan mengunduh data Guru & Siswa terbaru dari SiPintu Gateway. Lanjutkan?')">
-                    @csrf
-                    <button type="submit"
-                            class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 text-sm font-medium shadow-sm transition">
-                        <i class="fas fa-sync-alt mr-1"></i> Sinkronkan SiPintu
-                    </button>
-                </form>
-                <a href="{{ route('pengurus.create') }}"
-                   class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium shadow-sm transition">
-                    <i class="fas fa-plus mr-1"></i> Tambah Pengurus
-                </a>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h2 class="font-bold text-2xl text-gray-800 leading-tight flex items-center gap-2">
+                    <i class="fas fa-user-tie text-emerald-600"></i> Data Anggota DKM
+                </h2>
+                <p class="text-xs text-gray-500 mt-1">Data Pengurus & Jamaah Internal Masjid — <span class="font-semibold text-emerald-700">Anggota Internal SIMADI</span></p>
             </div>
+            <a href="{{ route('pengurus.create') }}"
+               class="px-5 py-2.5 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 text-sm font-semibold shadow-md transition-all duration-200 flex items-center gap-2 self-start sm:self-auto">
+                <i class="fas fa-plus"></i> Tambah Anggota DKM
+            </a>
         </div>
     </x-slot>
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <!-- Filter Kelompok Asal (Guru, Siswa, Umum) -->
-            <div class="mb-6 flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
-                <div class="flex items-center space-x-2">
-                    <span class="text-sm font-semibold text-gray-700 mr-2"><i class="fas fa-filter text-gray-400 mr-1"></i> Filter Kelompok:</span>
+            {{-- Sub-Navbar Navigation --}}
+            <x-anggota-sipintu-nav />
+
+            @if (session('success'))
+                <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl shadow-sm flex items-center gap-3">
+                    <i class="fas fa-check-circle text-emerald-600 text-lg"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-xl shadow-sm flex items-center gap-3">
+                    <i class="fas fa-exclamation-circle text-red-600 text-lg"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+
+            <!-- Filter Status Kelompok -->
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex items-center space-x-2 overflow-x-auto">
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mr-1"><i class="fas fa-filter text-gray-400 mr-1"></i> Filter Anggota:</span>
                     <a href="{{ route('pengurus.index') }}"
-                       class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ !request('asal') ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
-                        Semua
-                    </a>
-                    <a href="{{ route('pengurus.index', ['asal' => 'guru']) }}"
-                       class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ request('asal') == 'guru' ? 'bg-blue-600 text-white shadow-sm' : 'bg-blue-50 text-blue-700 hover:bg-blue-100' }}">
-                        👨‍🏫 Data Guru
-                    </a>
-                    <a href="{{ route('pengurus.index', ['asal' => 'siswa']) }}"
-                       class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ request('asal') == 'siswa' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' }}">
-                        🎓 Data Siswa
+                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {{ !request('asal') ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                        Semua Anggota DKM
                     </a>
                     <a href="{{ route('pengurus.index', ['asal' => 'umum']) }}"
-                       class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ request('asal') == 'umum' ? 'bg-purple-600 text-white shadow-sm' : 'bg-purple-50 text-purple-700 hover:bg-purple-100' }}">
-                        🏛️ Umum
+                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {{ request('asal') == 'umum' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' }}">
+                        🏛️ DKM / General
                     </a>
                 </div>
             </div>
 
-            @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <!-- Table -->
+            <div class="bg-white shadow-sm rounded-2xl border border-gray-100 overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                    <thead class="bg-gray-50/80">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Foto</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Asal</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. HP</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Foto</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Lengkap</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Kategori</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Jabatan DKM</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Kontak</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
+                    <tbody class="divide-y divide-gray-200 bg-white">
                         @forelse ($pengurus as $item)
-                            <tr>
-                                <td class="px-6 py-4">
+                            <tr class="hover:bg-emerald-50/30 transition duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     @if ($item->foto)
-                                        <img src="{{ Storage::url($item->foto) }}"
-                                             class="w-10 h-10 rounded-full object-cover">
+                                        <img src="{{ Storage::url($item->foto) }}" class="w-10 h-10 rounded-full object-cover shadow-sm">
                                     @else
-                                        <div class="w-10 h-10 rounded-full bg-gray-200"></div>
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-100 to-green-200 text-emerald-800 flex items-center justify-center font-bold text-sm">
+                                            {{ strtoupper(substr($item->nama, 0, 1)) }}
+                                        </div>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 font-medium">
-                                    {{ $item->nama }}
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-gray-900">{{ $item->nama }}</div>
                                     @if($item->nik)
-                                        <span class="block text-xs text-gray-400">ID/NIP/NIS: {{ $item->nik }}</span>
+                                        <span class="text-xs text-gray-500">NIK: <span class="font-mono">{{ $item->nik }}</span></span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4">
-                                    @if ($item->asal === 'guru')
-                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            👨‍🏫 Guru
-                                        </span>
-                                    @elseif ($item->asal === 'siswa')
-                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">
-                                            🎓 Siswa
-                                        </span>
-                                    @else
-                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700">
-                                            🏛️ Umum
-                                        </span>
-                                    @endif
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 text-xs font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                        👤 Anggota DKM
+                                    </span>
                                 </td>
-                                <td class="px-6 py-4">{{ $item->jabatan->nama_jabatan ?? '-' }}</td>
-                                <td class="px-6 py-4">{{ $item->no_hp ?? '-' }}</td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-xs rounded-full
+                                <td class="px-6 py-4 text-sm font-medium text-gray-800">
+                                    {{ $item->jabatan->nama_jabatan ?? '-' }}
+                                </td>
+                                <td class="px-6 py-4 text-xs text-gray-600">
+                                    <div><i class="fas fa-phone text-gray-400 mr-1"></i> {{ $item->no_hp ?? '-' }}</div>
+                                    <div class="text-gray-400 mt-0.5"><i class="fas fa-envelope mr-1"></i> {{ $item->email ?? '-' }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full
                                         {{ $item->status === 'aktif' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
                                         {{ ucfirst($item->status) }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-center gap-3">
+                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                    <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('pengurus.show', $item) }}"
                                            title="Lihat"
-                                           class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100">
+                                           class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <a href="{{ route('pengurus.edit', $item) }}"
                                            title="Edit"
-                                           class="w-8 h-8 flex items-center justify-center rounded-lg bg-yellow-50 text-yellow-600 hover:bg-yellow-100">
+                                           class="w-8 h-8 flex items-center justify-center rounded-lg bg-yellow-50 text-yellow-600 hover:bg-yellow-100 transition">
                                             <i class="fas fa-pen"></i>
                                         </a>
                                         <form action="{{ route('pengurus.destroy', $item) }}" method="POST"
@@ -122,7 +116,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" title="Hapus"
-                                                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100">
+                                                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -131,8 +125,12 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-8 text-center text-gray-400">
-                                    Belum ada data pengurus.
+                                <td colspan="7" class="px-6 py-12 text-center text-gray-400">
+                                    <div class="max-w-sm mx-auto">
+                                        <i class="fas fa-user-tie text-4xl mb-3 text-gray-300"></i>
+                                        <p class="font-medium text-gray-500">Belum ada data anggota DKM.</p>
+                                        <p class="text-xs text-gray-400 mt-1">Klik <strong>"Tambah Anggota DKM"</strong> untuk menginputkan data pengurus atau anggota masjid baru.</p>
+                                    </div>
                                 </td>
                             </tr>
                         @endforelse
