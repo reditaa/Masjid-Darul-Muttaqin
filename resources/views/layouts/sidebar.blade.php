@@ -22,19 +22,20 @@
             <span class="font-medium">Dashboard</span>
         </a>
 
-        {{-- Menu Dropdown Keanggotaan & SiPintu (Native HTML5 Details & Summary) --}}
-        <details class="group" {{ request()->routeIs('pengurus.*', 'sipintu.data') ? 'open' : '' }}>
-            <summary class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 cursor-pointer list-none [&::-webkit-details-marker]:hidden select-none
+        {{-- Menu Dropdown Keanggotaan & SiPintu (Instant 1-Click Toggle via JS) --}}
+        <div class="w-full">
+            <button type="button" onclick="toggleKeanggotaanSubmenu(event)"
+                class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 cursor-pointer select-none text-left
                 {{ request()->routeIs('pengurus.*', 'sipintu.data') ? 'bg-white/15 text-white font-semibold' : 'hover:bg-white/10 text-green-100' }}">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 pointer-events-none">
                     <i class="fas fa-users-gear w-6 text-center text-green-300"></i>
-                    <span>Data Keanggotaan</span>
+                    <span class="font-medium">Data Keanggotaan</span>
                 </div>
-                <i class="fas fa-chevron-down text-xs transition-transform duration-300 group-open:rotate-180"></i>
-            </summary>
+                <i id="chevron-keanggotaan" class="fas fa-chevron-down text-xs transition-transform duration-300 pointer-events-none {{ request()->routeIs('pengurus.*', 'sipintu.data') ? 'rotate-180' : '' }}"></i>
+            </button>
 
             {{-- Sub-Menu Dropdown --}}
-            <div class="pl-4 pr-1 mt-1.5 space-y-1">
+            <div id="submenu-keanggotaan" class="pl-4 pr-1 mt-1.5 space-y-1 {{ request()->routeIs('pengurus.*', 'sipintu.data') ? '' : 'hidden' }}">
                 <a href="{{ route('pengurus.index') }}"
                     class="flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-200
                     {{ request()->routeIs('pengurus.*') ? 'bg-white text-green-900 shadow-md font-bold' : 'text-green-200 hover:bg-white/10 hover:text-white' }}">
@@ -55,7 +56,7 @@
                     <span class="text-[9px] bg-blue-600/80 text-blue-100 px-2 py-0.5 rounded-full font-semibold">Bukan Anggota</span>
                 </a>
             </div>
-        </details>
+        </div>
 
         <a href="{{ route('pengumuman.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
@@ -64,21 +65,21 @@
             <span>Pengumuman</span>
         </a>
 
-        <p class="px-4 pt-4 pb-1 text-xs uppercase text-green-300 tracking-wider">Segera Hadir</p>
-<a href="{{ route('jadwal-imam-muazin.index') }}"
+        <p class="px-4 pt-4 pb-1 text-xs uppercase text-green-300 tracking-wider">Jadwal & Kegiatan</p>
+
+        <a href="{{ route('jadwal-imam-muazin.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
             {{ request()->routeIs('jadwal-imam-muazin.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-mosque w-6 text-center"></i>
             <span>Jadwal Imam & Muazin</span>
         </a>
-        
-<a href="{{ route('jadwal-bilal.index') }}"
+
+        <a href="{{ route('jadwal-bilal.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
             {{ request()->routeIs('jadwal-bilal.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-microphone w-6 text-center"></i>
             <span>Jadwal Bilal</span>
         </a>
-        
 
         <a href="{{ route('jadwal-piket-kebersihan.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
@@ -86,13 +87,15 @@
             <i class="fas fa-broom w-6 text-center"></i>
             <span>Jadwal Piket Kebersihan</span>
         </a>
-<a href="{{ route('kegiatan.index') }}"
+
+        <a href="{{ route('kegiatan.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
             {{ request()->routeIs('kegiatan.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-calendar-days w-6 text-center"></i>
             <span>Kalender Kegiatan</span>
         </a>
-       <a href="{{ route('galeri.index') }}"
+
+        <a href="{{ route('galeri.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
             {{ request()->routeIs('galeri.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-images w-6 text-center"></i>
@@ -112,6 +115,7 @@
             <i class="fas fa-wallet w-6 text-center"></i>
             <span>Keuangan</span>
         </a>
+
         <a href="{{ route('presensi.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
             {{ request()->routeIs('presensi.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
@@ -142,3 +146,17 @@
     </div>
 
 </div>
+
+<script>
+    function toggleKeanggotaanSubmenu(e) {
+        if (e) e.preventDefault();
+        const sub = document.getElementById('submenu-keanggotaan');
+        const chevron = document.getElementById('chevron-keanggotaan');
+        if (sub) {
+            sub.classList.toggle('hidden');
+        }
+        if (chevron) {
+            chevron.classList.toggle('rotate-180');
+        }
+    }
+</script>
