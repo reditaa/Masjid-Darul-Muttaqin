@@ -19,6 +19,7 @@ use App\Http\Controllers\AnggotaDashboardController;
 use App\Http\Controllers\AnggotaPresensiController;
 use App\Http\Controllers\Auth\SipintuAuthController;
 use App\Http\Controllers\SipintuController;
+use App\Http\Controllers\JadwalJumatController;
 use App\Http\Controllers\LandingController;
 
 /*
@@ -29,6 +30,9 @@ use App\Http\Controllers\LandingController;
 
 Route::get('/', [LandingController::class, 'index'])
     ->name('landing');
+    
+Route::get('/pengumuman/{pengumuman:slug}', [PengumumanController::class, 'showPublic'])
+    ->name('pengumuman.public');
     /*
 |--------------------------------------------------------------------------
 | LOGIN VIA SIPINTU (OAuth SSO)
@@ -95,6 +99,11 @@ Route::middleware(['auth:web', 'role:admin'])->group(function () {
     // Jadwal Imam & Muazin
     Route::resource('jadwal-imam-muazin', JadwalImamMuazinController::class)
         ->parameters(['jadwal-imam-muazin' => 'jadwal_imam_muazin']);
+
+        
+    // Jadwal Jumat
+    Route::resource('jadwal-jumat', JadwalJumatController::class)
+        ->parameters(['jadwal-jumat' => 'jadwal_jumat']);
         // Jadwal Bilal
     Route::resource('jadwal-bilal', JadwalBilalController::class);
 

@@ -65,6 +65,15 @@ class PengumumanController extends Controller
             ->with('success', 'Pengumuman berhasil diperbarui.');
     }
 
+        public function showPublic(Pengumuman $pengumuman)
+    {
+        abort_unless($pengumuman->status === 'published', 404);
+
+        $pengumuman->tambahDilihat();
+
+        return view('pengumuman-public', compact('pengumuman'));
+    }
+
     public function destroy(Pengumuman $pengumuman)
     {
         if ($pengumuman->gambar) {

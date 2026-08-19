@@ -73,6 +73,12 @@
             <i class="fas fa-mosque w-6 text-center"></i>
             <span>Jadwal Imam & Muazin</span>
         </a>
+                <a href="{{ route('jadwal-jumat.index') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
+            {{ request()->routeIs('jadwal-jumat.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
+            <i class="fas fa-book-quran w-6 text-center"></i>
+            <span>Jadwal Jumat</span>
+        </a>
 
         <a href="{{ route('jadwal-bilal.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
