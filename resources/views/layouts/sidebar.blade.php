@@ -22,6 +22,13 @@
             <span class="font-medium">Dashboard</span>
         </a>
 
+        <a href="{{ route('profil-masjid.edit') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
+            {{ request()->routeIs('profil-masjid.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
+            <i class="fas fa-mosque w-6 text-center"></i>
+            <span class="font-medium">Profil Masjid</span>
+        </a>
+
         {{-- Menu Dropdown Keanggotaan & SiPintu (Instant 1-Click Toggle via JS) --}}
         <div class="w-full">
             <button type="button" onclick="toggleKeanggotaanSubmenu(event)"

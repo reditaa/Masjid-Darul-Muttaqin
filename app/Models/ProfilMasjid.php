@@ -9,11 +9,11 @@ class ProfilMasjid extends Model
     protected $table = 'profil_masjid';
 
     protected $fillable = [
-        'nama_masjid', 'slogan', 'alamat', 'kelurahan', 'kecamatan',
+        'nama_masjid', 'slogan', 'deskripsi', 'alamat', 'kelurahan', 'kecamatan',
         'kabupaten_kota', 'provinsi', 'kode_pos', 'latitude', 'longitude',
         'no_telepon', 'email', 'website', 'tahun_berdiri', 'luas_tanah',
         'luas_bangunan', 'kapasitas_jamaah', 'sejarah', 'visi', 'misi',
-        'logo', 'foto_utama',
+        'logo', 'foto_utama', 'foto_hero',
     ];
 
     protected $casts = [

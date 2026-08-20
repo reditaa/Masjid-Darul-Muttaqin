@@ -8,11 +8,14 @@ use App\Models\JadwalImamMuazin;
 use App\Models\JadwalBilal;
 use App\Models\JadwalPiketKebersihan;
 use App\Models\Kegiatan;
+use App\Models\ProfilMasjid;
 
 class LandingController extends Controller
 {
     public function index()
     {
+        $profil = ProfilMasjid::current();
+
         $jumlahPengurus = Pengurus::count();
         $jumlahPengumuman = Pengumuman::published()->count();
         $jumlahJadwal = JadwalImamMuazin::count();
@@ -37,6 +40,7 @@ class LandingController extends Controller
             ->sortBy(fn ($item) => array_search($item->hari, ['senin','selasa','rabu','kamis','jumat','sabtu','minggu']));
 
         return view('landing', compact(
+            'profil',
             'pengumuman',
             'jadwalImamMuazin',
             'jadwalBilal',

@@ -21,6 +21,7 @@ use App\Http\Controllers\Auth\SipintuAuthController;
 use App\Http\Controllers\SipintuController;
 use App\Http\Controllers\JadwalJumatController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ProfilMasjidController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,8 +32,6 @@ use App\Http\Controllers\LandingController;
 Route::get('/', [LandingController::class, 'index'])
     ->name('landing');
     
-Route::get('/pengumuman/{pengumuman:slug}', [PengumumanController::class, 'showPublic'])
-    ->name('pengumuman.public');
     /*
 |--------------------------------------------------------------------------
 | LOGIN VIA SIPINTU (OAuth SSO)
@@ -161,6 +160,21 @@ Route::middleware(['auth:web', 'role:admin'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
+    // Profil Masjid (Landing Page Settings)
+    Route::get('/profil-masjid', [ProfilMasjidController::class, 'edit'])
+        ->name('profil-masjid.edit');
+    Route::put('/profil-masjid', [ProfilMasjidController::class, 'update'])
+        ->name('profil-masjid.update');
+
 });
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC PENGUMUMAN DETAIL
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/pengumuman/{pengumuman:slug}', [PengumumanController::class, 'showPublic'])
+    ->name('pengumuman.public');
 
 require __DIR__.'/auth.php';
