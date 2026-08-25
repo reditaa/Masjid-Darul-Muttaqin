@@ -8,6 +8,8 @@ use App\Models\JadwalImamMuazin;
 use App\Models\JadwalBilal;
 use App\Models\JadwalPiketKebersihan;
 use App\Models\Kegiatan;
+use App\Models\Galeri;
+use App\Models\Inventaris;
 use App\Models\ProfilMasjid;
 
 class LandingController extends Controller
@@ -39,16 +41,36 @@ class LandingController extends Controller
             ->get()
             ->sortBy(fn ($item) => array_search($item->hari, ['senin','selasa','rabu','kamis','jumat','sabtu','minggu']));
 
+        // Kegiatan terbaru / akan datang
+        $kegiatan = Kegiatan::orderByDesc('tanggal_mulai')
+            ->take(6)
+            ->get();
+
+        // Galeri terbaru
+        $galeri = Galeri::latest('tanggal')
+            ->take(8)
+            ->get();
+
+        // Inventaris
+        $inventaris = Inventaris::orderBy('nama_barang')
+            ->take(10)
+            ->get();
+        $jumlahInventaris = Inventaris::count();
+
         return view('landing', compact(
             'profil',
             'pengumuman',
             'jadwalImamMuazin',
             'jadwalBilal',
             'jadwalPiket',
+            'kegiatan',
+            'galeri',
+            'inventaris',
             'jumlahPengurus',
             'jumlahPengumuman',
             'jumlahJadwal',
-            'jumlahKegiatan'
+            'jumlahKegiatan',
+            'jumlahInventaris'
         ));
     }
 }

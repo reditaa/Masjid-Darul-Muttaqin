@@ -106,10 +106,7 @@
                 LOGIN VIA SIPINTU
             </a>
 
-            <p class="text-center text-sm text-gray-500 mt-5">
-                Pengurus DKM belum punya akun?
-                <a href="{{ route('register') }}" class="text-green-700 font-semibold hover:underline">Daftar di sini</a>
-            </p>
+           
         </div>
 
     </div>

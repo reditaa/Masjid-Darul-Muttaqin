@@ -97,26 +97,27 @@ class PengurusController extends Controller
             ->with('success', 'Data pengurus berhasil dihapus.');
     }
 
-    public function buatAkun(Request $request, Pengurus $pengurus)
-    {
-        $validated = $request->validate([
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-        ]);
+   public function buatAkun(Request $request, Pengurus $pengurus)
+{
+    $validated = $request->validate([
+        'email' => 'required|email|unique:users,email',
+    ]);
 
-        $user = \App\Models\User::create([
-            'name'     => $pengurus->nama,
-            'email'    => $validated['email'],
-            'password' => bcrypt($validated['password']),
-            'role'     => 'anggota',
-        ]);
+    $defaultPassword = config('services.anggota.default_password');
 
-        $pengurus->update(['user_id' => $user->id]);
+    $user = \App\Models\User::create([
+        'name'     => $pengurus->nama,
+        'email'    => $validated['email'],
+        'password' => bcrypt($defaultPassword),
+        'role'     => 'anggota',
+    ]);
 
-        return redirect()
-            ->route('pengurus.edit', $pengurus)
-            ->with('success', 'Akun login berhasil dibuat untuk ' . $pengurus->nama . '.');
-    }
+    $pengurus->update(['user_id' => $user->id]);
+
+    return redirect()
+        ->route('pengurus.edit', $pengurus)
+        ->with('success', 'Akun login berhasil dibuat untuk ' . $pengurus->nama . '. Password: ' . $defaultPassword);
+}
 
     public function hapusAkun(Pengurus $pengurus)
     {

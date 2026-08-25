@@ -51,7 +51,7 @@ Route::get('/login/sipintu/callback', [SipintuAuthController::class, 'callback']
 */
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth:web', 'verified'])
+    ->middleware(['auth:web', 'verified', 'role:admin'])
     ->name('dashboard');
 
 

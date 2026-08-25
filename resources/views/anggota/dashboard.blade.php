@@ -54,57 +54,162 @@
             </div>
         @endif
 
-        {{-- Jadwal Tugas --}}
+               {{-- Jadwal Kegiatan Masjid --}}
         <div class="bg-white rounded-xl shadow p-5">
-            <h2 class="font-bold text-lg mb-3">Jadwal Tugas Saya</h2>
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <h2 class="font-bold text-lg">Jadwal Kegiatan Masjid</h2>
+                <div class="flex items-center gap-3 text-xs text-gray-500">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span> Hari ini</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Tugas saya</span>
+                </div>
+            </div>
 
-            <div class="space-y-2">
-                @forelse ($jadwalImam as $j)
-                    <div class="flex justify-between items-center border rounded-lg p-3">
-                        <div>
-                            <p class="font-medium capitalize">{{ $j->hari }} - {{ ucfirst($j->waktu_sholat) }}</p>
-                            <p class="text-xs text-gray-500">Imam & Muazin</p>
-                        </div>
-                        <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition"
-                            data-type="{{ \App\Models\JadwalImamMuazin::class }}" data-id="{{ $j->id }}"
-                            data-label="{{ ucfirst($j->hari) }} - {{ ucfirst($j->waktu_sholat) }}">
-                            Presensi
-                        </button>
+            <div class="space-y-6">
+
+                {{-- Imam & Muazin --}}
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Imam & Muazin</p>
+                    <div class="space-y-2">
+                        @forelse ($jadwalImam as $j)
+                            <div class="flex justify-between items-center gap-3 border rounded-lg p-3 transition
+                                {{ $j->hari_ini ? 'border-green-400 bg-green-50' : 'border-gray-200' }}">
+                                <div>
+                                    <p class="font-medium capitalize flex items-center gap-2 flex-wrap">
+                                        {{ $j->hari }} - {{ ucfirst($j->waktu_sholat) }}
+                                        @if ($j->hari_ini)
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">HARI INI</span>
+                                        @endif
+                                        @if ($j->milik_saya)
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
+                                        @endif
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ $j->anggota->pluck('nama')->join(', ') ?: 'Belum ada petugas' }}
+                                    </p>
+                                </div>
+                                @if ($j->milik_saya)
+                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0"
+                                        data-type="{{ \App\Models\JadwalImamMuazin::class }}" data-id="{{ $j->id }}"
+                                        data-label="{{ ucfirst($j->hari) }} - {{ ucfirst($j->waktu_sholat) }}">
+                                        Presensi
+                                    </button>
+                                @endif
+                            </div>
+                        @empty
+                            <p class="text-gray-400 text-sm">Belum ada jadwal.</p>
+                        @endforelse
                     </div>
-                @empty
-                @endforelse
+                </div>
 
-                @foreach ($jadwalBilal as $jb)
-                    <div class="flex justify-between items-center border rounded-lg p-3">
-                        <div>
-                            <p class="font-medium">Pasaran {{ ucfirst($jb->jadwalBilal->pasaran) }}</p>
-                            <p class="text-xs text-gray-500">Bilal</p>
-                        </div>
-                        <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition"
-                            data-type="{{ \App\Models\JadwalBilal::class }}" data-id="{{ $jb->jadwal_bilal_id }}"
-                            data-label="Pasaran {{ ucfirst($jb->jadwalBilal->pasaran) }}">
-                            Presensi
-                        </button>
+                {{-- Jumat --}}
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Jumat (Khatib & Imam)</p>
+                    <div class="space-y-2">
+                        @forelse ($jadwalJumat as $jj)
+                            <div class="flex justify-between items-center gap-3 border rounded-lg p-3 transition
+                                {{ $jj->hari_ini ? 'border-green-400 bg-green-50' : 'border-gray-200' }}">
+                                <div>
+                                    <p class="font-medium flex items-center gap-2 flex-wrap">
+                                        Pasaran {{ ucfirst($jj->pasaran) }}
+                                        @if ($jj->hari_ini)
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">HARI INI</span>
+                                        @endif
+                                        @if ($jj->milik_saya)
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
+                                        @endif
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Khatib: {{ $jj->khatib->pluck('nama')->join(', ') ?: '-' }}
+                                        &middot; Imam: {{ $jj->imam->pluck('nama')->join(', ') ?: '-' }}
+                                    </p>
+                                </div>
+                                @if ($jj->milik_saya)
+                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0"
+                                        data-type="{{ \App\Models\JadwalJumat::class }}" data-id="{{ $jj->id }}"
+                                        data-label="Jumat Pasaran {{ ucfirst($jj->pasaran) }}">
+                                        Presensi
+                                    </button>
+                                @endif
+                            </div>
+                        @empty
+                            <p class="text-gray-400 text-sm">Belum ada jadwal.</p>
+                        @endforelse
                     </div>
-                @endforeach
+                </div>
 
-                @foreach ($jadwalPiket as $jp)
-                    <div class="flex justify-between items-center border rounded-lg p-3">
-                        <div>
-                            <p class="font-medium capitalize">{{ $jp->jadwalPiket->hari }}</p>
-                            <p class="text-xs text-gray-500">Piket Kebersihan</p>
-                        </div>
-                        <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition"
-                            data-type="{{ \App\Models\JadwalPiketKebersihan::class }}" data-id="{{ $jp->jadwal_piket_kebersihan_id }}"
-                            data-label="Piket {{ ucfirst($jp->jadwalPiket->hari) }}">
-                            Presensi
-                        </button>
+                {{-- Bilal --}}
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Bilal</p>
+                    <div class="space-y-2">
+                        @forelse ($jadwalBilal as $jb)
+                            <div class="flex justify-between items-center gap-3 border rounded-lg p-3 transition
+                                {{ $jb->hari_ini ? 'border-green-400 bg-green-50' : 'border-gray-200' }}">
+                                <div>
+                                    <p class="font-medium flex items-center gap-2 flex-wrap">
+                                        Pasaran {{ ucfirst($jb->pasaran) }}
+                                        @if ($jb->hari_ini)
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">HARI INI</span>
+                                        @endif
+                                        @if ($jb->milik_saya)
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
+                                        @endif
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ $jb->anggota->pluck('nama')->join(', ') ?: 'Belum ada petugas' }}
+                                    </p>
+                                </div>
+                                @if ($jb->milik_saya)
+                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0"
+                                        data-type="{{ \App\Models\JadwalBilal::class }}" data-id="{{ $jb->id }}"
+                                        data-label="Pasaran {{ ucfirst($jb->pasaran) }}">
+                                        Presensi
+                                    </button>
+                                @endif
+                            </div>
+                        @empty
+                            <p class="text-gray-400 text-sm">Belum ada jadwal.</p>
+                        @endforelse
                     </div>
-                @endforeach
+                </div>
 
-                @if ($jadwalImam->isEmpty() && $jadwalBilal->isEmpty() && $jadwalPiket->isEmpty())
-                    <p class="text-gray-400 text-sm text-center py-4">Belum ada jadwal tugas untuk Anda.</p>
-                @endif
+                {{-- Piket Kebersihan --}}
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Piket Kebersihan</p>
+                    <div class="space-y-2">
+                        @forelse ($jadwalPiket as $jp)
+                            <div class="flex justify-between items-center gap-3 border rounded-lg p-3 transition
+                                {{ $jp->hari_ini ? 'border-green-400 bg-green-50' : 'border-gray-200' }}">
+                                <div>
+                                    <p class="font-medium capitalize flex items-center gap-2 flex-wrap">
+                                        {{ $jp->hari }}
+                                        @if ($jp->hari_ini)
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">HARI INI</span>
+                                        @endif
+                                        @if ($jp->milik_saya)
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
+                                        @endif
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ $jp->anggota->pluck('nama')->join(', ') ?: 'Belum ada petugas' }}
+                                    </p>
+                                </div>
+                                @if ($jp->milik_saya)
+                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0"
+                                        data-type="{{ \App\Models\JadwalPiketKebersihan::class }}" data-id="{{ $jp->id }}"
+                                        data-label="Piket {{ ucfirst($jp->hari) }}">
+                                        Presensi
+                                    </button>
+                                @endif
+                            </div>
+                        @empty
+                            <p class="text-gray-400 text-sm">Belum ada jadwal.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+            </div>
+        </div>
+                
             </div>
         </div>
 

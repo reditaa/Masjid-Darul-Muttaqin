@@ -278,6 +278,136 @@
         </div>
     </div>
 </section>
+<!-- ================= KEGIATAN ================= -->
+<section id="kegiatan" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center">Kegiatan Masjid</h2>
+        <p class="text-center text-gray-500 mt-2">Agenda dan riwayat kegiatan masjid.</p>
+
+        <div class="grid md:grid-cols-3 gap-8 mt-14">
+            @forelse ($kegiatan as $item)
+                <div class="bg-gray-50 rounded-3xl shadow overflow-hidden hover:-translate-y-2 transition">
+                    @if ($item->poster)
+                        <img src="{{ Storage::url($item->poster) }}" class="w-full h-44 object-cover">
+                    @else
+                        <div class="w-full h-44 bg-blue-100 flex items-center justify-center text-5xl">📅</div>
+                    @endif
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700">
+                                {{ ucfirst(str_replace('_', ' ', $item->kategori)) }}
+                            </span>
+                            <span @class([
+                                'text-xs px-2 py-1 rounded-full',
+                                'bg-green-100 text-green-700' => $item->status === 'akan_datang',
+                                'bg-yellow-100 text-yellow-700' => $item->status === 'berlangsung',
+                                'bg-gray-200 text-gray-600' => $item->status === 'selesai',
+                                'bg-red-100 text-red-700' => $item->status === 'dibatalkan',
+                            ])>
+                                {{ ucfirst(str_replace('_', ' ', $item->status)) }}
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-lg mt-3">{{ $item->judul }}</h3>
+                        <p class="text-gray-500 text-sm mt-2">
+                            {{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}
+                            @if ($item->lokasi)
+                                &middot; {{ $item->lokasi }}
+                            @endif
+                        </p>
+                        @if ($item->deskripsi)
+                            <p class="text-gray-600 text-sm mt-3 line-clamp-3">
+                                {{ Str::limit(strip_tags($item->deskripsi), 120) }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <p class="col-span-3 text-center text-gray-400">Belum ada kegiatan.</p>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<!-- ================= GALERI ================= -->
+<section id="galeri" class="py-20 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center">Galeri</h2>
+        <p class="text-center text-gray-500 mt-2">Dokumentasi foto dan video kegiatan masjid.</p>
+
+        <div class="grid md:grid-cols-4 gap-6 mt-14">
+            @forelse ($galeri as $item)
+                <div class="group relative rounded-2xl overflow-hidden shadow bg-white aspect-square">
+                    @if ($item->tipe === 'video')
+                        <video src="{{ Storage::url($item->file) }}" class="w-full h-full object-cover"></video>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                            <span class="text-white text-4xl">▶</span>
+                        </div>
+                    @else
+                        <img src="{{ Storage::url($item->file) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                    @endif
+                    <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                        <p class="text-white text-sm font-medium truncate">{{ $item->judul }}</p>
+                        <p class="text-gray-200 text-xs">
+                            {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
+                        </p>
+                    </div>
+                </div>
+            @empty
+                <p class="col-span-4 text-center text-gray-400">Belum ada galeri.</p>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<!-- ================= INVENTARIS ================= -->
+<section id="inventaris" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center">Inventaris Masjid</h2>
+        <p class="text-center text-gray-500 mt-2">Data aset dan perlengkapan masjid.</p>
+
+        <div class="overflow-x-auto mt-14 bg-gray-50 rounded-3xl shadow">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-green-700 text-white">
+                    <tr>
+                        <th class="px-6 py-4 text-left">Nama Barang</th>
+                        <th class="px-6 py-4 text-left">Kategori</th>
+                        <th class="px-6 py-4 text-left">Jumlah</th>
+                        <th class="px-6 py-4 text-left">Kondisi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @forelse ($inventaris as $item)
+                        <tr>
+                            <td class="px-6 py-4 font-medium">{{ $item->nama_barang }}</td>
+                            <td class="px-6 py-4 capitalize">{{ str_replace('_', ' ', $item->kategori) }}</td>
+                            <td class="px-6 py-4">{{ $item->jumlah }} {{ $item->satuan }}</td>
+                            <td class="px-6 py-4">
+                                <span @class([
+                                    'text-xs px-2 py-1 rounded-full',
+                                    'bg-green-100 text-green-700' => $item->kondisi === 'baik',
+                                    'bg-yellow-100 text-yellow-700' => $item->kondisi === 'rusak_ringan',
+                                    'bg-red-100 text-red-700' => in_array($item->kondisi, ['rusak_berat', 'hilang']),
+                                ])>
+                                    {{ ucfirst(str_replace('_', ' ', $item->kondisi)) }}
+                                </span>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-8 text-center text-gray-400">Belum ada data inventaris.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if ($jumlahInventaris > 10)
+            <p class="text-center text-gray-400 text-sm mt-4">
+                Menampilkan 10 dari {{ $jumlahInventaris }} item inventaris.
+            </p>
+        @endif
+    </div>
+</section>
 
 <!-- ================= FOOTER ================= -->
 <footer class="bg-green-900 text-green-100 py-10">

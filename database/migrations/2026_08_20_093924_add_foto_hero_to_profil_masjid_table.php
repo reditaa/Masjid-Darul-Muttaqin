@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::table('profil_masjid', function (Blueprint $table) {
             $table->string('foto_hero')->nullable()->after('foto_utama');
             $table->text('deskripsi')->nullable()->after('slogan');
+            $table->text('alamat')->nullable()->change();
         });
     }
 
@@ -18,6 +19,7 @@ return new class extends Migration
     {
         Schema::table('profil_masjid', function (Blueprint $table) {
             $table->dropColumn(['foto_hero', 'deskripsi']);
+            $table->text('alamat')->nullable(false)->change();
         });
     }
 };

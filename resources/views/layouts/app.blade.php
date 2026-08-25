@@ -70,5 +70,39 @@
 
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const aside = document.querySelector('aside');
+    if (!aside) return;
+
+    // Cari otomatis elemen scroll di dalam sidebar (overflow-y auto/scroll)
+    let scrollEl = null;
+    const candidates = aside.querySelectorAll('*');
+    for (const el of candidates) {
+        const style = window.getComputedStyle(el);
+        if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+            scrollEl = el;
+            break;
+        }
+    }
+
+    // Fallback: kalau tidak ketemu, pakai aside itu sendiri
+    if (!scrollEl) scrollEl = aside;
+
+    const STORAGE_KEY = 'sidebarScrollPos';
+
+    // Restore posisi scroll setelah reload
+    const savedScroll = sessionStorage.getItem(STORAGE_KEY);
+    if (savedScroll !== null) {
+        scrollEl.scrollTop = parseInt(savedScroll, 10);
+    }
+
+    // Simpan posisi setiap kali di-scroll
+    scrollEl.addEventListener('scroll', function () {
+        sessionStorage.setItem(STORAGE_KEY, scrollEl.scrollTop);
+    });
+});
+</script>
+
 </body>
 </html>

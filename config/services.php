@@ -2,6 +2,10 @@
 
 return [
 
+
+'anggota' => [
+    'default_password' => env('ANGGOTA_DEFAULT_PASSWORD', 'anggota123'),
+],
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
