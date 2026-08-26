@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Jadwal Khotib & Imam Jumat
+            Edit Jadwal Jumat
         </h2>
     </x-slot>
 
@@ -22,6 +22,7 @@
                 @php
                     $khatibTerpilih = $jadwal->khatib->sortBy('pivot.urutan')->values();
                     $imamTerpilih = $jadwal->imam->sortBy('pivot.urutan')->values();
+                    $bilalTerpilih = $jadwal->bilal->sortBy('pivot.urutan')->values();
                 @endphp
 
                 <form action="{{ route('jadwal-jumat.update', $jadwal) }}" method="POST" class="space-y-4">
@@ -39,27 +40,36 @@
                         </select>
                     </div>
 
+                    {{-- Live Search Filter Box --}}
+                    <div class="bg-blue-50/70 p-3 rounded-lg border border-blue-100">
+                        <label class="block text-xs font-semibold text-blue-800 mb-1">
+                            <i class="fas fa-search text-blue-500 mr-1"></i> Cari Nama Petugas:
+                        </label>
+                        <input type="text" id="search-petugas-global" placeholder="Ketik nama petugas untuk menyaring pilihan..."
+                               class="w-full text-xs border border-blue-200 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                    </div>
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Khatib (urutan cadangan)</label>
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
-                                <span class="w-6 text-sm text-gray-500">1.</span>
-                                <select name="khatib_ids[]" class="block w-full border-gray-300 rounded-md" required>
+                                <span class="w-24 text-xs font-semibold text-gray-600">1. Utama:</span>
+                                <select name="khatib_ids[]" class="select-petugas-list block w-full border-gray-300 rounded-md text-sm" required>
                                     <option value="">-- Khatib Utama --</option>
                                     @foreach ($pengurus as $p)
-                                        <option value="{{ $p->id }}" {{ ($khatibTerpilih->get(0)?->id) == $p->id ? 'selected' : '' }}>
-                                            {{ $p->nama }}
+                                        <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}" {{ ($khatibTerpilih->get(0)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }} {{ $p->asal ? '('.ucfirst($p->asal).')' : '' }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-6 text-sm text-gray-500">2.</span>
-                                <select name="khatib_ids[]" class="block w-full border-gray-300 rounded-md">
+                                <span class="w-24 text-xs font-semibold text-gray-600">2. Cadangan:</span>
+                                <select name="khatib_ids[]" class="select-petugas-list block w-full border-gray-300 rounded-md text-sm">
                                     <option value="">-- Cadangan (opsional) --</option>
                                     @foreach ($pengurus as $p)
-                                        <option value="{{ $p->id }}" {{ ($khatibTerpilih->get(1)?->id) == $p->id ? 'selected' : '' }}>
-                                            {{ $p->nama }}
+                                        <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}" {{ ($khatibTerpilih->get(1)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }} {{ $p->asal ? '('.ucfirst($p->asal).')' : '' }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -71,23 +81,51 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Imam (urutan cadangan)</label>
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
-                                <span class="w-6 text-sm text-gray-500">1.</span>
-                                <select name="imam_ids[]" class="block w-full border-gray-300 rounded-md" required>
+                                <span class="w-24 text-xs font-semibold text-gray-600">1. Utama:</span>
+                                <select name="imam_ids[]" class="select-petugas-list block w-full border-gray-300 rounded-md text-sm" required>
                                     <option value="">-- Imam Utama --</option>
                                     @foreach ($pengurus as $p)
-                                        <option value="{{ $p->id }}" {{ ($imamTerpilih->get(0)?->id) == $p->id ? 'selected' : '' }}>
-                                            {{ $p->nama }}
+                                        <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}" {{ ($imamTerpilih->get(0)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }} {{ $p->asal ? '('.ucfirst($p->asal).')' : '' }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-6 text-sm text-gray-500">2.</span>
-                                <select name="imam_ids[]" class="block w-full border-gray-300 rounded-md">
+                                <span class="w-24 text-xs font-semibold text-gray-600">2. Cadangan:</span>
+                                <select name="imam_ids[]" class="select-petugas-list block w-full border-gray-300 rounded-md text-sm">
                                     <option value="">-- Cadangan (opsional) --</option>
                                     @foreach ($pengurus as $p)
-                                        <option value="{{ $p->id }}" {{ ($imamTerpilih->get(1)?->id) == $p->id ? 'selected' : '' }}>
-                                            {{ $p->nama }}
+                                        <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}" {{ ($imamTerpilih->get(1)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }} {{ $p->asal ? '('.ucfirst($p->asal).')' : '' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Bilal (urutan cadangan)</label>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-24 text-xs font-semibold text-gray-600">1. Utama:</span>
+                                <select name="bilal_ids[]" class="select-petugas-list block w-full border-gray-300 rounded-md text-sm" required>
+                                    <option value="">-- Bilal Utama --</option>
+                                    @foreach ($pengurus as $p)
+                                        <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}" {{ ($bilalTerpilih->get(0)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }} {{ $p->asal ? '('.ucfirst($p->asal).')' : '' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-24 text-xs font-semibold text-gray-600">2. Cadangan:</span>
+                                <select name="bilal_ids[]" class="select-petugas-list block w-full border-gray-300 rounded-md text-sm">
+                                    <option value="">-- Cadangan (opsional) --</option>
+                                    @foreach ($pengurus as $p)
+                                        <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}" {{ ($bilalTerpilih->get(1)?->id) == $p->id ? 'selected' : '' }}>
+                                            {{ $p->nama }} {{ $p->asal ? '('.ucfirst($p->asal).')' : '' }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -111,4 +149,24 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('search-petugas-global').addEventListener('input', function () {
+            const keyword = this.value.toLowerCase().trim();
+            const selects = document.querySelectorAll('.select-petugas-list');
+            selects.forEach(select => {
+                Array.from(select.options).forEach(option => {
+                    if (!option.value) return;
+                    const name = option.getAttribute('data-nama') || option.text.toLowerCase();
+                    if (name.includes(keyword)) {
+                        option.hidden = false;
+                        option.style.display = '';
+                    } else {
+                        option.hidden = true;
+                        option.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </x-app-layout>

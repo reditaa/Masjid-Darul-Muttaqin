@@ -31,4 +31,13 @@ class JadwalJumat extends Model
             ->orderByPivot('urutan')
             ->withTimestamps();
     }
+
+    public function bilal(): BelongsToMany
+    {
+        return $this->belongsToMany(Pengurus::class, 'jadwal_jumat_anggotas')
+            ->wherePivot('peran', 'bilal')
+            ->withPivot('urutan')
+            ->orderByPivot('urutan')
+            ->withTimestamps();
+    }
 }

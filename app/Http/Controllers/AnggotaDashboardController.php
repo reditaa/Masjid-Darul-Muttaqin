@@ -24,10 +24,12 @@ class AnggotaDashboardController extends Controller
         $isJumat = $hariIni === 'jumat';
 
         // Imam & Muazin - SELURUH jadwal, ditandai mana milik sendiri & mana yang hari ini
-        $jadwalImam = JadwalImamMuazin::with('anggota')
+        $jadwalImam = JadwalImamMuazin::with(['imam', 'muazin'])
             ->get()
             ->map(function ($j) use ($pengurusId, $hariIni) {
-                $j->milik_saya = $pengurusId && $j->anggota->contains('id', $pengurusId);
+                $j->milik_saya = $pengurusId && (
+                    $j->imam->contains('id', $pengurusId) || $j->muazin->contains('id', $pengurusId)
+                );
                 $j->hari_ini = $j->hari === $hariIni;
                 return $j;
             })

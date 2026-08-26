@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Jadwal Khotib & Imam Jumat
+                Jadwal Jumat (Pasaran Jawa)
             </h2>
             <a href="{{ route('jadwal-jumat.create') }}"
                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
@@ -12,7 +12,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if (session('success'))
                 <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
@@ -24,29 +24,37 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pasaran</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Khatib (Urutan)</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Imam (Urutan)</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-32">Pasaran</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Khatib</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Imam</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bilal</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase w-32">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse ($jadwal as $item)
                             <tr>
-                                <td class="px-6 py-4 font-medium">
-                                    <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800 capitalize">
-                                        {{ $item->pasaran }}
-                                    </span>
+                                <td class="px-6 py-4 font-medium capitalize">{{ $item->pasaran }}</td>
+                                <td class="px-6 py-4">
+                                    @forelse ($item->khatib as $khatib)
+                                        <span class="text-sm">{{ $khatib->pivot->urutan }}. {{ $khatib->nama }}</span>@if (!$loop->last)<br>@endif
+                                    @empty
+                                        <span class="text-sm text-gray-400">Belum ada khatib</span>
+                                    @endforelse
                                 </td>
                                 <td class="px-6 py-4">
-                                    @foreach ($item->khatib as $k)
-                                        <span class="text-sm">{{ $k->pivot->urutan }}. {{ $k->nama }}</span>@if (!$loop->last)<br>@endif
-                                    @endforeach
+                                    @forelse ($item->imam as $imam)
+                                        <span class="text-sm">{{ $imam->pivot->urutan }}. {{ $imam->nama }}</span>@if (!$loop->last)<br>@endif
+                                    @empty
+                                        <span class="text-sm text-gray-400">Belum ada imam</span>
+                                    @endforelse
                                 </td>
                                 <td class="px-6 py-4">
-                                    @foreach ($item->imam as $i)
-                                        <span class="text-sm">{{ $i->pivot->urutan }}. {{ $i->nama }}</span>@if (!$loop->last)<br>@endif
-                                    @endforeach
+                                    @forelse ($item->bilal as $bilal)
+                                        <span class="text-sm">{{ $bilal->pivot->urutan }}. {{ $bilal->nama }}</span>@if (!$loop->last)<br>@endif
+                                    @empty
+                                        <span class="text-sm text-gray-400">Belum ada bilal</span>
+                                    @endforelse
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center gap-3">
@@ -69,7 +77,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-400">
+                                <td colspan="5" class="px-6 py-8 text-center text-gray-400">
                                     Belum ada jadwal Jumat.
                                 </td>
                             </tr>

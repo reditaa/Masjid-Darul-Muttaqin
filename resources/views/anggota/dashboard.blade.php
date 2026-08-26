@@ -84,7 +84,8 @@
                                         @endif
                                     </p>
                                     <p class="text-xs text-gray-500 mt-1">
-                                        {{ $j->anggota->pluck('nama')->join(', ') ?: 'Belum ada petugas' }}
+                                        Imam: {{ $j->imam->pluck('nama')->join(', ') ?: '-' }}
+                                        &middot; Muazin: {{ $j->muazin->pluck('nama')->join(', ') ?: '-' }}
                                     </p>
                                 </div>
                                 @if ($j->milik_saya)

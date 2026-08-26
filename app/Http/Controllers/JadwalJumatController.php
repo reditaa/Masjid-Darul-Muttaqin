@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\JadwalJumat;
 use App\Models\Pengurus;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class JadwalJumatController extends Controller
 {
@@ -12,7 +13,7 @@ class JadwalJumatController extends Controller
 
     public function index()
     {
-        $jadwal = JadwalJumat::with(['khatib', 'imam'])
+        $jadwal = JadwalJumat::with(['khatib', 'imam', 'bilal'])
             ->get()
             ->sortBy(fn ($item) => array_search($item->pasaran, $this->pasaranUrutan));
 
@@ -35,7 +36,7 @@ class JadwalJumatController extends Controller
             'keterangan' => $validated['keterangan'] ?? null,
         ]);
 
-        $this->syncAnggota($jadwal, $validated['khatib_ids'], $validated['imam_ids']);
+        $this->syncKhatibImamBilal($jadwal, $validated['khatib_ids'], $validated['imam_ids'], $validated['bilal_ids']);
 
         return redirect()
             ->route('jadwal-jumat.index')
@@ -45,7 +46,7 @@ class JadwalJumatController extends Controller
     public function edit(JadwalJumat $jadwal_jumat)
     {
         $pengurus = Pengurus::aktif()->orderBy('nama')->get();
-        $jadwal_jumat->load(['khatib', 'imam']);
+        $jadwal_jumat->load(['khatib', 'imam', 'bilal']);
 
         return view('jadwal-jumat.edit', [
             'jadwal' => $jadwal_jumat,
@@ -62,7 +63,7 @@ class JadwalJumatController extends Controller
             'keterangan' => $validated['keterangan'] ?? null,
         ]);
 
-        $this->syncAnggota($jadwal_jumat, $validated['khatib_ids'], $validated['imam_ids']);
+        $this->syncKhatibImamBilal($jadwal_jumat, $validated['khatib_ids'], $validated['imam_ids'], $validated['bilal_ids']);
 
         return redirect()
             ->route('jadwal-jumat.index')
@@ -78,10 +79,11 @@ class JadwalJumatController extends Controller
             ->with('success', 'Jadwal Jumat berhasil dihapus.');
     }
 
-    private function syncAnggota(JadwalJumat $jadwal, array $khatibIds, array $imamIds): void
+    private function syncKhatibImamBilal(JadwalJumat $jadwal, array $khatibIds, array $imamIds, array $bilalIds): void
     {
         $jadwal->khatib()->detach();
         $jadwal->imam()->detach();
+        $jadwal->bilal()->detach();
 
         foreach ($khatibIds as $index => $pengurusId) {
             if ($pengurusId) {
@@ -92,6 +94,12 @@ class JadwalJumatController extends Controller
         foreach ($imamIds as $index => $pengurusId) {
             if ($pengurusId) {
                 $jadwal->imam()->attach($pengurusId, ['peran' => 'imam', 'urutan' => $index + 1]);
+            }
+        }
+
+        foreach ($bilalIds as $index => $pengurusId) {
+            if ($pengurusId) {
+                $jadwal->bilal()->attach($pengurusId, ['peran' => 'bilal', 'urutan' => $index + 1]);
             }
         }
     }
@@ -106,13 +114,38 @@ class JadwalJumatController extends Controller
             $rule .= '|unique:jadwal_jumats,pasaran';
         }
 
-        return $request->validate([
+        $validated = $request->validate([
             'pasaran'        => $rule,
             'khatib_ids'     => 'required|array|min:1|max:2',
             'khatib_ids.*'   => 'nullable|exists:pengurus,id',
             'imam_ids'       => 'required|array|min:1|max:2',
             'imam_ids.*'     => 'nullable|exists:pengurus,id',
+            'bilal_ids'      => 'required|array|min:1|max:2',
+            'bilal_ids.*'    => 'nullable|exists:pengurus,id',
             'keterangan'     => 'nullable|string',
         ]);
+
+        $khatibTerisi = array_filter($validated['khatib_ids']);
+        if (count($khatibTerisi) !== count(array_unique($khatibTerisi))) {
+            throw ValidationException::withMessages([
+                'khatib_ids' => 'Tidak boleh memilih orang yang sama lebih dari sekali sebagai Khatib.',
+            ]);
+        }
+
+        $imamTerisi = array_filter($validated['imam_ids']);
+        if (count($imamTerisi) !== count(array_unique($imamTerisi))) {
+            throw ValidationException::withMessages([
+                'imam_ids' => 'Tidak boleh memilih orang yang sama lebih dari sekali sebagai Imam.',
+            ]);
+        }
+
+        $bilalTerisi = array_filter($validated['bilal_ids']);
+        if (count($bilalTerisi) !== count(array_unique($bilalTerisi))) {
+            throw ValidationException::withMessages([
+                'bilal_ids' => 'Tidak boleh memilih orang yang sama lebih dari sekali sebagai Bilal.',
+            ]);
+        }
+
+        return $validated;
     }
 }
