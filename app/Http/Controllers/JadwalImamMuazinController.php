@@ -13,15 +13,18 @@ class JadwalImamMuazinController extends Controller
 
     public function index()
     {
-        $jadwal = JadwalImamMuazin::with('anggota')
+        $jadwal = JadwalImamMuazin::with(['imam', 'muazin'])
             ->get()
             ->sortBy(function ($item) {
                 $hariIndex = array_search($item->hari, $this->hariUrutan);
                 $waktuIndex = array_search($item->waktu_sholat, $this->waktuUrutan);
                 return ($hariIndex * 10) + $waktuIndex;
-            });
+            })
+            ->groupBy('hari');
 
-        return view('jadwal-imam-muazin.index', compact('jadwal'));
+        $hariUrutan = $this->hariUrutan;
+
+        return view('jadwal-imam-muazin.index', compact('jadwal', 'hariUrutan'));
     }
 
     public function create()
@@ -41,7 +44,8 @@ class JadwalImamMuazinController extends Controller
             'keterangan' => $validated['keterangan'] ?? null,
         ]);
 
-        $this->syncAnggota($jadwal, $validated['imam_ids']);
+        $this->syncAnggota($jadwal, $validated['imam_ids'], 'imam');
+        $this->syncAnggota($jadwal, $validated['muazin_ids'], 'muazin');
 
         return redirect()
             ->route('jadwal-imam-muazin.index')
@@ -51,7 +55,7 @@ class JadwalImamMuazinController extends Controller
     public function edit(JadwalImamMuazin $jadwal_imam_muazin)
     {
         $pengurus = Pengurus::aktif()->orderBy('nama')->get();
-        $jadwal_imam_muazin->load('anggota');
+        $jadwal_imam_muazin->load(['imam', 'muazin']);
 
         return view('jadwal-imam-muazin.edit', [
             'jadwal' => $jadwal_imam_muazin,
@@ -69,7 +73,8 @@ class JadwalImamMuazinController extends Controller
             'keterangan' => $validated['keterangan'] ?? null,
         ]);
 
-        $this->syncAnggota($jadwal_imam_muazin, $validated['imam_ids']);
+        $this->syncAnggota($jadwal_imam_muazin, $validated['imam_ids'], 'imam');
+        $this->syncAnggota($jadwal_imam_muazin, $validated['muazin_ids'], 'muazin');
 
         return redirect()
             ->route('jadwal-imam-muazin.index')
@@ -85,28 +90,66 @@ class JadwalImamMuazinController extends Controller
             ->with('success', 'Jadwal berhasil dihapus.');
     }
 
-    private function syncAnggota(JadwalImamMuazin $jadwal, array $imamIds): void
+    /**
+     * Sync anggota untuk peran tertentu (imam / muazin) tanpa menghapus peran lainnya.
+     */
+    private function syncAnggota(JadwalImamMuazin $jadwal, array $ids, string $peran): void
     {
-        $syncData = [];
-        foreach ($imamIds as $index => $pengurusId) {
+        // Hapus dulu baris lama untuk peran ini saja
+        $jadwal->pengurus()
+            ->wherePivot('peran', $peran)
+            ->newPivotStatement()
+            ->where('jadwal_imam_muazin_id', $jadwal->id)
+            ->where('peran', $peran)
+            ->delete();
+
+        $data = [];
+        foreach ($ids as $index => $pengurusId) {
             if ($pengurusId) {
-                $syncData[$pengurusId] = ['urutan' => $index + 1];
+                $data[] = [
+                    'jadwal_imam_muazin_id' => $jadwal->id,
+                    'pengurus_id' => $pengurusId,
+                    'urutan' => $index + 1,
+                    'peran' => $peran,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
             }
         }
-        $jadwal->anggota()->sync($syncData);
+
+        if (!empty($data)) {
+            \DB::table('jadwal_imam_muazin_anggotas')->insert($data);
+        }
     }
 
-    private function validateData(Request $request, ?int $ignoreId = null): array
+      private function validateData(Request $request, ?int $ignoreId = null): array
     {
-        $rule = 'required|in:senin,selasa,rabu,kamis,jumat,sabtu,minggu';
-        $uniqueRule = $rule . '|unique:jadwal_imam_muazins,hari,NULL,id,waktu_sholat,' . $request->waktu_sholat;
-
-        return $request->validate([
+        $validated = $request->validate([
             'hari'          => 'required|in:senin,selasa,rabu,kamis,jumat,sabtu,minggu',
             'waktu_sholat'  => 'required|in:subuh,dzuhur,ashar,maghrib,isya',
             'imam_ids'      => 'required|array|min:1|max:3',
             'imam_ids.*'    => 'nullable|exists:pengurus,id',
+            'muazin_ids'    => 'required|array|min:1|max:3',
+            'muazin_ids.*'  => 'nullable|exists:pengurus,id',
             'keterangan'    => 'nullable|string',
         ]);
+
+        // Cegah orang yang sama dipilih dua kali di kolom Imam
+        $imamTerisi = array_filter($validated['imam_ids']);
+        if (count($imamTerisi) !== count(array_unique($imamTerisi))) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'imam_ids' => 'Tidak boleh memilih orang yang sama lebih dari sekali sebagai Imam.',
+            ]);
+        }
+
+        // Cegah orang yang sama dipilih dua kali di kolom Muazin
+        $muazinTerisi = array_filter($validated['muazin_ids']);
+        if (count($muazinTerisi) !== count(array_unique($muazinTerisi))) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'muazin_ids' => 'Tidak boleh memilih orang yang sama lebih dari sekali sebagai Muazin.',
+            ]);
+        }
+
+        return $validated;
     }
 }
