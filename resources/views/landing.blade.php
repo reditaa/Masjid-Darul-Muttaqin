@@ -195,6 +195,7 @@
                         <th class="px-6 py-4 text-left">Hari</th>
                         <th class="px-6 py-4 text-left">Waktu</th>
                         <th class="px-6 py-4 text-left">Imam</th>
+                        <th class="px-6 py-4 text-left">Muazin</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -203,12 +204,15 @@
                             <td class="px-6 py-4 capitalize">{{ $item->hari }}</td>
                             <td class="px-6 py-4 capitalize">{{ $item->waktu_sholat }}</td>
                             <td class="px-6 py-4">
-                                {{ $item->anggota->pluck('nama')->join(', ') ?: '-' }}
+                                {{ $item->imam->pluck('nama')->join(', ') ?: '-' }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $item->muazin->pluck('nama')->join(', ') ?: '-' }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-6 py-8 text-center text-gray-400">Belum ada jadwal.</td>
+                            <td colspan="4" class="px-6 py-8 text-center text-gray-400">Belum ada jadwal.</td>
                         </tr>
                     @endforelse
                 </tbody>

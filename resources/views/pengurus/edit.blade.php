@@ -23,27 +23,16 @@
                     @csrf
                     @method('PUT')
 
-                  <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Jabatan (opsional)</label>
-                            <select name="jabatan_id" class="mt-1 block w-full border-gray-300 rounded-md">
-                                <option value="">-- Bukan Pengurus Struktural --</option>
-                                @foreach ($jabatans as $jabatan)
-                                    <option value="{{ $jabatan->id }}" {{ old('jabatan_id', $pengurus->jabatan_id) == $jabatan->id ? 'selected' : '' }}>
-                                        {{ $jabatan->nama_jabatan }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Asal</label>
-                            <select name="asal" class="mt-1 block w-full border-gray-300 rounded-md">
-                                <option value="">-- Pilih Asal --</option>
-                                <option value="guru" {{ old('asal', $pengurus->asal) == 'guru' ? 'selected' : '' }}>Guru</option>
-                                <option value="siswa" {{ old('asal', $pengurus->asal) == 'siswa' ? 'selected' : '' }}>Siswa</option>
-                                <option value="umum" {{ old('asal', $pengurus->asal) == 'umum' ? 'selected' : '' }}>Umum</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Jabatan (opsional)</label>
+                        <select name="jabatan_id" class="mt-1 block w-full border-gray-300 rounded-md">
+                            <option value="">-- Bukan Pengurus Struktural --</option>
+                            @foreach ($jabatans as $jabatan)
+                                <option value="{{ $jabatan->id }}" {{ old('jabatan_id', $pengurus->jabatan_id) == $jabatan->id ? 'selected' : '' }}>
+                                    {{ $jabatan->nama_jabatan }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
@@ -52,19 +41,12 @@
                                class="mt-1 block w-full border-gray-300 rounded-md" required>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">NIK</label>
-                            <input type="text" name="nik" value="{{ old('nik', $pengurus->nik) }}"
-                                   class="mt-1 block w-full border-gray-300 rounded-md">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
-                            <select name="jenis_kelamin" class="mt-1 block w-full border-gray-300 rounded-md" required>
-                                <option value="L" {{ old('jenis_kelamin', $pengurus->jenis_kelamin) == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                                <option value="P" {{ old('jenis_kelamin', $pengurus->jenis_kelamin) == 'P' ? 'selected' : '' }}>Perempuan</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                        <select name="jenis_kelamin" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                            <option value="L" {{ old('jenis_kelamin', $pengurus->jenis_kelamin) == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="P" {{ old('jenis_kelamin', $pengurus->jenis_kelamin) == 'P' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -95,22 +77,12 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Alamat</label>
-                        <textarea name="alamat" rows="2" class="mt-1 block w-full border-gray-300 rounded-md">{{ old('alamat', $pengurus->alamat) }}</textarea>
-                    </div>
-
-                    <div>
                         <label class="block text-sm font-medium text-gray-700">Foto</label>
                         @if ($pengurus->foto)
                             <img src="{{ Storage::url($pengurus->foto) }}" class="w-16 h-16 rounded-full object-cover mb-2">
                         @endif
                         <input type="file" name="foto" accept="image/*" class="mt-1 block w-full">
                         <p class="text-xs text-gray-500 mt-1">Kosongkan kalau tidak ingin mengganti foto.</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Bio Singkat</label>
-                        <textarea name="bio" rows="3" class="mt-1 block w-full border-gray-300 rounded-md">{{ old('bio', $pengurus->bio) }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">

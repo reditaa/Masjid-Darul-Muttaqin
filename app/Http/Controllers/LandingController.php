@@ -28,7 +28,7 @@ class LandingController extends Controller
             ->take(3)
             ->get();
 
-        $jadwalImamMuazin = JadwalImamMuazin::with('anggota')
+        $jadwalImamMuazin = JadwalImamMuazin::with(['imam', 'muazin'])
             ->orderByRaw("FIELD(hari, 'senin','selasa','rabu','kamis','jumat','sabtu','minggu')")
             ->orderByRaw("FIELD(waktu_sholat, 'subuh','dzuhur','ashar','maghrib','isya','jumat')")
             ->get();

@@ -34,21 +34,6 @@
                 </div>
             @endif
 
-            <!-- Filter Status Kelompok -->
-            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                <div class="flex items-center space-x-2 overflow-x-auto">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mr-1"><i class="fas fa-filter text-gray-400 mr-1"></i> Filter Anggota:</span>
-                    <a href="{{ route('pengurus.index') }}"
-                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {{ !request('asal') ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
-                        Semua Anggota DKM
-                    </a>
-                    <a href="{{ route('pengurus.index', ['asal' => 'umum']) }}"
-                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {{ request('asal') == 'umum' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' }}">
-                        🏛️ DKM / General
-                    </a>
-                </div>
-            </div>
-
             <!-- Table -->
             <div class="bg-white shadow-sm rounded-2xl border border-gray-100 overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">

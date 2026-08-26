@@ -11,18 +11,9 @@ class PengurusController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Pengurus::with('jabatan');
-
-        if ($request->filled('asal')) {
-            $query->where('asal', $request->asal);
-        } else {
-            // Default to internal DKM anggota (asal = umum or null)
-            $query->where(function ($q) {
-                $q->where('asal', 'umum')->orWhereNull('asal');
-            });
-        }
-
-        $pengurus = $query->orderBy('jabatan_id')
+        $pengurus = Pengurus::with('jabatan')
+            ->whereNull('asal') // hanya anggota DKM manual, bukan data sync SiPintu (guru/siswa)
+            ->orderBy('jabatan_id')
             ->orderBy('nama')
             ->paginate(15)
             ->withQueryString();
@@ -150,7 +141,6 @@ class PengurusController extends Controller
     {
         return $request->validate([
             'jabatan_id'       => 'nullable|exists:jabatans,id',
-            'asal'             => 'nullable|in:guru,siswa,umum',
             'nama'             => 'required|string|max:255',
             'nik'              => 'nullable|string|max:20',
             'jenis_kelamin'    => 'required|in:L,P',
