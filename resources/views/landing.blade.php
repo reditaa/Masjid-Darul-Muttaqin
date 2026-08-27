@@ -97,16 +97,20 @@
                 </p>
 
                 <div class="grid grid-cols-2 gap-6 mt-10">
-                    <a href="#jadwal" class="bg-green-50 rounded-2xl p-5 block hover:bg-green-100 hover:-translate-y-1 transition cursor-pointer">
-                        <div class="text-4xl">🕌</div>
-                        <h3 class="font-bold mt-3">Ibadah</h3>
-                        <p class="text-gray-600 text-sm mt-2">Jadwal imam selalu diperbarui.</p>
-                    </a>
-                    <a href="#pengumuman" class="bg-blue-50 rounded-2xl p-5 block hover:bg-blue-100 hover:-translate-y-1 transition cursor-pointer">
-                        <div class="text-4xl">📢</div>
-                        <h3 class="font-bold mt-3">Informasi</h3>
-                        <p class="text-gray-600 text-sm mt-2">Pengumuman kegiatan terbaru.</p>
-                    </a>
+                    <div class="bg-green-50 rounded-2xl p-5">
+                        <div class="text-4xl">🎯</div>
+                        <h3 class="font-bold mt-3">Visi</h3>
+                        <p class="text-gray-600 text-sm mt-2">
+                            {{ $profil && $profil->visi ? Str::limit($profil->visi, 100) : 'Belum diatur.' }}
+                        </p>
+                    </div>
+                    <div class="bg-blue-50 rounded-2xl p-5">
+                        <div class="text-4xl">🚀</div>
+                        <h3 class="font-bold mt-3">Misi</h3>
+                        <p class="text-gray-600 text-sm mt-2">
+                            {{ $profil && $profil->misi ? Str::limit($profil->misi, 100) : 'Belum diatur.' }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,11 +124,13 @@
         <p class="text-center text-gray-500 mt-2">Data diperbarui secara otomatis.</p>
 
         <div class="grid md:grid-cols-4 gap-8 mt-14">
-            <div class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 transition">
+            <button type="button" onclick="bukaModalPengurus()"
+                    class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 hover:shadow-lg transition cursor-pointer w-full">
                 <div class="text-5xl">👳</div>
                 <h3 class="text-5xl font-bold mt-4 text-green-700">{{ $jumlahPengurus }}</h3>
                 <p class="mt-3 text-gray-600">Pengurus</p>
-            </div>
+                <p class="text-xs text-green-600 mt-2">Lihat bagan &rarr;</p>
+            </button>
 
             <div class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 transition">
                 <div class="text-5xl">📅</div>
@@ -423,6 +429,66 @@
         </p>
     </div>
 </footer>
+
+<!-- ================= MODAL BAGAN PENGURUS ================= -->
+<div id="modal-pengurus" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/50" onclick="tutupModalPengurus()"></div>
+
+    <div class="relative max-w-2xl mx-auto mt-16 mb-16 bg-white rounded-3xl shadow-2xl max-h-[80vh] flex flex-col">
+        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+            <div>
+                <h3 class="text-2xl font-bold text-gray-800">Struktur Pengurus DKM</h3>
+                <p class="text-sm text-gray-500 mt-1">Masjid Darul Muttaqin</p>
+            </div>
+            <button onclick="tutupModalPengurus()"
+                    class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-lg">
+                &times;
+            </button>
+        </div>
+
+        <div class="px-6 py-5 overflow-y-auto space-y-6">
+            @forelse ($strukturPengurus as $namaJabatan => $anggota)
+                <div>
+                    <h4 class="text-green-700 font-bold text-sm uppercase tracking-wide mb-3">
+                        {{ $namaJabatan }}
+                    </h4>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        @foreach ($anggota as $item)
+                            <div class="flex items-center gap-3 bg-gray-50 rounded-2xl px-4 py-3">
+                                @if ($item->foto)
+                                    <img src="{{ Storage::url($item->foto) }}" class="w-10 h-10 rounded-full object-cover">
+                                @else
+                                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-bold">
+                                        {{ strtoupper(substr($item->nama, 0, 1)) }}
+                                    </div>
+                                @endif
+                                <span class="text-sm font-medium text-gray-800">{{ $item->nama }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @empty
+                <p class="text-center text-gray-400 py-8">Struktur pengurus belum tersedia.</p>
+            @endforelse
+        </div>
+    </div>
+</div>
+
+<script>
+    function bukaModalPengurus() {
+        document.getElementById('modal-pengurus').classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function tutupModalPengurus() {
+        document.getElementById('modal-pengurus').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') tutupModalPengurus();
+    });
+</script>
 
 </body>
 </html>

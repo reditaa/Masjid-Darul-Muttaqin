@@ -18,10 +18,21 @@ class LandingController extends Controller
     {
         $profil = ProfilMasjid::current();
 
-        $jumlahPengurus = Pengurus::count();
+        // Hanya hitung Anggota DKM manual (asal null), bukan data sync SiPintu (guru/siswa)
+        $jumlahPengurus = Pengurus::whereNull('asal')->aktif()->count();
         $jumlahPengumuman = Pengumuman::published()->count();
         $jumlahJadwal = JadwalImamMuazin::count();
         $jumlahKegiatan = Kegiatan::count();
+
+        // Struktur pengurus (untuk modal bagan), dikelompokkan per jabatan sesuai urutan
+        $strukturPengurus = Pengurus::whereNull('asal')
+            ->aktif()
+            ->whereNotNull('jabatan_id')
+            ->with('jabatan')
+            ->orderBy('nama')
+            ->get()
+            ->groupBy(fn ($item) => $item->jabatan->nama_jabatan)
+            ->sortBy(fn ($group) => optional($group->first()->jabatan)->urutan ?? 999);
 
         $pengumuman = Pengumuman::published()
             ->latest('tanggal_publish')
@@ -67,6 +78,7 @@ class LandingController extends Controller
             'galeri',
             'inventaris',
             'jumlahPengurus',
+            'strukturPengurus',
             'jumlahPengumuman',
             'jumlahJadwal',
             'jumlahKegiatan',
