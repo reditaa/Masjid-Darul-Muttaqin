@@ -9,23 +9,33 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('jadwal_imam_muazin_anggotas', function (Blueprint $table) {
-            // Hapus unique constraint lama yang tidak menghitung kolom 'peran'
+            $table->dropForeign('jadwal_imam_muazin_anggotas_jadwal_imam_muazin_id_foreign');
+
             $table->dropUnique('imam_anggota_unique');
 
-            // Buat unique constraint baru: satu orang boleh jadi imam DAN muazin
-            // di jadwal yang sama, tapi tidak boleh dobel untuk peran yang sama
             $table->unique(
                 ['jadwal_imam_muazin_id', 'pengurus_id', 'peran'],
                 'jadwal_imam_muazin_anggota_unique'
             );
+
+            $table->foreign('jadwal_imam_muazin_id', 'jadwal_imam_muazin_anggotas_jadwal_imam_muazin_id_foreign')
+                ->references('id')->on('jadwal_imam_muazins')
+                ->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
         Schema::table('jadwal_imam_muazin_anggotas', function (Blueprint $table) {
+            $table->dropForeign('jadwal_imam_muazin_anggotas_jadwal_imam_muazin_id_foreign');
+
             $table->dropUnique('jadwal_imam_muazin_anggota_unique');
+
             $table->unique(['jadwal_imam_muazin_id', 'pengurus_id'], 'imam_anggota_unique');
+
+            $table->foreign('jadwal_imam_muazin_id', 'jadwal_imam_muazin_anggotas_jadwal_imam_muazin_id_foreign')
+                ->references('id')->on('jadwal_imam_muazins')
+                ->cascadeOnDelete();
         });
     }
 };

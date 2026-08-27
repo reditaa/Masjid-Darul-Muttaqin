@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kegiatan;
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -10,14 +11,16 @@ class PengumumanController extends Controller
 {
     public function index()
     {
-        $pengumuman = Pengumuman::latest('tanggal_publish')->paginate(10);
+        $pengumuman = Pengumuman::with('kegiatan')->latest('tanggal_publish')->paginate(10);
 
         return view('pengumuman.index', compact('pengumuman'));
     }
 
     public function create()
     {
-        return view('pengumuman.create');
+        $kegiatan = Kegiatan::orderBy('tanggal_mulai', 'desc')->get();
+
+        return view('pengumuman.create', compact('kegiatan'));
     }
 
     public function store(Request $request)
@@ -37,6 +40,7 @@ class PengumumanController extends Controller
 
     public function show(Pengumuman $pengumuman)
     {
+        $pengumuman->load('kegiatan');
         $pengumuman->tambahDilihat();
 
         return view('pengumuman.show', compact('pengumuman'));
@@ -44,7 +48,9 @@ class PengumumanController extends Controller
 
     public function edit(Pengumuman $pengumuman)
     {
-        return view('pengumuman.edit', compact('pengumuman'));
+        $kegiatan = Kegiatan::orderBy('tanggal_mulai', 'desc')->get();
+
+        return view('pengumuman.edit', compact('pengumuman', 'kegiatan'));
     }
 
     public function update(Request $request, Pengumuman $pengumuman)
@@ -65,10 +71,11 @@ class PengumumanController extends Controller
             ->with('success', 'Pengumuman berhasil diperbarui.');
     }
 
-        public function showPublic(Pengumuman $pengumuman)
+    public function showPublic(Pengumuman $pengumuman)
     {
         abort_unless($pengumuman->status === 'published', 404);
 
+        $pengumuman->load('kegiatan');
         $pengumuman->tambahDilihat();
 
         return view('pengumuman-public', compact('pengumuman'));
@@ -101,6 +108,7 @@ class PengumumanController extends Controller
     private function validateData(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([
+            'kegiatan_id'       => 'nullable|exists:kegiatans,id',
             'judul'             => 'required|string|max:255',
             'isi'               => 'required|string',
             'kategori'          => 'required|in:umum,kegiatan,keuangan,sosial,lainnya',

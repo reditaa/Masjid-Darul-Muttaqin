@@ -47,7 +47,13 @@ class Kegiatan extends Model
     {
         return $this->hasMany(TransaksiKeuangan::class);
     }
-public function scopeAkanDatang($query)
+
+    public function pengumumans(): HasMany
+    {
+        return $this->hasMany(Pengumuman::class);
+    }
+
+    public function scopeAkanDatang($query)
     {
         return $query->where('status', '!=', 'dibatalkan')
             ->where(function ($q) {

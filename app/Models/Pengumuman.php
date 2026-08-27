@@ -8,9 +8,10 @@ use Illuminate\Support\Str;
 
 class Pengumuman extends Model
 {
-     protected $table = 'pengumumans';
+    protected $table = 'pengumumans';
+
     protected $fillable = [
-        'judul', 'slug', 'isi', 'kategori', 'gambar', 'tanggal_publish',
+        'kegiatan_id', 'judul', 'slug', 'isi', 'kategori', 'gambar', 'tanggal_publish',
         'tanggal_berakhir', 'status', 'dilihat', 'penulis_id',
     ];
 
@@ -31,6 +32,11 @@ class Pengumuman extends Model
     public function penulis(): BelongsTo
     {
         return $this->belongsTo(User::class, 'penulis_id');
+    }
+
+    public function kegiatan(): BelongsTo
+    {
+        return $this->belongsTo(Kegiatan::class);
     }
 
     public function scopePublished($query)

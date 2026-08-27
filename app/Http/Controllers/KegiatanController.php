@@ -44,7 +44,7 @@ class KegiatanController extends Controller
 
     public function show(Kegiatan $kegiatan)
     {
-        $kegiatan->load('penanggungJawab', 'galeris');
+        $kegiatan->load('penanggungJawab', 'galeris', 'pengumumans');
 
         return view('kegiatan.show', compact('kegiatan'));
     }
