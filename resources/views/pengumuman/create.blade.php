@@ -53,6 +53,19 @@
                         </div>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Kegiatan Terkait (opsional)</label>
+                        <select name="kegiatan_id" class="mt-1 block w-full border-gray-300 rounded-md">
+                            <option value="">-- Tidak terkait kegiatan --</option>
+                            @foreach ($kegiatan as $item)
+                                <option value="{{ $item->id }}" {{ old('kegiatan_id') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->judul }} &mdash; {{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">Pilih kegiatan supaya pengumuman ini muncul di halaman detail kegiatan tersebut.</p>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Tanggal Publish</label>

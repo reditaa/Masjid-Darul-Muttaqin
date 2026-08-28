@@ -215,6 +215,11 @@
                         <p class="text-gray-600 text-sm mt-3 line-clamp-3">
                             {{ Str::limit(strip_tags($item->isi), 120) }}
                         </p>
+                        @if ($item->kegiatan)
+                            <p class="text-xs text-blue-600 mt-3">
+                                Terkait kegiatan: {{ $item->kegiatan->judul }}
+                            </p>
+                        @endif
                     </div>
                 </a>
             @empty
@@ -348,16 +353,33 @@
 
         <div class="grid md:grid-cols-3 gap-8 mt-14">
             @forelse ($kegiatan as $item)
+                @php
+                    $tanggalAcuan = $item->tanggal_selesai ?? $item->tanggal_mulai;
+                    $sudahLewat = $tanggalAcuan && $tanggalAcuan->lt(now()->startOfDay());
+                    $sudahSelesai = $item->status === 'selesai' || $sudahLewat;
+
+                    if ($item->status === 'dibatalkan') {
+                        $labelStatus = 'Dibatalkan';
+                        $statusKey = 'dibatalkan';
+                    } elseif ($sudahSelesai) {
+                        $labelStatus = 'Selesai';
+                        $statusKey = 'selesai';
+                    } else {
+                        $labelStatus = ucfirst(str_replace('_', ' ', $item->status));
+                        $statusKey = $item->status;
+                    }
+                @endphp
                 <button type="button"
                         onclick="bukaModalKegiatan(this)"
                         data-judul="{{ $item->judul }}"
                         data-kategori="{{ ucfirst(str_replace('_', ' ', $item->kategori)) }}"
-                        data-status="{{ ucfirst(str_replace('_', ' ', $item->status)) }}"
-                        data-status-raw="{{ $item->status }}"
+                        data-status="{{ $labelStatus }}"
+                        data-status-raw="{{ $statusKey }}"
                         data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}"
                         data-lokasi="{{ $item->lokasi ?? '' }}"
                         data-deskripsi="{{ $item->deskripsi ? strip_tags($item->deskripsi) : '' }}"
                         data-poster="{{ $item->poster ? Storage::url($item->poster) : '' }}"
+                        data-pengumuman='@json($item->pengumumans->map(fn($p) => ["judul" => $p->judul, "slug" => $p->slug]))'
                         class="text-left w-full bg-gray-50 rounded-3xl shadow overflow-hidden hover:-translate-y-2 hover:shadow-lg transition cursor-pointer">
                     @if ($item->poster)
                         <img src="{{ Storage::url($item->poster) }}" class="w-full h-44 object-cover">
@@ -375,12 +397,11 @@
                             </span>
                             <span @class([
                                 'text-xs px-2 py-1 rounded-full',
-                                'bg-green-100 text-green-700' => $item->status === 'akan_datang',
-                                'bg-yellow-100 text-yellow-700' => $item->status === 'berlangsung',
-                                'bg-gray-200 text-gray-600' => $item->status === 'selesai',
-                                'bg-red-100 text-red-700' => $item->status === 'dibatalkan',
+                                'bg-green-100 text-green-700' => $statusKey === 'selesai',
+                                'bg-blue-100 text-blue-700' => in_array($statusKey, ['akan_datang', 'berlangsung']),
+                                'bg-red-100 text-red-700' => $statusKey === 'dibatalkan',
                             ])>
-                                {{ ucfirst(str_replace('_', ' ', $item->status)) }}
+                                {{ $labelStatus }}
                             </span>
                         </div>
                         <h3 class="font-bold text-lg mt-3">{{ $item->judul }}</h3>
@@ -393,6 +414,11 @@
                         @if ($item->deskripsi)
                             <p class="text-gray-600 text-sm mt-3 line-clamp-3">
                                 {{ Str::limit(strip_tags($item->deskripsi), 120) }}
+                            </p>
+                        @endif
+                        @if ($item->pengumumans->count() > 0)
+                            <p class="text-xs text-green-600 mt-3">
+                                {{ $item->pengumumans->count() }} pengumuman terkait
                             </p>
                         @endif
                     </div>
@@ -571,6 +597,11 @@
                 <p id="kegiatan-meta" class="text-gray-500 text-sm mt-4"></p>
 
                 <p id="kegiatan-deskripsi" class="text-gray-600 text-sm mt-4 leading-relaxed whitespace-pre-line"></p>
+
+                <div id="kegiatan-pengumuman-wrap" class="mt-6 hidden">
+                    <h4 class="font-bold text-sm text-gray-700 mb-2">Pengumuman Terkait</h4>
+                    <div id="kegiatan-pengumuman-list" class="space-y-2"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -629,9 +660,9 @@
         status.textContent = btn.dataset.status;
         status.className = 'text-xs px-2 py-1 rounded-full';
         const statusColors = {
-            akan_datang: 'bg-green-100 text-green-700',
-            berlangsung: 'bg-yellow-100 text-yellow-700',
-            selesai: 'bg-gray-200 text-gray-600',
+            selesai: 'bg-green-100 text-green-700',
+            akan_datang: 'bg-blue-100 text-blue-700',
+            berlangsung: 'bg-blue-100 text-blue-700',
             dibatalkan: 'bg-red-100 text-red-700',
         };
         status.classList.add(...(statusColors[btn.dataset.statusRaw] || 'bg-gray-200 text-gray-600').split(' '));
@@ -649,6 +680,24 @@
             poster.classList.remove('hidden');
         } else {
             poster.classList.add('hidden');
+        }
+
+        const pengumumanList = document.getElementById('kegiatan-pengumuman-list');
+        const pengumumanWrap = document.getElementById('kegiatan-pengumuman-wrap');
+        const daftarPengumuman = JSON.parse(btn.dataset.pengumuman || '[]');
+
+        pengumumanList.innerHTML = '';
+        if (daftarPengumuman.length > 0) {
+            daftarPengumuman.forEach(p => {
+                const a = document.createElement('a');
+                a.href = `/pengumuman/${p.slug}`;
+                a.className = 'block text-sm text-green-700 hover:underline bg-green-50 rounded-lg px-3 py-2';
+                a.textContent = p.judul;
+                pengumumanList.appendChild(a);
+            });
+            pengumumanWrap.classList.remove('hidden');
+        } else {
+            pengumumanWrap.classList.add('hidden');
         }
 
         document.getElementById('modal-kegiatan').classList.remove('hidden');
