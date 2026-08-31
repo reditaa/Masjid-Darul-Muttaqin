@@ -22,7 +22,7 @@
             </div>
         @endif
 
-        <form action="{{ route('profil-masjid.update') }}" method="POST" enctype="multipart/form-data" id="form-profil">
+        <form action="{{ route('profil-masjid.update') }}" method="POST" enctype="multipart/form-data" id="form-profil" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -100,6 +100,68 @@
                         @enderror
                         <p class="text-gray-400 text-xs mt-2">Rekomendasi: 800×600px. Foto ini tampil di bagian "Tentang Masjid".</p>
                     </div>
+
+                    {{-- Logo --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">
+                            🏷️ Logo Masjid (Navbar & Footer)
+                        </label>
+                        <div class="relative group cursor-pointer w-40 mx-auto" onclick="document.getElementById('input_logo').click()">
+                            <div id="preview_logo"
+                                 class="w-40 h-40 rounded-full overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center transition group-hover:border-green-400 group-hover:bg-green-50">
+                                @if($profil->logo)
+                                    <img src="{{ Storage::url($profil->logo) }}"
+                                         id="img_logo"
+                                         class="w-full h-full object-cover">
+                                @else
+                                    <div id="img_logo" class="text-center text-gray-400">
+                                        <i class="fas fa-image text-3xl mb-1 block"></i>
+                                        <p class="text-xs">Klik untuk upload logo</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="absolute bottom-0 right-0 bg-green-600 text-white text-xs w-8 h-8 rounded-full shadow flex items-center justify-center group-hover:bg-green-700 transition">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        </div>
+                        <input type="file" id="input_logo" name="logo" accept="image/*" class="hidden"
+                               onchange="previewImage(this, 'preview_logo', 'img_logo')">
+                        @error('logo')
+                            <p class="text-red-500 text-xs mt-2 text-center">{{ $message }}</p>
+                        @enderror
+                        <p class="text-gray-400 text-xs mt-2 text-center">Rekomendasi: gambar persegi (misal 256×256px), maks 2MB.</p>
+                    </div>
+
+                    {{-- QRIS Infaq (foto singkat di sini, detail lengkap ada di section Infaq di bawah) --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">
+                            💳 Barcode QRIS Infaq
+                        </label>
+                        <div class="relative group cursor-pointer w-40 mx-auto" onclick="document.getElementById('input_qris').click()">
+                            <div id="preview_qris"
+                                 class="w-40 h-40 rounded-2xl overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center transition group-hover:border-green-400 group-hover:bg-green-50">
+                                @if($profil->qris_infaq)
+                                    <img src="{{ Storage::url($profil->qris_infaq) }}"
+                                         id="img_qris"
+                                         class="w-full h-full object-contain">
+                                @else
+                                    <div id="img_qris" class="text-center text-gray-400">
+                                        <i class="fas fa-qrcode text-3xl mb-1 block"></i>
+                                        <p class="text-xs">Klik untuk upload QRIS</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="absolute bottom-0 right-0 bg-green-600 text-white text-xs w-8 h-8 rounded-full shadow flex items-center justify-center group-hover:bg-green-700 transition">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        </div>
+                        <input type="file" id="input_qris" name="qris_infaq" accept="image/*" class="hidden"
+                               onchange="previewImage(this, 'preview_qris', 'img_qris')">
+                        @error('qris_infaq')
+                            <p class="text-red-500 text-xs mt-2 text-center">{{ $message }}</p>
+                        @enderror
+                        <p class="text-gray-400 text-xs mt-2 text-center">Tampil di section "Mari Berinfaq" halaman utama. Maks 2MB.</p>
+                    </div>
                 </div>
             </div>
 
@@ -122,6 +184,19 @@
                             @error('nama_masjid') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
+                        {{-- Sub Judul --}}
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                Sub Judul
+                                <span class="font-normal text-gray-400 text-xs ml-1">(tampil di bawah nama masjid di navbar &amp; footer)</span>
+                            </label>
+                            <input type="text" name="sub_judul" value="{{ old('sub_judul', $profil->sub_judul) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Contoh: SMK Negeri 1 Bangsri">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-5">
                         {{-- Slogan --}}
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Slogan / Tagline</label>
@@ -129,9 +204,7 @@
                                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
                                    placeholder="Contoh: Masjid Sekolah, Cahaya Umat">
                         </div>
-                    </div>
 
-                    <div class="grid md:grid-cols-2 gap-5">
                         {{-- Tahun Berdiri --}}
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tahun Berdiri</label>
@@ -140,15 +213,15 @@
                                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
                                    placeholder="2010">
                         </div>
+                    </div>
 
-                        {{-- Kapasitas --}}
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kapasitas Jamaah</label>
-                            <input type="number" name="kapasitas_jamaah" value="{{ old('kapasitas_jamaah', $profil->kapasitas_jamaah) }}"
-                                   min="0"
-                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-                                   placeholder="500">
-                        </div>
+                    {{-- Kapasitas --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kapasitas Jamaah</label>
+                        <input type="number" name="kapasitas_jamaah" value="{{ old('kapasitas_jamaah', $profil->kapasitas_jamaah) }}"
+                               min="0"
+                               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                               placeholder="500">
                     </div>
 
                     {{-- Alamat --}}
@@ -199,11 +272,114 @@
 
                         {{-- Misi --}}
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Misi</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                Misi
+                                <span class="font-normal text-gray-400 text-xs ml-1">(satu poin per baris)</span>
+                            </label>
                             <textarea name="misi" rows="4"
                                       class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
                                       placeholder="Misi masjid...">{{ old('misi', $profil->misi) }}</textarea>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ============ SECTION: INFAQ (QRIS) ============ --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4">
+                    <h3 class="text-white font-semibold text-base flex items-center gap-2">
+                        <i class="fas fa-hand-holding-heart"></i> Infaq (QRIS)
+                    </h3>
+                    <p class="text-green-100 text-xs mt-0.5">Gambar QRIS ditampilkan di section "Mari Berinfaq" pada halaman utama</p>
+                </div>
+
+                <div class="p-6 flex flex-col items-center">
+                    <div class="relative group cursor-pointer" onclick="document.getElementById('input_qris').click()">
+                        <div id="preview_qris_full"
+                             class="w-56 h-56 rounded-2xl overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center transition group-hover:border-green-400 group-hover:bg-green-50">
+                            @if($profil->qris_infaq)
+                                <img src="{{ Storage::url($profil->qris_infaq) }}"
+                                     id="img_qris_full"
+                                     class="w-full h-full object-contain">
+                            @else
+                                <div id="img_qris_full" class="text-center text-gray-400">
+                                    <i class="fas fa-qrcode text-4xl mb-2 block"></i>
+                                    <p class="text-sm">Klik untuk upload QRIS</p>
+                                    <p class="text-xs mt-1">JPG, PNG — maks 2MB</p>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="absolute bottom-3 right-3 bg-green-600 text-white text-xs px-3 py-1.5 rounded-xl shadow group-hover:bg-green-700 transition">
+                            <i class="fas fa-camera mr-1"></i> Ganti Gambar
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-xs mt-3 text-center">
+                        Upload gambar barcode QRIS resmi rekening infaq masjid (persegi, disarankan min. 512×512px).<br>
+                        Field ini sama dengan "Barcode QRIS Infaq" di section Foto & Gambar di atas — cukup diisi salah satu.
+                    </p>
+                </div>
+            </div>
+
+            {{-- ============ SECTION: KONTAK & MEDIA SOSIAL ============ --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4">
+                    <h3 class="text-white font-semibold text-base flex items-center gap-2">
+                        <i class="fas fa-share-alt"></i> Kontak & Media Sosial
+                    </h3>
+                    <p class="text-green-100 text-xs mt-0.5">Ditampilkan di footer website</p>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">No. Telepon / WA</label>
+                            <input type="text" name="no_telepon" value="{{ old('no_telepon', $profil->no_telepon) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="08xxxxxxxxxx">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+                            <input type="email" name="email" value="{{ old('email', $profil->email) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="masjid@email.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Website</label>
+                        <input type="text" name="website" value="{{ old('website', $profil->website) }}"
+                               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                               placeholder="https://...">
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Instagram</label>
+                            <input type="text" name="instagram" value="{{ old('instagram', $profil->instagram) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="https://instagram.com/...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Facebook</label>
+                            <input type="text" name="facebook" value="{{ old('facebook', $profil->facebook) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="https://facebook.com/...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp</label>
+                            <input type="text" name="whatsapp" value="{{ old('whatsapp', $profil->whatsapp) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="628xxxxxxxxxx (untuk link wa.me)">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                            Teks Footer <span class="font-normal text-gray-400 text-xs ml-1">(kosongkan untuk pakai default)</span>
+                        </label>
+                        <textarea name="footer_text" rows="2"
+                                  class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+                                  placeholder="Contoh: Melayani umat, membangun peradaban.">{{ old('footer_text', $profil->footer_text) }}</textarea>
                     </div>
                 </div>
             </div>
@@ -225,11 +401,25 @@
 
             const file = input.files[0];
             const reader = new FileReader();
-            const preview = document.getElementById(previewId);
 
             reader.onload = function(e) {
-                // Clear the placeholder content
-                preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                const html = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                const htmlContain = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
+
+                // Update preview utama
+                const preview = document.getElementById(previewId);
+                if (preview) {
+                    preview.innerHTML = (previewId === 'preview_qris' || previewId === 'preview_qris_full') ? htmlContain : html;
+                }
+
+                // Sinkronkan preview QRIS di 2 tempat (section Foto & Gambar + section Infaq)
+                if (previewId === 'preview_qris') {
+                    const dup = document.getElementById('preview_qris_full');
+                    if (dup) dup.innerHTML = htmlContain;
+                } else if (previewId === 'preview_qris_full') {
+                    const dup = document.getElementById('preview_qris');
+                    if (dup) dup.innerHTML = htmlContain;
+                }
             };
 
             reader.readAsDataURL(file);

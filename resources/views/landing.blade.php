@@ -29,10 +29,8 @@
 <nav class="fixed w-full bg-white/95 backdrop-blur shadow z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full bg-green-700 flex items-center justify-center text-white text-xl">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m4.5-4.5H21m-4.5 0v4.5" />
-                </svg>
+            <div class="w-12 h-12 rounded-full bg-green-700 flex items-center justify-center overflow-hidden">
+                <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS Darul Muttaqin" class="w-full h-full object-cover">
             </div>
             <div>
                 <h1 class="font-bold text-xl text-green-700">Masjid Darul Muttaqin</h1>
@@ -45,6 +43,7 @@
             <a href="#statistik" class="hover:text-green-700">Statistik</a>
             <a href="#pengumuman" class="hover:text-green-700">Pengumuman</a>
             <a href="#jadwal" class="hover:text-green-700">Jadwal</a>
+            <a href="#infaq" class="hover:text-green-700">Infaq</a>
             <a href="{{ route('login') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
                 Login Admin
             </a>
@@ -56,9 +55,7 @@
 <section class="hero h-screen flex items-center" style="background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
     <div class="max-w-7xl mx-auto px-6 text-white">
         <span class="inline-flex items-center gap-2 bg-green-600 px-4 py-2 rounded-full">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m4.5-4.5H21m-4.5 0v4.5" />
-            </svg>
+            <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS" class="w-5 h-5 rounded-full object-cover">
             Website Resmi
         </span>
 
@@ -510,6 +507,30 @@
                 Menampilkan 10 dari {{ $jumlahInventaris }} item inventaris.
             </p>
         @endif
+    </div>
+</section>
+
+<!-- ================= INFAQ ================= -->
+<section id="infaq" class="py-20 bg-green-700">
+    <div class="max-w-2xl mx-auto px-6 text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold text-white">Mari Berinfaq</h2>
+
+        <div class="bg-white rounded-3xl shadow-xl inline-block p-6 mt-8">
+            {{-- Placeholder sementara — nanti ganti src ke asset('images/qris-infaq.png') setelah QRIS asli tersedia --}}
+            <img src="https://via.placeholder.com/256x256/f0fdf4/16a34a?text=QRIS+Infaq"
+                 alt="Barcode QRIS Infaq Masjid Darul Muttaqin (contoh sementara)"
+                 class="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto">
+            <p class="text-gray-500 text-sm mt-3">Scan untuk berinfaq via QRIS</p>
+        </div>
+
+        <p class="text-green-100 mt-8 max-w-xl mx-auto leading-7">
+            Sedikit yang kita sisihkan hari ini bisa jadi ladang pahala yang terus mengalir.
+            Yuk, dukung kegiatan dan pembangunan Masjid Darul Muttaqin melalui infaq.
+        </p>
+
+        <p class="text-green-200 text-sm mt-6 italic max-w-xl mx-auto">
+            "Perumpamaan orang yang menginfakkan hartanya di jalan Allah seperti sebutir benih yang menumbuhkan tujuh tangkai." (QS. Al-Baqarah: 261)
+        </p>
     </div>
 </section>
 
