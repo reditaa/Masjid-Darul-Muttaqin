@@ -18,12 +18,19 @@
                 <p class="text-xs text-green-200">{{ $pengurus->nama ?? Auth::user()->name }}</p>
             </div>
         </div>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold">
-                <i class="fas fa-right-from-bracket mr-1"></i> Logout
-            </button>
-        </form>
+                <div class="flex items-center gap-2">
+            <a href="{{ route('landing') }}"
+                class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                <i class="fas fa-arrow-left mr-1"></i> Kembali ke Web
+            </a>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold">
+                    <i class="fas fa-right-from-bracket mr-1"></i> Logout
+                </button>
+            </form>
+        </div>
     </nav>
 
     <div class="max-w-3xl mx-auto p-4 space-y-6">
