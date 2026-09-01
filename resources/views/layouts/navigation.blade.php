@@ -18,6 +18,19 @@
         {{-- Kanan --}}
         <div class="flex items-center gap-3 lg:gap-5">
 
+            {{-- Kembali ke Web --}}
+            <a href="{{ route('landing') }}"
+                class="hidden sm:inline-flex items-center gap-2 px-3 lg:px-4 h-11 rounded-xl bg-gray-100 hover:bg-green-100 text-gray-700 hover:text-green-700 text-sm font-medium transition">
+                <i class="fas fa-arrow-left"></i>
+                <span class="hidden lg:inline">Kembali ke Web</span>
+            </a>
+
+            {{-- Versi ikon saja untuk mobile --}}
+            <a href="{{ route('landing') }}"
+                class="sm:hidden w-11 h-11 rounded-xl bg-gray-100 hover:bg-green-100 text-gray-700 hover:text-green-700 transition flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+
             {{-- Notifikasi --}}
             <button
                 class="relative w-11 h-11 rounded-xl bg-gray-100 hover:bg-green-100 transition flex items-center justify-center">
