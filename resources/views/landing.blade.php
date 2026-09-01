@@ -64,19 +64,18 @@
     </div>
 </nav>
 
-<!-- ================= HERO ================= -->
-<section class="hero h-screen flex items-center" style="background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
-    <div class="max-w-7xl mx-auto px-6 text-white">
+<section class="hero min-h-[85vh] flex items-center py-28" style="background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
+    <div class="max-w-6xl mx-auto px-6 text-white">
         <span class="inline-flex items-center gap-2 bg-green-600 px-4 py-2 rounded-full">
             <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS" class="w-5 h-5 rounded-full object-cover">
             Website Resmi
         </span>
 
-        <h1 class="text-6xl font-extrabold mt-6 leading-tight">
+        <h1 class="text-5xl md:text-6xl font-extrabold mt-6 leading-tight">
             {{ $profil ? Str::words($profil->nama_masjid, 1, '') : 'Masjid' }}<br>{{ $profil ? trim(Str::after($profil->nama_masjid, ' ')) : 'Darul Muttaqin' }}
         </h1>
 
-        <p class="mt-6 text-xl max-w-2xl">
+        <p class="mt-6 text-lg md:text-xl max-w-2xl text-gray-100">
             {{ $profil && $profil->slogan ? $profil->slogan : 'Sistem Informasi Masjid Sekolah untuk memudahkan pengelolaan jadwal imam, jadwal Jumat, pengurus, dan pengumuman kegiatan.' }}
         </p>
 
@@ -98,46 +97,46 @@
 </section>
 
 <!-- ================= TENTANG ================= -->
-<section id="tentang" class="py-20 bg-white">
+<section id="tentang" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
             <div>
                 @if($profil && $profil->foto_utama)
                     <img src="{{ Storage::url($profil->foto_utama) }}"
-                         class="rounded-3xl shadow-xl w-full object-cover">
+                         class="rounded-2xl shadow-lg w-full h-[380px] object-cover">
                 @else
                     <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1200"
-                         class="rounded-3xl shadow-xl w-full">
+                         class="rounded-2xl shadow-lg w-full h-[380px] object-cover">
                 @endif
             </div>
 
             <div>
-                <span class="text-green-700 font-semibold">Tentang Masjid</span>
-                <h2 class="text-4xl font-bold mt-3">{{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}</h2>
+                <span class="text-green-700 font-semibold text-sm">Tentang Masjid</span>
+                <h2 class="text-3xl font-bold mt-2">{{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}</h2>
 
-                <p class="text-gray-600 mt-6 leading-8">
+                <p class="text-gray-600 mt-4 leading-7 text-sm">
                     {{ $profil && $profil->deskripsi ? $profil->deskripsi : 'Masjid Darul Muttaqin merupakan pusat kegiatan keagamaan di lingkungan sekolah. Website ini dibuat untuk mempermudah pengelolaan jadwal imam, jadwal Jumat, pengurus DKM, serta penyampaian pengumuman kepada seluruh warga sekolah.' }}
                 </p>
 
-                <div class="grid grid-cols-2 gap-6 mt-10">
+                <div class="grid grid-cols-2 gap-4 mt-6">
                     <button type="button" onclick="bukaModalVisiMisi()"
-                            class="bg-green-50 rounded-2xl p-5 text-left w-full hover:-translate-y-2 hover:shadow-lg transition cursor-pointer">
-                        <svg class="w-9 h-9 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            class="bg-green-50 rounded-xl p-4 text-left w-full hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
+                        <svg class="w-7 h-7 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
                         </svg>
-                        <h3 class="font-bold mt-3">Visi</h3>
-                        <p class="text-gray-600 text-sm mt-2">
-                            {{ $profil && $profil->visi ? Str::limit($profil->visi, 100) : 'Belum diatur.' }}
+                        <h3 class="font-bold mt-2 text-sm">Visi</h3>
+                        <p class="text-gray-600 text-xs mt-1 line-clamp-3">
+                            {{ $profil && $profil->visi ? Str::limit($profil->visi, 90) : 'Belum diatur.' }}
                         </p>
                     </button>
                     <button type="button" onclick="bukaModalVisiMisi()"
-                            class="bg-blue-50 rounded-2xl p-5 text-left w-full hover:-translate-y-2 hover:shadow-lg transition cursor-pointer">
-                        <svg class="w-9 h-9 text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            class="bg-blue-50 rounded-xl p-4 text-left w-full hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
+                        <svg class="w-7 h-7 text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
                         </svg>
-                        <h3 class="font-bold mt-3">Misi</h3>
-                        <p class="text-gray-600 text-sm mt-2">
-                            {{ $profil && $profil->misi ? Str::limit($profil->misi, 100) : 'Belum diatur.' }}
+                        <h3 class="font-bold mt-2 text-sm">Misi</h3>
+                        <p class="text-gray-600 text-xs mt-1 line-clamp-3">
+                            {{ $profil && $profil->misi ? Str::limit($profil->misi, 90) : 'Belum diatur.' }}
                         </p>
                     </button>
                 </div>
@@ -147,48 +146,48 @@
 </section>
 
 <!-- ================= STATISTIK ================= -->
-<section id="statistik" class="py-20 bg-gray-100">
+<section id="statistik" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center">Statistik Masjid</h2>
-        <p class="text-center text-gray-500 mt-2">Data diperbarui secara otomatis.</p>
+        <h2 class="text-3xl font-bold text-center">Statistik Masjid</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Data diperbarui secara otomatis.</p>
 
-        <div class="grid md:grid-cols-4 gap-8 mt-14">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
 
             <button type="button" onclick="bukaModalPengurus()"
-                    class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 hover:shadow-lg transition cursor-pointer w-full">
-                <svg class="w-12 h-12 mx-auto text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    class="bg-white rounded-2xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-md transition cursor-pointer w-full">
+                <svg class="w-8 h-8 mx-auto text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                 </svg>
-                <h3 class="text-5xl font-bold mt-4 text-green-700">{{ $jumlahPengurus }}</h3>
-                <p class="mt-3 text-gray-600">Pengurus</p>
-                <p class="text-xs text-green-600 mt-2">Lihat bagan &rarr;</p>
+                <h3 class="text-3xl font-bold mt-2 text-green-700">{{ $jumlahPengurus }}</h3>
+                <p class="mt-1 text-gray-600 text-sm">Pengurus</p>
+                <p class="text-xs text-green-600 mt-1">Lihat bagan &rarr;</p>
             </button>
 
             <a href="#kegiatan"
-               class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 hover:shadow-lg transition cursor-pointer block">
-                <svg class="w-12 h-12 mx-auto text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+               class="bg-white rounded-2xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-md transition cursor-pointer block">
+                <svg class="w-8 h-8 mx-auto text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                 </svg>
-                <h3 class="text-5xl font-bold mt-4 text-blue-700">{{ $jumlahKegiatan }}</h3>
-                <p class="mt-3 text-gray-600">Kegiatan</p>
+                <h3 class="text-3xl font-bold mt-2 text-blue-700">{{ $jumlahKegiatan }}</h3>
+                <p class="mt-1 text-gray-600 text-sm">Kegiatan</p>
             </a>
 
             <a href="#pengumuman"
-               class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 hover:shadow-lg transition cursor-pointer block">
-                <svg class="w-12 h-12 mx-auto text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+               class="bg-white rounded-2xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-md transition cursor-pointer block">
+                <svg class="w-8 h-8 mx-auto text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
                 </svg>
-                <h3 class="text-5xl font-bold mt-4 text-red-600">{{ $jumlahPengumuman }}</h3>
-                <p class="mt-3 text-gray-600">Pengumuman</p>
+                <h3 class="text-3xl font-bold mt-2 text-red-600">{{ $jumlahPengumuman }}</h3>
+                <p class="mt-1 text-gray-600 text-sm">Pengumuman</p>
             </a>
 
             <a href="#jadwal"
-               class="bg-white rounded-3xl shadow p-8 text-center hover:-translate-y-2 hover:shadow-lg transition cursor-pointer block">
-                <svg class="w-12 h-12 mx-auto text-yellow-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+               class="bg-white rounded-2xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-md transition cursor-pointer block">
+                <svg class="w-8 h-8 mx-auto text-yellow-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-                <h3 class="text-5xl font-bold mt-4 text-yellow-600">{{ $jumlahJadwal }}</h3>
-                <p class="mt-3 text-gray-600">Jadwal Harian</p>
+                <h3 class="text-3xl font-bold mt-2 text-yellow-600">{{ $jumlahJadwal }}</h3>
+                <p class="mt-1 text-gray-600 text-sm">Jadwal Harian</p>
             </a>
 
         </div>
@@ -196,15 +195,15 @@
 </section>
 
 <!-- ================= PENGUMUMAN ================= -->
-<section id="pengumuman" class="py-20 bg-white">
+<section id="pengumuman" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center">Pengumuman Terbaru</h2>
-        <p class="text-center text-gray-500 mt-2">Informasi dan kegiatan terkini masjid.</p>
+        <h2 class="text-3xl font-bold text-center">Pengumuman Terbaru</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Informasi dan kegiatan terkini masjid.</p>
 
-        <div class="grid md:grid-cols-3 gap-8 mt-14">
+        <div class="grid md:grid-cols-3 gap-5 mt-8">
             @forelse ($pengumuman as $item)
                 <a href="{{ route('pengumuman.public', $item->slug) }}"
-                   class="block bg-gray-50 rounded-3xl shadow overflow-hidden hover:-translate-y-2 transition">
+                   class="block bg-gray-50 rounded-2xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-md transition">
                     @if ($item->gambar)
                         <img src="{{ Storage::url($item->gambar) }}" class="w-full h-44 object-cover">
                     @else
@@ -214,19 +213,19 @@
                             </svg>
                         </div>
                     @endif
-                    <div class="p-6">
+                    <div class="p-5">
                         <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">
                             {{ ucfirst($item->kategori) }}
                         </span>
-                        <h3 class="font-bold text-lg mt-3">{{ $item->judul }}</h3>
-                        <p class="text-gray-500 text-sm mt-2">
+                        <h3 class="font-bold text-base mt-2">{{ $item->judul }}</h3>
+                        <p class="text-gray-500 text-xs mt-1">
                             {{ $item->tanggal_publish->translatedFormat('d F Y') }}
                         </p>
-                        <p class="text-gray-600 text-sm mt-3 line-clamp-3">
+                        <p class="text-gray-600 text-sm mt-2 line-clamp-3">
                             {{ Str::limit(strip_tags($item->isi), 120) }}
                         </p>
                         @if ($item->kegiatan)
-                            <p class="text-xs text-blue-600 mt-3">
+                            <p class="text-xs text-blue-600 mt-2">
                                 Terkait kegiatan: {{ $item->kegiatan->judul }}
                             </p>
                         @endif
@@ -240,12 +239,12 @@
 </section>
 
 <!-- ================= JADWAL IMAM & MUAZIN ================= -->
-<section id="jadwal" class="py-20 bg-gray-100">
+<section id="jadwal" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center">Jadwal Imam & Muazin</h2>
-        <p class="text-center text-gray-500 mt-2">Jadwal petugas sholat sepanjang pekan.</p>
+        <h2 class="text-3xl font-bold text-center">Jadwal Imam & Muazin</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Jadwal petugas sholat sepanjang pekan.</p>
 
-        <div class="overflow-x-auto mt-14 bg-white rounded-3xl shadow">
+        <div class="overflow-x-auto mt-8 bg-white rounded-2xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
@@ -295,12 +294,12 @@
 </section>
 
 <!-- ================= JADWAL BILAL ================= -->
-<section class="py-20 bg-white">
+<section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center">Jadwal Bilal</h2>
-        <p class="text-center text-gray-500 mt-2">Petugas bilal berdasarkan siklus pasaran.</p>
+        <h2 class="text-3xl font-bold text-center">Jadwal Bilal</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Petugas bilal berdasarkan siklus pasaran.</p>
 
-        <div class="overflow-x-auto mt-14 bg-gray-50 rounded-3xl shadow">
+        <div class="overflow-x-auto mt-8 bg-gray-50 rounded-2xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
@@ -326,12 +325,12 @@
 </section>
 
 <!-- ================= JADWAL PIKET KEBERSIHAN ================= -->
-<section class="py-20 bg-gray-100">
+<section class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center">Jadwal Piket Kebersihan</h2>
-        <p class="text-center text-gray-500 mt-2">Petugas kebersihan masjid setiap harinya.</p>
+        <h2 class="text-3xl font-bold text-center">Jadwal Piket Kebersihan</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Petugas kebersihan masjid setiap harinya.</p>
 
-        <div class="overflow-x-auto mt-14 bg-white rounded-3xl shadow">
+        <div class="overflow-x-auto mt-8 bg-white rounded-2xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
@@ -356,12 +355,12 @@
     </div>
 </section>
 <!-- ================= KEGIATAN ================= -->
-<section id="kegiatan" class="py-20 bg-white">
+<section id="kegiatan" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center">Kegiatan Masjid</h2>
-        <p class="text-center text-gray-500 mt-2">Agenda dan riwayat kegiatan masjid.</p>
+        <h2 class="text-3xl font-bold text-center">Kegiatan Masjid</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Agenda dan riwayat kegiatan masjid.</p>
 
-        <div class="grid md:grid-cols-3 gap-8 mt-14">
+        <div class="grid md:grid-cols-3 gap-5 mt-8">
             @forelse ($kegiatan as $item)
                 @php
                     $tanggalAcuan = $item->tanggal_selesai ?? $item->tanggal_mulai;
@@ -390,17 +389,17 @@
                         data-deskripsi="{{ $item->deskripsi ? strip_tags($item->deskripsi) : '' }}"
                         data-poster="{{ $item->poster ? Storage::url($item->poster) : '' }}"
                         data-pengumuman='@json($item->pengumumans->map(fn($p) => ["judul" => $p->judul, "slug" => $p->slug]))'
-                        class="text-left w-full bg-gray-50 rounded-3xl shadow overflow-hidden hover:-translate-y-2 hover:shadow-lg transition cursor-pointer">
+                        class="text-left w-full bg-gray-50 rounded-2xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
                     @if ($item->poster)
-                        <img src="{{ Storage::url($item->poster) }}" class="w-full h-44 object-cover">
+                        <img src="{{ Storage::url($item->poster) }}" class="w-full h-36 object-cover">
                     @else
-                        <div class="w-full h-44 bg-blue-100 flex items-center justify-center">
-                            <svg class="w-12 h-12 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <div class="w-full h-36 bg-blue-100 flex items-center justify-center">
+                            <svg class="w-10 h-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                             </svg>
                         </div>
                     @endif
-                    <div class="p-6">
+                    <div class="p-5">
                         <div class="flex items-center gap-2 flex-wrap">
                             <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700">
                                 {{ ucfirst(str_replace('_', ' ', $item->kategori)) }}
@@ -414,20 +413,20 @@
                                 {{ $labelStatus }}
                             </span>
                         </div>
-                        <h3 class="font-bold text-lg mt-3">{{ $item->judul }}</h3>
-                        <p class="text-gray-500 text-sm mt-2">
+                        <h3 class="font-bold text-base mt-2">{{ $item->judul }}</h3>
+                        <p class="text-gray-500 text-xs mt-1">
                             {{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}
                             @if ($item->lokasi)
                                 &middot; {{ $item->lokasi }}
                             @endif
                         </p>
                         @if ($item->deskripsi)
-                            <p class="text-gray-600 text-sm mt-3 line-clamp-3">
+                            <p class="text-gray-600 text-sm mt-2 line-clamp-3">
                                 {{ Str::limit(strip_tags($item->deskripsi), 120) }}
                             </p>
                         @endif
                         @if ($item->pengumumans->count() > 0)
-                            <p class="text-xs text-green-600 mt-3">
+                            <p class="text-xs text-green-600 mt-2">
                                 {{ $item->pengumumans->count() }} pengumuman terkait
                             </p>
                         @endif
@@ -441,12 +440,12 @@
 </section>
 
 <!-- ================= GALERI ================= -->
-<section id="galeri" class="py-20 bg-gray-100">
+<section id="galeri" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center">Galeri</h2>
-        <p class="text-center text-gray-500 mt-2">Dokumentasi foto dan video kegiatan masjid.</p>
+        <h2 class="text-3xl font-bold text-center">Galeri</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Dokumentasi foto dan video kegiatan masjid.</p>
 
-        <div class="grid md:grid-cols-4 gap-6 mt-14">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             @forelse ($galeri as $item)
                 <div class="group relative rounded-2xl overflow-hidden shadow bg-white aspect-square">
                     @if ($item->tipe === 'video')
@@ -474,12 +473,12 @@
 </section>
 
 <!-- ================= INVENTARIS ================= -->
-<section id="inventaris" class="py-20 bg-white">
+<section id="inventaris" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center">Inventaris Masjid</h2>
-        <p class="text-center text-gray-500 mt-2">Data aset dan perlengkapan masjid.</p>
+        <h2 class="text-3xl font-bold text-center">Inventaris Masjid</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Data aset dan perlengkapan masjid.</p>
 
-        <div class="overflow-x-auto mt-14 bg-gray-50 rounded-3xl shadow">
+        <div class="overflow-x-auto mt-8 bg-gray-50 rounded-2xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
@@ -524,35 +523,35 @@
 </section>
 
 <!-- ================= INFAQ ================= -->
-<section id="infaq" class="py-20 bg-green-700">
+<section id="infaq" class="py-14 bg-green-700">
     <div class="max-w-2xl mx-auto px-6 text-center">
-        <h2 class="text-3xl sm:text-4xl font-bold text-white">Mari Berinfaq</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white">Mari Berinfaq</h2>
 
-        <div class="bg-white rounded-3xl shadow-xl inline-block p-6 mt-8">
+        <div class="bg-white rounded-2xl shadow-xl inline-block p-4 mt-5">
             {{-- Placeholder sementara — nanti ganti src ke asset('images/qris-infaq.png') setelah QRIS asli tersedia --}}
             <img src="https://via.placeholder.com/256x256/f0fdf4/16a34a?text=QRIS+Infaq"
                  alt="Barcode QRIS Infaq Masjid Darul Muttaqin (contoh sementara)"
-                 class="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto">
-            <p class="text-gray-500 text-sm mt-3">Scan untuk berinfaq via QRIS</p>
+                 class="w-44 h-44 sm:w-52 sm:h-52 object-contain mx-auto">
+            <p class="text-gray-500 text-xs mt-2">Scan untuk berinfaq via QRIS</p>
         </div>
 
-        <p class="text-green-100 mt-8 max-w-xl mx-auto leading-7">
+        <p class="text-green-100 mt-5 max-w-xl mx-auto leading-6 text-sm">
             Sedikit yang kita sisihkan hari ini bisa jadi ladang pahala yang terus mengalir.
             Yuk, dukung kegiatan dan pembangunan Masjid Darul Muttaqin melalui infaq.
         </p>
 
-        <p class="text-green-200 text-sm mt-6 italic max-w-xl mx-auto">
+        <p class="text-green-200 text-xs mt-4 italic max-w-xl mx-auto">
             "Perumpamaan orang yang menginfakkan hartanya di jalan Allah seperti sebutir benih yang menumbuhkan tujuh tangkai." (QS. Al-Baqarah: 261)
         </p>
     </div>
 </section>
 
 <!-- ================= FOOTER ================= -->
-<footer class="bg-green-900 text-green-100 py-10">
+<footer class="bg-green-900 text-green-100 py-6">
     <div class="max-w-7xl mx-auto px-6 text-center">
-        <p class="font-bold text-white text-lg">Masjid Darul Muttaqin</p>
-        <p class="text-sm mt-2">SMK Negeri 1 Bangsri</p>
-        <p class="text-xs mt-6 text-green-300">
+        <p class="font-bold text-white text-base">Masjid Darul Muttaqin</p>
+        <p class="text-xs mt-1">SMK Negeri 1 Bangsri</p>
+        <p class="text-xs mt-3 text-green-300">
             &copy; {{ date('Y') }} SIMADI — Sistem Informasi Masjid Darul Muttaqin
         </p>
     </div>
