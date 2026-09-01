@@ -37,9 +37,11 @@
                             <tr>
                                 <td class="px-6 py-4">
                                     @if ($item->foto)
-                                        <a href="{{ Storage::url($item->foto) }}" target="_blank">
-                                            <img src="{{ Storage::url($item->foto) }}" class="w-10 h-10 rounded-full object-cover">
-                                        </a>
+                                        <button type="button"
+                                                onclick="bukaModalFoto('{{ Storage::url($item->foto) }}')"
+                                                class="block">
+                                            <img src="{{ Storage::url($item->foto) }}" class="w-10 h-10 rounded-full object-cover hover:opacity-80 transition">
+                                        </button>
                                     @else
                                         <div class="w-10 h-10 rounded-full bg-gray-200"></div>
                                     @endif
@@ -95,4 +97,37 @@
 
         </div>
     </div>
+
+    {{-- ================= MODAL PREVIEW FOTO ================= --}}
+    <div id="modal-foto" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/80" onclick="tutupModalFoto()"></div>
+
+        <div class="relative h-full flex items-center justify-center p-6">
+            <button type="button" onclick="tutupModalFoto()"
+                    class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white text-2xl transition">
+                &times;
+            </button>
+
+            <img id="modal-foto-img" src="" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain">
+        </div>
+    </div>
+
+    <script>
+        function bukaModalFoto(url) {
+            document.getElementById('modal-foto-img').src = url;
+            document.getElementById('modal-foto').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function tutupModalFoto() {
+            document.getElementById('modal-foto').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                tutupModalFoto();
+            }
+        });
+    </script>
 </x-app-layout>
