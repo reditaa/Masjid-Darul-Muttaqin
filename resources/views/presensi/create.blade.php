@@ -40,7 +40,7 @@
                             @foreach ($jadwalImamMuazin as $j)
                                 <option value="{{ $j->id }}">
                                     {{ ucfirst($j->hari) }} - {{ ucfirst($j->waktu_sholat) }}
-                                    (Imam: {{ $j->imam->nama ?? '-' }})
+                                    (Imam: {{ $j->imam->pluck('nama')->join(', ') ?: '-' }})
                                 </option>
                             @endforeach
                         </select>
