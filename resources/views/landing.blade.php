@@ -44,9 +44,22 @@
             <a href="#pengumuman" class="hover:text-green-700">Pengumuman</a>
             <a href="#jadwal" class="hover:text-green-700">Jadwal</a>
             <a href="#infaq" class="hover:text-green-700">Infaq</a>
-            <a href="{{ route('login') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
-                Login Admin
-            </a>
+
+            @auth
+                @if (Auth::user()->role === 'admin')
+                    <a href="{{ route('dashboard') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
+                        Dashboard Admin
+                    </a>
+                @else
+                    <a href="{{ route('anggota.dashboard') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
+                        Dashboard Saya
+                    </a>
+                @endif
+            @else
+                <a href="{{ route('login') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
+                    Login Admin
+                </a>
+            @endauth
         </div>
     </div>
 </nav>
