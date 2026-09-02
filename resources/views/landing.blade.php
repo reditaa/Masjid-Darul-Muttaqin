@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div class="hidden md:flex items-center gap-8">
+        <div class="hidden lg:flex items-center gap-8">
             <a href="#tentang" class="hover:text-green-700">Tentang</a>
             <a href="#statistik" class="hover:text-green-700">Statistik</a>
             <a href="#pengumuman" class="hover:text-green-700">Pengumuman</a>
@@ -66,7 +66,7 @@
             @endauth
         </div>
 
-        <button type="button" onclick="toggleMenuMobile()" class="md:hidden shrink-0 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100">
+        <button type="button" onclick="toggleMenuMobile()" class="lg:hidden shrink-0 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100">
             <svg id="icon-menu-buka" class="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
             </svg>
@@ -76,7 +76,7 @@
         </button>
     </div>
 
-    <div id="menu-mobile" class="hidden md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
+    <div id="menu-mobile" class="hidden lg:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
         <a href="#tentang" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Tentang</a>
         <a href="#statistik" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Statistik</a>
         <a href="#pengumuman" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Pengumuman</a>
