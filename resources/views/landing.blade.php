@@ -34,7 +34,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-xl text-green-700">Masjid Darul Muttaqin</h1>
-                <p class="text-sm text-gray-500">SMK Negeri 1 Bangsri</p>
+                <p class="text-sm text-black">SMK Negeri 1 Bangsri</p>
             </div>
         </div>
 
@@ -66,12 +66,7 @@
 
 <section class="hero min-h-[85vh] flex items-center py-28" style="background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
     <div class="max-w-6xl mx-auto px-6 text-white">
-        <span class="inline-flex items-center gap-2 bg-green-600 px-4 py-2 rounded-full">
-            <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS" class="w-5 h-5 rounded-full object-cover">
-            Website Resmi
-        </span>
-
-        <h1 class="text-5xl md:text-6xl font-extrabold mt-6 leading-tight">
+        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
             {{ $profil ? Str::words($profil->nama_masjid, 1, '') : 'Masjid' }}<br>{{ $profil ? trim(Str::after($profil->nama_masjid, ' ')) : 'Darul Muttaqin' }}
         </h1>
 
@@ -238,6 +233,91 @@
     </div>
 </section>
 
+<!-- ================= KEGIATAN ================= -->
+<section id="kegiatan" class="py-14 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center">Kegiatan Masjid</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Agenda dan riwayat kegiatan masjid.</p>
+
+        <div class="grid md:grid-cols-3 gap-5 mt-8">
+            @forelse ($kegiatan as $item)
+                @php
+                    $tanggalAcuan = $item->tanggal_selesai ?? $item->tanggal_mulai;
+                    $sudahLewat = $tanggalAcuan && $tanggalAcuan->lt(now()->startOfDay());
+                    $sudahSelesai = $item->status === 'selesai' || $sudahLewat;
+
+                    if ($item->status === 'dibatalkan') {
+                        $labelStatus = 'Dibatalkan';
+                        $statusKey = 'dibatalkan';
+                    } elseif ($sudahSelesai) {
+                        $labelStatus = 'Selesai';
+                        $statusKey = 'selesai';
+                    } else {
+                        $labelStatus = ucfirst(str_replace('_', ' ', $item->status));
+                        $statusKey = $item->status;
+                    }
+                @endphp
+                <button type="button"
+                        onclick="bukaModalKegiatan(this)"
+                        data-judul="{{ $item->judul }}"
+                        data-kategori="{{ ucfirst(str_replace('_', ' ', $item->kategori)) }}"
+                        data-status="{{ $labelStatus }}"
+                        data-status-raw="{{ $statusKey }}"
+                        data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}"
+                        data-lokasi="{{ $item->lokasi ?? '' }}"
+                        data-deskripsi="{{ $item->deskripsi ? strip_tags($item->deskripsi) : '' }}"
+                        data-poster="{{ $item->poster ? Storage::url($item->poster) : '' }}"
+                        data-pengumuman='@json($item->pengumumans->map(fn($p) => ["judul" => $p->judul, "slug" => $p->slug]))'
+                        class="text-left w-full bg-gray-50 rounded-2xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
+                    @if ($item->poster)
+                        <img src="{{ Storage::url($item->poster) }}" class="w-full h-36 object-cover">
+                    @else
+                        <div class="w-full h-36 bg-blue-100 flex items-center justify-center">
+                            <svg class="w-10 h-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                        </div>
+                    @endif
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700">
+                                {{ ucfirst(str_replace('_', ' ', $item->kategori)) }}
+                            </span>
+                            <span @class([
+                                'text-xs px-2 py-1 rounded-full',
+                                'bg-green-100 text-green-700' => $statusKey === 'selesai',
+                                'bg-blue-100 text-blue-700' => in_array($statusKey, ['akan_datang', 'berlangsung']),
+                                'bg-red-100 text-red-700' => $statusKey === 'dibatalkan',
+                            ])>
+                                {{ $labelStatus }}
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-base mt-2">{{ $item->judul }}</h3>
+                        <p class="text-gray-500 text-xs mt-1">
+                            {{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}
+                            @if ($item->lokasi)
+                                &middot; {{ $item->lokasi }}
+                            @endif
+                        </p>
+                        @if ($item->deskripsi)
+                            <p class="text-gray-600 text-sm mt-2 line-clamp-3">
+                                {{ Str::limit(strip_tags($item->deskripsi), 120) }}
+                            </p>
+                        @endif
+                        @if ($item->pengumumans->count() > 0)
+                            <p class="text-xs text-green-600 mt-2">
+                                {{ $item->pengumumans->count() }} pengumuman terkait
+                            </p>
+                        @endif
+                    </div>
+                </button>
+            @empty
+                <p class="col-span-3 text-center text-gray-400">Belum ada kegiatan.</p>
+            @endforelse
+        </div>
+    </div>
+</section>
+
 <!-- ================= JADWAL IMAM & MUAZIN ================= -->
 <section id="jadwal" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
@@ -354,91 +434,6 @@
         </div>
     </div>
 </section>
-<!-- ================= KEGIATAN ================= -->
-<section id="kegiatan" class="py-14 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Kegiatan Masjid</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Agenda dan riwayat kegiatan masjid.</p>
-
-        <div class="grid md:grid-cols-3 gap-5 mt-8">
-            @forelse ($kegiatan as $item)
-                @php
-                    $tanggalAcuan = $item->tanggal_selesai ?? $item->tanggal_mulai;
-                    $sudahLewat = $tanggalAcuan && $tanggalAcuan->lt(now()->startOfDay());
-                    $sudahSelesai = $item->status === 'selesai' || $sudahLewat;
-
-                    if ($item->status === 'dibatalkan') {
-                        $labelStatus = 'Dibatalkan';
-                        $statusKey = 'dibatalkan';
-                    } elseif ($sudahSelesai) {
-                        $labelStatus = 'Selesai';
-                        $statusKey = 'selesai';
-                    } else {
-                        $labelStatus = ucfirst(str_replace('_', ' ', $item->status));
-                        $statusKey = $item->status;
-                    }
-                @endphp
-                <button type="button"
-                        onclick="bukaModalKegiatan(this)"
-                        data-judul="{{ $item->judul }}"
-                        data-kategori="{{ ucfirst(str_replace('_', ' ', $item->kategori)) }}"
-                        data-status="{{ $labelStatus }}"
-                        data-status-raw="{{ $statusKey }}"
-                        data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}"
-                        data-lokasi="{{ $item->lokasi ?? '' }}"
-                        data-deskripsi="{{ $item->deskripsi ? strip_tags($item->deskripsi) : '' }}"
-                        data-poster="{{ $item->poster ? Storage::url($item->poster) : '' }}"
-                        data-pengumuman='@json($item->pengumumans->map(fn($p) => ["judul" => $p->judul, "slug" => $p->slug]))'
-                        class="text-left w-full bg-gray-50 rounded-2xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
-                    @if ($item->poster)
-                        <img src="{{ Storage::url($item->poster) }}" class="w-full h-36 object-cover">
-                    @else
-                        <div class="w-full h-36 bg-blue-100 flex items-center justify-center">
-                            <svg class="w-10 h-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                            </svg>
-                        </div>
-                    @endif
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700">
-                                {{ ucfirst(str_replace('_', ' ', $item->kategori)) }}
-                            </span>
-                            <span @class([
-                                'text-xs px-2 py-1 rounded-full',
-                                'bg-green-100 text-green-700' => $statusKey === 'selesai',
-                                'bg-blue-100 text-blue-700' => in_array($statusKey, ['akan_datang', 'berlangsung']),
-                                'bg-red-100 text-red-700' => $statusKey === 'dibatalkan',
-                            ])>
-                                {{ $labelStatus }}
-                            </span>
-                        </div>
-                        <h3 class="font-bold text-base mt-2">{{ $item->judul }}</h3>
-                        <p class="text-gray-500 text-xs mt-1">
-                            {{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}
-                            @if ($item->lokasi)
-                                &middot; {{ $item->lokasi }}
-                            @endif
-                        </p>
-                        @if ($item->deskripsi)
-                            <p class="text-gray-600 text-sm mt-2 line-clamp-3">
-                                {{ Str::limit(strip_tags($item->deskripsi), 120) }}
-                            </p>
-                        @endif
-                        @if ($item->pengumumans->count() > 0)
-                            <p class="text-xs text-green-600 mt-2">
-                                {{ $item->pengumumans->count() }} pengumuman terkait
-                            </p>
-                        @endif
-                    </div>
-                </button>
-            @empty
-                <p class="col-span-3 text-center text-gray-400">Belum ada kegiatan.</p>
-            @endforelse
-        </div>
-    </div>
-</section>
-
 <!-- ================= GALERI ================= -->
 <section id="galeri" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
