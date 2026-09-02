@@ -20,6 +20,10 @@
             background-size: cover;
             background-position: center;
         }
+
+        section[id] {
+            scroll-margin-top: 5.5rem;
+        }
     </style>
 </head>
 
@@ -27,14 +31,14 @@
 
 <!-- ================= NAVBAR ================= -->
 <nav class="fixed w-full bg-white/95 backdrop-blur shadow z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center py-4 px-6">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full bg-green-700 flex items-center justify-center overflow-hidden">
+    <div class="max-w-7xl mx-auto flex justify-between items-center py-3 px-4 sm:px-6">
+        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-700 flex items-center justify-center overflow-hidden shrink-0">
                 <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS Darul Muttaqin" class="w-full h-full object-cover">
             </div>
-            <div>
-                <h1 class="font-bold text-xl text-green-700">Masjid Darul Muttaqin</h1>
-                <p class="text-sm text-black">SMK Negeri 1 Bangsri</p>
+            <div class="min-w-0">
+                <h1 class="font-bold text-sm sm:text-xl text-green-700 leading-tight truncate">Masjid Darul Muttaqin</h1>
+                <p class="text-xs sm:text-sm text-black truncate">SMK Negeri 1 Bangsri</p>
             </div>
         </div>
 
@@ -61,28 +65,61 @@
                 </a>
             @endauth
         </div>
+
+        <button type="button" onclick="toggleMenuMobile()" class="md:hidden shrink-0 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100">
+            <svg id="icon-menu-buka" class="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+            </svg>
+            <svg id="icon-menu-tutup" class="w-6 h-6 text-green-700 hidden" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <div id="menu-mobile" class="hidden md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
+        <a href="#tentang" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Tentang</a>
+        <a href="#statistik" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Statistik</a>
+        <a href="#pengumuman" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Pengumuman</a>
+        <a href="#jadwal" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Jadwal</a>
+        <a href="#infaq" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Infaq</a>
+
+        @auth
+            @if (Auth::user()->role === 'admin')
+                <a href="{{ route('dashboard') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
+                    Dashboard Admin
+                </a>
+            @else
+                <a href="{{ route('anggota.dashboard') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
+                    Dashboard Saya
+                </a>
+            @endif
+        @else
+            <a href="{{ route('login') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
+                Login Admin
+            </a>
+        @endauth
     </div>
 </nav>
 
-<section class="hero min-h-[85vh] flex items-center py-28" style="background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
-    <div class="max-w-6xl mx-auto px-6 text-white">
-        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+<section class="hero min-h-[70vh] sm:min-h-[85vh] flex items-center pt-28 pb-16 sm:py-28" style="background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-white">
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
             {{ $profil ? Str::words($profil->nama_masjid, 1, '') : 'Masjid' }}<br>{{ $profil ? trim(Str::after($profil->nama_masjid, ' ')) : 'Darul Muttaqin' }}
         </h1>
 
-        <p class="mt-6 text-lg md:text-xl max-w-2xl text-gray-100">
+        <p class="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl max-w-2xl text-gray-100">
             {{ $profil && $profil->slogan ? $profil->slogan : 'Sistem Informasi Masjid Sekolah untuk memudahkan pengelolaan jadwal imam, jadwal Jumat, pengurus, dan pengumuman kegiatan.' }}
         </p>
 
-        <div class="mt-10 flex gap-4">
-            <a href="#jadwal" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 px-7 py-3 rounded-xl text-lg">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <div class="mt-6 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <a href="#jadwal" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 px-6 py-3 rounded-xl text-base sm:text-lg">
+                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                 </svg>
                 Lihat Jadwal
             </a>
-            <a href="#pengumuman" class="inline-flex items-center gap-2 bg-white text-green-700 px-7 py-3 rounded-xl text-lg">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <a href="#pengumuman" class="inline-flex items-center justify-center gap-2 bg-white text-green-700 px-6 py-3 rounded-xl text-base sm:text-lg">
+                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
                 </svg>
                 Pengumuman
@@ -98,10 +135,10 @@
             <div>
                 @if($profil && $profil->foto_utama)
                     <img src="{{ Storage::url($profil->foto_utama) }}"
-                         class="rounded-2xl shadow-lg w-full h-[380px] object-cover">
+                         class="rounded-2xl shadow-lg w-full h-64 sm:h-[380px] object-cover">
                 @else
                     <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1200"
-                         class="rounded-2xl shadow-lg w-full h-[380px] object-cover">
+                         class="rounded-2xl shadow-lg w-full h-64 sm:h-[380px] object-cover">
                 @endif
             </div>
 
@@ -237,7 +274,7 @@
 <section id="kegiatan" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Kegiatan Masjid</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Agenda dan riwayat kegiatan masjid.</p>
+        <p class="text-center text-gray-500 mt-2 text-sm">Riwayat agenda masjid terkini.</p>
 
         <div class="grid md:grid-cols-3 gap-5 mt-8">
             @forelse ($kegiatan as $item)
@@ -547,7 +584,7 @@
         <p class="font-bold text-white text-base">Masjid Darul Muttaqin</p>
         <p class="text-xs mt-1">SMK Negeri 1 Bangsri</p>
         <p class="text-xs mt-3 text-green-300">
-            &copy; {{ date('Y') }} SIMADI — Sistem Informasi Masjid Darul Muttaqin
+            &copy; {{ date('Y') }} SIMMADI — Sistem Manajemen Masjid Digital
         </p>
     </div>
 </footer>
@@ -680,6 +717,18 @@
 </div>
 
 <script>
+    function toggleMenuMobile() {
+        document.getElementById('menu-mobile').classList.toggle('hidden');
+        document.getElementById('icon-menu-buka').classList.toggle('hidden');
+        document.getElementById('icon-menu-tutup').classList.toggle('hidden');
+    }
+
+    function tutupMenuMobile() {
+        document.getElementById('menu-mobile').classList.add('hidden');
+        document.getElementById('icon-menu-buka').classList.remove('hidden');
+        document.getElementById('icon-menu-tutup').classList.add('hidden');
+    }
+
     function bukaModalKegiatan(btn) {
         document.getElementById('kegiatan-judul').textContent = btn.dataset.judul;
         document.getElementById('kegiatan-kategori').textContent = btn.dataset.kategori;

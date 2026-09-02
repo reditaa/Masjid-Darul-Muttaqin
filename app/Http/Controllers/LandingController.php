@@ -34,10 +34,11 @@ class LandingController extends Controller
             ->groupBy(fn ($item) => $item->jabatan->nama_jabatan)
             ->sortBy(fn ($group) => optional($group->first()->jabatan)->urutan ?? 999);
 
+        // Pengumuman aktif (belum lewat tanggal_berakhir), maksimal 9 terbaru
         $pengumuman = Pengumuman::published()
             ->with('kegiatan')
             ->latest('tanggal_publish')
-            ->take(3)
+            ->take(9)
             ->get();
 
         $jadwalImamMuazin = JadwalImamMuazin::with(['imam', 'muazin'])
