@@ -63,18 +63,6 @@
 
             </form>
 
-            <div class="flex items-center gap-3 my-5">
-                <div class="flex-1 h-px bg-white/25"></div>
-                <span class="text-xs text-white/70">ATAU</span>
-                <div class="flex-1 h-px bg-white/25"></div>
-            </div>
-
-            <a href="{{ route('sipintu.redirect') }}"
-               class="w-full flex items-center justify-center gap-2 border-2 border-white/40 text-white hover:bg-white/10 transition rounded-xl py-3 font-bold backdrop-blur">
-                <i class="fas fa-school"></i>
-                LOGIN VIA SIPINTU
-            </a>
-
         </div>
 
     </div>
