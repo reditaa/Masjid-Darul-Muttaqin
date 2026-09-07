@@ -61,6 +61,21 @@
             </div>
         @endif
 
+        {{-- Saldo Kas Masjid --}}
+        <div class="bg-white rounded-xl shadow p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Saldo Kas Masjid</p>
+                    <p class="text-2xl font-bold text-green-700 mt-1">
+                        Rp {{ number_format($saldoKas, 0, ',', '.') }}
+                    </p>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-green-100 text-green-700 flex items-center justify-center">
+                    <i class="fas fa-wallet text-xl"></i>
+                </div>
+            </div>
+        </div>
+
                {{-- Jadwal Kegiatan Masjid --}}
         <div class="bg-white rounded-xl shadow p-5">
             <div class="flex items-center justify-between mb-4 flex-wrap gap-2">

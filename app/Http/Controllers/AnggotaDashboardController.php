@@ -8,6 +8,7 @@ use App\Models\JadwalJumat;
 use App\Models\JadwalPiketKebersihan;
 use App\Models\Kegiatan;
 use App\Models\Pengumuman;
+use App\Models\TransaksiKeuangan;
 use Illuminate\Support\Facades\Auth;
 
 class AnggotaDashboardController extends Controller
@@ -74,6 +75,9 @@ class AnggotaDashboardController extends Controller
         $pengumuman = Pengumuman::published()->latest('tanggal_publish')->take(5)->get();
         $kegiatan = Kegiatan::akanDatang()->orderBy('tanggal_mulai')->take(5)->get();
 
+        // Saldo kas masjid saat ini
+        $saldoKas = TransaksiKeuangan::saldoSaatIni();
+
         // Ringkasan tugas pribadi hari ini (untuk banner notifikasi di atas)
         $tugasHariIni = collect()
             ->concat($jadwalImam->filter(fn ($j) => $j->milik_saya && $j->hari_ini)
@@ -88,7 +92,7 @@ class AnggotaDashboardController extends Controller
 
         return view('anggota.dashboard', compact(
             'pengurus', 'jadwalImam', 'jadwalJumat', 'jadwalBilal', 'jadwalPiket',
-            'pengumuman', 'kegiatan', 'tugasHariIni'
+            'pengumuman', 'kegiatan', 'tugasHariIni', 'saldoKas'
         ));
     }
 
