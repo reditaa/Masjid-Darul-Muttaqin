@@ -596,7 +596,31 @@
         <h2 class="text-3xl font-bold text-center">Inventaris Masjid</h2>
         <p class="text-center text-gray-500 mt-2 text-sm">Data aset dan perlengkapan masjid.</p>
 
-        <div class="overflow-x-auto mt-8 bg-gray-50 rounded-2xl shadow">
+        {{-- Mobile: card view --}}
+        <div class="sm:hidden mt-8 space-y-3">
+            @forelse ($inventaris as $item)
+                <div class="bg-gray-50 rounded-2xl shadow px-5 py-4">
+                    <div class="flex items-start justify-between gap-3">
+                        <p class="font-medium text-gray-800">{{ $item->nama_barang }}</p>
+                        <span @class([
+                            'text-xs px-2 py-1 rounded-full shrink-0',
+                            'bg-green-100 text-green-700' => $item->kondisi === 'baik',
+                            'bg-yellow-100 text-yellow-700' => $item->kondisi === 'rusak_ringan',
+                            'bg-red-100 text-red-700' => in_array($item->kondisi, ['rusak_berat', 'hilang']),
+                        ])>
+                            {{ ucfirst(str_replace('_', ' ', $item->kondisi)) }}
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-500 capitalize mt-1">{{ str_replace('_', ' ', $item->kategori) }}</p>
+                    <p class="text-sm text-gray-600 mt-1">{{ $item->jumlah }} {{ $item->satuan }}</p>
+                </div>
+            @empty
+                <p class="text-center text-gray-400 bg-gray-50 rounded-2xl shadow py-8">Belum ada data inventaris.</p>
+            @endforelse
+        </div>
+
+        {{-- Desktop: table view --}}
+        <div class="hidden sm:block overflow-x-auto mt-8 bg-gray-50 rounded-2xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
