@@ -131,37 +131,6 @@
                         @enderror
                         <p class="text-gray-400 text-xs mt-2 text-center">Rekomendasi: gambar persegi (misal 256×256px), maks 2MB.</p>
                     </div>
-
-                    {{-- QRIS Infaq (foto singkat di sini, detail lengkap ada di section Infaq di bawah) --}}
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-3">
-                            💳 Barcode QRIS Infaq
-                        </label>
-                        <div class="relative group cursor-pointer w-40 mx-auto" onclick="document.getElementById('input_qris').click()">
-                            <div id="preview_qris"
-                                 class="w-40 h-40 rounded-2xl overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center transition group-hover:border-green-400 group-hover:bg-green-50">
-                                @if($profil->qris_infaq)
-                                    <img src="{{ Storage::url($profil->qris_infaq) }}"
-                                         id="img_qris"
-                                         class="w-full h-full object-contain">
-                                @else
-                                    <div id="img_qris" class="text-center text-gray-400">
-                                        <i class="fas fa-qrcode text-3xl mb-1 block"></i>
-                                        <p class="text-xs">Klik untuk upload QRIS</p>
-                                    </div>
-                                @endif
-                            </div>
-                            <div class="absolute bottom-0 right-0 bg-green-600 text-white text-xs w-8 h-8 rounded-full shadow flex items-center justify-center group-hover:bg-green-700 transition">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                        </div>
-                        <input type="file" id="input_qris" name="qris_infaq" accept="image/*" class="hidden"
-                               onchange="previewImage(this, 'preview_qris', 'img_qris')">
-                        @error('qris_infaq')
-                            <p class="text-red-500 text-xs mt-2 text-center">{{ $message }}</p>
-                        @enderror
-                        <p class="text-gray-400 text-xs mt-2 text-center">Tampil di section "Mari Berinfaq" halaman utama. Maks 2MB.</p>
-                    </div>
                 </div>
             </div>
 
@@ -284,42 +253,6 @@
                 </div>
             </div>
 
-            {{-- ============ SECTION: INFAQ (QRIS) ============ --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4">
-                    <h3 class="text-white font-semibold text-base flex items-center gap-2">
-                        <i class="fas fa-hand-holding-heart"></i> Infaq (QRIS)
-                    </h3>
-                    <p class="text-green-100 text-xs mt-0.5">Gambar QRIS ditampilkan di section "Mari Berinfaq" pada halaman utama</p>
-                </div>
-
-                <div class="p-6 flex flex-col items-center">
-                    <div class="relative group cursor-pointer" onclick="document.getElementById('input_qris').click()">
-                        <div id="preview_qris_full"
-                             class="w-56 h-56 rounded-2xl overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center transition group-hover:border-green-400 group-hover:bg-green-50">
-                            @if($profil->qris_infaq)
-                                <img src="{{ Storage::url($profil->qris_infaq) }}"
-                                     id="img_qris_full"
-                                     class="w-full h-full object-contain">
-                            @else
-                                <div id="img_qris_full" class="text-center text-gray-400">
-                                    <i class="fas fa-qrcode text-4xl mb-2 block"></i>
-                                    <p class="text-sm">Klik untuk upload QRIS</p>
-                                    <p class="text-xs mt-1">JPG, PNG — maks 2MB</p>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="absolute bottom-3 right-3 bg-green-600 text-white text-xs px-3 py-1.5 rounded-xl shadow group-hover:bg-green-700 transition">
-                            <i class="fas fa-camera mr-1"></i> Ganti Gambar
-                        </div>
-                    </div>
-                    <p class="text-gray-400 text-xs mt-3 text-center">
-                        Upload gambar barcode QRIS resmi rekening infaq masjid (persegi, disarankan min. 512×512px).<br>
-                        Field ini sama dengan "Barcode QRIS Infaq" di section Foto & Gambar di atas — cukup diisi salah satu.
-                    </p>
-                </div>
-            </div>
-
             {{-- ============ SECTION: KONTAK & MEDIA SOSIAL ============ --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4">
@@ -404,21 +337,10 @@
 
             reader.onload = function(e) {
                 const html = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-                const htmlContain = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
 
-                // Update preview utama
                 const preview = document.getElementById(previewId);
                 if (preview) {
-                    preview.innerHTML = (previewId === 'preview_qris' || previewId === 'preview_qris_full') ? htmlContain : html;
-                }
-
-                // Sinkronkan preview QRIS di 2 tempat (section Foto & Gambar + section Infaq)
-                if (previewId === 'preview_qris') {
-                    const dup = document.getElementById('preview_qris_full');
-                    if (dup) dup.innerHTML = htmlContain;
-                } else if (previewId === 'preview_qris_full') {
-                    const dup = document.getElementById('preview_qris');
-                    if (dup) dup.innerHTML = htmlContain;
+                    preview.innerHTML = html;
                 }
             };
 

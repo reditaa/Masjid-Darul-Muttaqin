@@ -47,7 +47,6 @@
             <a href="#statistik" class="hover:text-green-700">Statistik</a>
             <a href="#pengumuman" class="hover:text-green-700">Pengumuman</a>
             <a href="#jadwal" class="hover:text-green-700">Jadwal</a>
-            <a href="#infaq" class="hover:text-green-700">Infaq</a>
 
             @auth
                 @if (Auth::user()->role === 'admin')
@@ -81,7 +80,6 @@
         <a href="#statistik" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Statistik</a>
         <a href="#pengumuman" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Pengumuman</a>
         <a href="#jadwal" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Jadwal</a>
-        <a href="#infaq" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Infaq</a>
 
         @auth
             @if (Auth::user()->role === 'admin')
@@ -246,13 +244,30 @@
                         </div>
                     @endif
                     <div class="p-5">
-                        <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">
-                            {{ ucfirst($item->kategori) }}
-                        </span>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">
+                                {{ ucfirst($item->kategori) }}
+                            </span>
+                        </div>
                         <h3 class="font-bold text-base mt-2">{{ $item->judul }}</h3>
+
                         <p class="text-gray-500 text-xs mt-1">
-                            {{ $item->tanggal_publish->translatedFormat('d F Y') }}
+                            <svg class="w-3.5 h-3.5 inline-block -mt-0.5 mr-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09" />
+                            </svg>
+                            Dipublikasikan {{ $item->tanggal_publish->translatedFormat('d F Y') }}
                         </p>
+
+                        @if ($item->tanggal_berakhir)
+                            <p class="text-xs text-blue-600 font-medium mt-1">
+                                <svg class="w-3.5 h-3.5 inline-block -mt-0.5 mr-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                </svg>
+                                Berlaku {{ $item->tanggal_publish->translatedFormat('d M Y') }}
+                                &ndash; {{ $item->tanggal_berakhir->translatedFormat('d M Y') }}
+                            </p>
+                        @endif
+
                         <p class="text-gray-600 text-sm mt-2 line-clamp-3">
                             {{ Str::limit(strip_tags($item->isi), 120) }}
                         </p>
@@ -551,30 +566,6 @@
                 Menampilkan 10 dari {{ $jumlahInventaris }} item inventaris.
             </p>
         @endif
-    </div>
-</section>
-
-<!-- ================= INFAQ ================= -->
-<section id="infaq" class="py-14 bg-green-700">
-    <div class="max-w-2xl mx-auto px-6 text-center">
-        <h2 class="text-2xl sm:text-3xl font-bold text-white">Mari Berinfaq</h2>
-
-        <div class="bg-white rounded-2xl shadow-xl inline-block p-4 mt-5">
-            {{-- Placeholder sementara — nanti ganti src ke asset('images/qris-infaq.png') setelah QRIS asli tersedia --}}
-            <img src="https://via.placeholder.com/256x256/f0fdf4/16a34a?text=QRIS+Infaq"
-                 alt="Barcode QRIS Infaq Masjid Darul Muttaqin (contoh sementara)"
-                 class="w-44 h-44 sm:w-52 sm:h-52 object-contain mx-auto">
-            <p class="text-gray-500 text-xs mt-2">Scan untuk berinfaq via QRIS</p>
-        </div>
-
-        <p class="text-green-100 mt-5 max-w-xl mx-auto leading-6 text-sm">
-            Sedikit yang kita sisihkan hari ini bisa jadi ladang pahala yang terus mengalir.
-            Yuk, dukung kegiatan dan pembangunan Masjid Darul Muttaqin melalui infaq.
-        </p>
-
-        <p class="text-green-200 text-xs mt-4 italic max-w-xl mx-auto">
-            "Perumpamaan orang yang menginfakkan hartanya di jalan Allah seperti sebutir benih yang menumbuhkan tujuh tangkai." (QS. Al-Baqarah: 261)
-        </p>
     </div>
 </section>
 
