@@ -376,7 +376,48 @@
         <h2 class="text-3xl font-bold text-center">Jadwal Imam & Muazin</h2>
         <p class="text-center text-gray-500 mt-2 text-sm">Jadwal petugas sholat sepanjang pekan.</p>
 
-        <div class="overflow-x-auto mt-8 bg-white rounded-2xl shadow">
+        {{-- Mobile: card view --}}
+        <div class="sm:hidden mt-8 space-y-4">
+            @forelse ($jadwalImamMuazin->groupBy('hari') as $hari => $itemHari)
+                <div class="bg-white rounded-2xl shadow overflow-hidden">
+                    <div class="bg-green-700 text-white px-5 py-3 font-bold capitalize">
+                        {{ $hari }}
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        @foreach ($itemHari as $item)
+                            <div class="px-5 py-4">
+                                <p class="text-xs font-semibold text-green-700 uppercase tracking-wide capitalize">
+                                    {{ $item->waktu_sholat }}
+                                </p>
+                                <div class="grid grid-cols-2 gap-3 mt-2">
+                                    <div>
+                                        <p class="text-xs text-gray-400">Imam</p>
+                                        @forelse ($item->imam as $imam)
+                                            <p class="text-sm text-gray-800">{{ $imam->nama }}</p>
+                                        @empty
+                                            <p class="text-sm text-gray-400">-</p>
+                                        @endforelse
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-400">Muazin</p>
+                                        @forelse ($item->muazin as $muazin)
+                                            <p class="text-sm text-gray-800">{{ $muazin->nama }}</p>
+                                        @empty
+                                            <p class="text-sm text-gray-400">-</p>
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @empty
+                <p class="text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal.</p>
+            @endforelse
+        </div>
+
+        {{-- Desktop: table view --}}
+        <div class="hidden sm:block overflow-x-auto mt-8 bg-white rounded-2xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
@@ -431,7 +472,22 @@
         <h2 class="text-3xl font-bold text-center">Jadwal Bilal</h2>
         <p class="text-center text-gray-500 mt-2 text-sm">Petugas bilal berdasarkan siklus pasaran.</p>
 
-        <div class="overflow-x-auto mt-8 bg-gray-50 rounded-2xl shadow">
+        {{-- Mobile: card view --}}
+        <div class="sm:hidden mt-8 space-y-3">
+            @forelse ($jadwalBilal as $item)
+                <div class="bg-gray-50 rounded-2xl shadow px-5 py-4">
+                    <p class="text-xs font-semibold text-green-700 uppercase tracking-wide capitalize">
+                        {{ $item->pasaran }}
+                    </p>
+                    <p class="text-sm text-gray-800 mt-1">{{ $item->anggota->pluck('nama')->join(', ') ?: '-' }}</p>
+                </div>
+            @empty
+                <p class="text-center text-gray-400 bg-gray-50 rounded-2xl shadow py-8">Belum ada jadwal bilal.</p>
+            @endforelse
+        </div>
+
+        {{-- Desktop: table view --}}
+        <div class="hidden sm:block overflow-x-auto mt-8 bg-gray-50 rounded-2xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
@@ -462,7 +518,22 @@
         <h2 class="text-3xl font-bold text-center">Jadwal Piket Kebersihan</h2>
         <p class="text-center text-gray-500 mt-2 text-sm">Petugas kebersihan masjid setiap harinya.</p>
 
-        <div class="overflow-x-auto mt-8 bg-white rounded-2xl shadow">
+        {{-- Mobile: card view --}}
+        <div class="sm:hidden mt-8 space-y-3">
+            @forelse ($jadwalPiket as $item)
+                <div class="bg-white rounded-2xl shadow px-5 py-4">
+                    <p class="text-xs font-semibold text-green-700 uppercase tracking-wide capitalize">
+                        {{ $item->hari }}
+                    </p>
+                    <p class="text-sm text-gray-800 mt-1">{{ $item->anggota->pluck('nama')->join(', ') ?: '-' }}</p>
+                </div>
+            @empty
+                <p class="text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal piket.</p>
+            @endforelse
+        </div>
+
+        {{-- Desktop: table view --}}
+        <div class="hidden sm:block overflow-x-auto mt-8 bg-white rounded-2xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
