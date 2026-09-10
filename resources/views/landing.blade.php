@@ -374,18 +374,24 @@
 <section id="jadwal" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Imam & Muazin</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Jadwal petugas sholat sepanjang pekan.</p>
+        <p class="text-center text-gray-500 mt-2 text-sm">Jadwal petugas sholat sepanjang pekan. Klik hari untuk lihat detail.</p>
 
-        {{-- Mobile: card view --}}
-        <div class="sm:hidden mt-8 space-y-4">
+        <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalImamMuazin->groupBy('hari') as $hari => $itemHari)
+                @php $idHari = 'jadwal-hari-' . Str::slug($hari); @endphp
                 <div class="bg-white rounded-2xl shadow overflow-hidden">
-                    <div class="bg-green-700 text-white px-5 py-3 font-bold capitalize">
-                        {{ $hari }}
-                    </div>
-                    <div class="divide-y divide-gray-100">
+                    <button type="button"
+                            onclick="toggleJadwalHari('{{ $idHari }}')"
+                            class="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:bg-green-50/50 transition">
+                        <span class="font-bold text-green-700 capitalize text-base sm:text-lg">{{ $hari }}</span>
+                        <svg id="{{ $idHari }}-icon" class="w-5 h-5 text-green-700 shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    <div id="{{ $idHari }}" class="hidden border-t border-gray-100 divide-y divide-gray-100">
                         @foreach ($itemHari as $item)
-                            <div class="px-5 py-4">
+                            <div class="px-5 sm:px-6 py-4">
                                 <p class="text-xs font-semibold text-green-700 uppercase tracking-wide capitalize">
                                     {{ $item->waktu_sholat }}
                                 </p>
@@ -414,54 +420,6 @@
             @empty
                 <p class="text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal.</p>
             @endforelse
-        </div>
-
-        {{-- Desktop: table view --}}
-        <div class="hidden sm:block overflow-x-auto mt-8 bg-white rounded-2xl shadow">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-green-700 text-white">
-                    <tr>
-                        <th class="px-6 py-4 text-left w-32">Hari</th>
-                        <th class="px-6 py-4 text-left w-32">Waktu</th>
-                        <th class="px-6 py-4 text-left">Imam</th>
-                        <th class="px-6 py-4 text-left">Muazin</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    @forelse ($jadwalImamMuazin->groupBy('hari') as $hari => $itemHari)
-                        @foreach ($itemHari as $index => $item)
-                            <tr class="{{ $index === 0 ? 'border-t-2 border-t-green-100' : '' }}">
-                                @if ($index === 0)
-                                    <td class="px-6 py-4 capitalize font-bold text-green-700 align-top bg-green-50/40" rowspan="{{ $itemHari->count() }}">
-                                        {{ $hari }}
-                                    </td>
-                                @endif
-                                <td class="px-6 py-4 capitalize align-top">{{ $item->waktu_sholat }}</td>
-
-                                <td class="px-6 py-4 align-top">
-                                    @forelse ($item->imam as $imam)
-                                        <div class="{{ !$loop->last ? 'mb-1' : '' }}">{{ $imam->nama }}</div>
-                                    @empty
-                                        <span>-</span>
-                                    @endforelse
-                                </td>
-
-                                <td class="px-6 py-4 align-top">
-                                    @forelse ($item->muazin as $muazin)
-                                        <div class="{{ !$loop->last ? 'mb-1' : '' }}">{{ $muazin->nama }}</div>
-                                    @empty
-                                        <span>-</span>
-                                    @endforelse
-                                </td>
-                            </tr>
-                        @endforeach
-                    @empty
-                        <tr>
-                            <td colspan="4" class="px-6 py-8 text-center text-gray-400">Belum ada jadwal.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
         </div>
     </div>
 </section>
@@ -600,16 +558,16 @@
         <div class="sm:hidden mt-8 space-y-3">
             @forelse ($inventaris as $item)
                 <div class="bg-gray-50 rounded-2xl shadow px-5 py-4">
-                    <div class="flex items-start justify-between gap-3">
-                        <p class="font-medium text-gray-800">{{ $item->nama_barang }}</p>
+                    <div class="flex items-center justify-between gap-2">
                         <span @class([
-                            'text-xs px-2 py-1 rounded-full shrink-0',
+                            'text-xs px-2 py-1 rounded-full shrink-0 order-2',
                             'bg-green-100 text-green-700' => $item->kondisi === 'baik',
                             'bg-yellow-100 text-yellow-700' => $item->kondisi === 'rusak_ringan',
                             'bg-red-100 text-red-700' => in_array($item->kondisi, ['rusak_berat', 'hilang']),
                         ])>
                             {{ ucfirst(str_replace('_', ' ', $item->kondisi)) }}
                         </span>
+                        <p class="font-medium text-gray-800 order-1 min-w-0 flex-1 break-words">{{ $item->nama_barang }}</p>
                     </div>
                     <p class="text-sm text-gray-500 capitalize mt-1">{{ str_replace('_', ' ', $item->kategori) }}</p>
                     <p class="text-sm text-gray-600 mt-1">{{ $item->jumlah }} {{ $item->satuan }}</p>
@@ -803,6 +761,17 @@
 </div>
 
 <script>
+    function toggleJadwalHari(id) {
+        const konten = document.getElementById(id);
+        const icon = document.getElementById(id + '-icon');
+        if (!konten) return;
+
+        konten.classList.toggle('hidden');
+        if (icon) {
+            icon.classList.toggle('rotate-180');
+        }
+    }
+
     function toggleMenuMobile() {
         document.getElementById('menu-mobile').classList.toggle('hidden');
         document.getElementById('icon-menu-buka').classList.toggle('hidden');
