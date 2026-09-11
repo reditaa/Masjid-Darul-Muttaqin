@@ -215,11 +215,12 @@
                                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
                                         @endif
                                     </p>
-                                    <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                    <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-600 text-white uppercase tracking-wide mt-2">Petugas</span>
+                                    <div class="mt-1 space-y-0.5">
                                         @forelse ($jb->anggota as $anggota)
-                                            <span class="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md">{{ $anggota->nama }}</span>
+                                            <p class="text-xs text-gray-600">{{ $anggota->nama }}</p>
                                         @empty
-                                            <span class="text-xs text-gray-400">Belum ada petugas</span>
+                                            <p class="text-xs text-gray-400">Belum ada petugas</p>
                                         @endforelse
                                     </div>
                                 </div>
@@ -254,11 +255,12 @@
                                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
                                         @endif
                                     </p>
-                                    <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                    <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-600 text-white uppercase tracking-wide mt-2">Petugas</span>
+                                    <div class="mt-1 space-y-0.5">
                                         @forelse ($jp->anggota as $anggota)
-                                            <span class="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md">{{ $anggota->nama }}</span>
+                                            <p class="text-xs text-gray-600">{{ $anggota->nama }}</p>
                                         @empty
-                                            <span class="text-xs text-gray-400">Belum ada petugas</span>
+                                            <p class="text-xs text-gray-400">Belum ada petugas</p>
                                         @endforelse
                                     </div>
                                 </div>
