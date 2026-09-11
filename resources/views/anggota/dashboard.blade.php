@@ -167,9 +167,9 @@
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Bilal</p>
                     <div class="space-y-2">
                         @forelse ($jadwalBilal as $jb)
-                            <div class="flex justify-between items-center gap-3 border rounded-lg p-3 transition
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border rounded-lg p-3 transition
                                 {{ $jb->hari_ini ? 'border-green-400 bg-green-50' : 'border-gray-200' }}">
-                                <div>
+                                <div class="min-w-0">
                                     <p class="font-medium flex items-center gap-2 flex-wrap">
                                         Pasaran {{ ucfirst($jb->pasaran) }}
                                         @if ($jb->hari_ini)
@@ -179,12 +179,16 @@
                                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
                                         @endif
                                     </p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        {{ $jb->anggota->pluck('nama')->join(', ') ?: 'Belum ada petugas' }}
-                                    </p>
+                                    <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                        @forelse ($jb->anggota as $anggota)
+                                            <span class="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md">{{ $anggota->nama }}</span>
+                                        @empty
+                                            <span class="text-xs text-gray-400">Belum ada petugas</span>
+                                        @endforelse
+                                    </div>
                                 </div>
                                 @if ($jb->milik_saya)
-                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0"
+                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0 self-start sm:self-auto"
                                         data-type="{{ \App\Models\JadwalBilal::class }}" data-id="{{ $jb->id }}"
                                         data-label="Pasaran {{ ucfirst($jb->pasaran) }}">
                                         Presensi
@@ -202,9 +206,9 @@
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Piket Kebersihan</p>
                     <div class="space-y-2">
                         @forelse ($jadwalPiket as $jp)
-                            <div class="flex justify-between items-center gap-3 border rounded-lg p-3 transition
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border rounded-lg p-3 transition
                                 {{ $jp->hari_ini ? 'border-green-400 bg-green-50' : 'border-gray-200' }}">
-                                <div>
+                                <div class="min-w-0">
                                     <p class="font-medium capitalize flex items-center gap-2 flex-wrap">
                                         {{ $jp->hari }}
                                         @if ($jp->hari_ini)
@@ -214,12 +218,16 @@
                                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
                                         @endif
                                     </p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        {{ $jp->anggota->pluck('nama')->join(', ') ?: 'Belum ada petugas' }}
-                                    </p>
+                                    <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                        @forelse ($jp->anggota as $anggota)
+                                            <span class="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md">{{ $anggota->nama }}</span>
+                                        @empty
+                                            <span class="text-xs text-gray-400">Belum ada petugas</span>
+                                        @endforelse
+                                    </div>
                                 </div>
                                 @if ($jp->milik_saya)
-                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0"
+                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0 self-start sm:self-auto"
                                         data-type="{{ \App\Models\JadwalPiketKebersihan::class }}" data-id="{{ $jp->id }}"
                                         data-label="Piket {{ ucfirst($jp->hari) }}">
                                         Presensi
