@@ -10,26 +10,28 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <nav class="bg-green-800 text-white px-4 py-4 flex justify-between items-center shadow">
-        <div class="flex items-center gap-3">
-            <i class="fas fa-mosque text-2xl"></i>
-            <div>
-                <p class="font-bold">SIMADI</p>
-                <p class="text-xs text-green-200">{{ $pengurus->nama ?? Auth::user()->name }}</p>
+    <nav class="bg-green-800 text-white px-4 py-3 sm:py-4 shadow">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+                <i class="fas fa-mosque text-2xl shrink-0"></i>
+                <div class="min-w-0">
+                    <p class="font-bold truncate">SIMADI</p>
+                    <p class="text-xs text-green-200 truncate">{{ $pengurus->nama ?? Auth::user()->name }}</p>
+                </div>
             </div>
-        </div>
-                <div class="flex items-center gap-2">
-            <a href="{{ route('landing') }}"
-                class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                <i class="fas fa-arrow-left mr-1"></i> Kembali ke Web
-            </a>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('landing') }}"
+                    class="flex-1 sm:flex-none text-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali ke Web
+                </a>
 
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold">
-                    <i class="fas fa-right-from-bracket mr-1"></i> Logout
-                </button>
-            </form>
+                <form method="POST" action="{{ route('logout') }}" class="flex-1 sm:flex-none">
+                    @csrf
+                    <button class="w-full sm:w-auto bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap">
+                        <i class="fas fa-right-from-bracket mr-1"></i> Logout
+                    </button>
+                </form>
+            </div>
         </div>
     </nav>
 
