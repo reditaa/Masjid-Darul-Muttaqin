@@ -434,8 +434,69 @@
     </div>
 </section>
 
-<!-- ================= JADWAL BILAL ================= -->
+<!-- ================= JADWAL JUMAT ================= -->
 <section class="py-14 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center">Jadwal Jumat</h2>
+        <p class="text-center text-gray-500 mt-2 text-sm">Jadwal Khatib, Imam & Bilal shalat Jumat berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
+
+        <div class="mt-8 max-w-4xl mx-auto space-y-3">
+            @forelse ($jadwalJumat as $item)
+                @php $idJumat = 'jadwal-jumat-' . Str::slug($item->pasaran) . '-' . $loop->index; @endphp
+                <div class="bg-gray-50 rounded-2xl shadow overflow-hidden">
+                    <button type="button"
+                            onclick="toggleJadwalHari('{{ $idJumat }}')"
+                            class="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:bg-green-50/50 transition">
+                        <span class="font-bold text-green-700 capitalize text-base sm:text-lg">{{ $item->pasaran }}</span>
+                        <svg id="{{ $idJumat }}-icon" class="w-5 h-5 text-green-700 shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    <div id="{{ $idJumat }}" class="hidden border-t border-gray-100 px-5 sm:px-6 py-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-400">Khatib</p>
+                                @forelse ($item->khatib as $khatib)
+                                    <p class="text-sm text-gray-800">{{ $khatib->nama }}</p>
+                                @empty
+                                    <p class="text-sm text-gray-400">-</p>
+                                @endforelse
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400">Imam</p>
+                                @forelse ($item->imam as $imam)
+                                    <p class="text-sm text-gray-800">{{ $imam->nama }}</p>
+                                @empty
+                                    <p class="text-sm text-gray-400">-</p>
+                                @endforelse
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400">Bilal</p>
+                                @forelse ($item->bilal as $bilal)
+                                    <p class="text-sm text-gray-800">{{ $bilal->nama }}</p>
+                                @empty
+                                    <p class="text-sm text-gray-400">-</p>
+                                @endforelse
+                            </div>
+                        </div>
+
+                        @if ($item->keterangan)
+                            <p class="text-xs text-gray-500 mt-4 pt-4 border-t border-gray-100">
+                                {{ $item->keterangan }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <p class="text-center text-gray-400 bg-gray-50 rounded-2xl shadow py-8">Belum ada jadwal Jumat.</p>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<!-- ================= JADWAL BILAL ================= -->
+<section class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Bilal</h2>
         <p class="text-center text-gray-500 mt-2 text-sm">Petugas bilal berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
@@ -470,7 +531,7 @@
 </section>
 
 <!-- ================= JADWAL PIKET KEBERSIHAN ================= -->
-<section class="py-14 bg-gray-100">
+<section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Piket Kebersihan</h2>
         <p class="text-center text-gray-500 mt-2 text-sm">Petugas kebersihan masjid setiap harinya. Klik hari untuk lihat detail.</p>
@@ -478,7 +539,7 @@
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalPiket as $item)
                 @php $idPiket = 'jadwal-piket-' . Str::slug($item->hari) . '-' . $loop->index; @endphp
-                <div class="bg-white rounded-2xl shadow overflow-hidden">
+                <div class="bg-gray-50 rounded-2xl shadow overflow-hidden">
                     <button type="button"
                             onclick="toggleJadwalHari('{{ $idPiket }}')"
                             class="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:bg-green-50/50 transition">

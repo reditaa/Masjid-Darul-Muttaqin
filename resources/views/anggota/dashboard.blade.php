@@ -359,9 +359,47 @@
         <div class="bg-white rounded-xl shadow p-5">
             <h2 class="font-bold text-lg mb-3">Pengumuman Terbaru</h2>
             @forelse ($pengumuman as $p)
-                <div class="border-b py-2 last:border-0">
-                    <p class="font-medium text-sm">{{ $p->judul }}</p>
-                    <p class="text-xs text-gray-500">{{ $p->tanggal_publish->translatedFormat('d M Y') }}</p>
+                <div class="border-b py-4 last:border-0 first:pt-0">
+                    <div class="flex gap-3">
+                        @if ($p->gambar)
+                            <img src="{{ \Illuminate\Support\Facades\Storage::url($p->gambar) }}"
+                                 alt="{{ $p->judul }}"
+                                 class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg border flex-shrink-0">
+                        @else
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-bullhorn text-green-600 text-xl"></i>
+                            </div>
+                        @endif
+
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                @if ($p->kategori)
+                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 uppercase tracking-wide">
+                                        {{ $p->kategori }}
+                                    </span>
+                                @endif
+                                <span class="text-xs text-gray-400">{{ $p->tanggal_publish->translatedFormat('d M Y') }}</span>
+                            </div>
+
+                            <p class="font-semibold text-sm text-gray-800 mt-1">{{ $p->judul }}</p>
+
+                            @if ($p->tanggal_berakhir)
+                                <p class="text-[11px] text-blue-600 font-medium mt-0.5">
+                                    Berlaku s.d. {{ $p->tanggal_berakhir->translatedFormat('d M Y') }}
+                                </p>
+                            @endif
+
+                            @if ($p->isi)
+                                <p class="text-xs text-gray-500 mt-1 line-clamp-2">
+                                    {{ Str::limit(strip_tags($p->isi), 120) }}
+                                </p>
+                            @endif
+
+                            <p class="text-[11px] text-gray-400 mt-1.5">
+                                <i class="fas fa-eye mr-1"></i>{{ $p->dilihat }} dilihat
+                            </p>
+                        </div>
+                    </div>
                 </div>
             @empty
                 <p class="text-gray-400 text-sm">Belum ada pengumuman.</p>

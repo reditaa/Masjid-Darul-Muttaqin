@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pengurus;
 use App\Models\Pengumuman;
 use App\Models\JadwalImamMuazin;
+use App\Models\JadwalJumat;
 use App\Models\JadwalBilal;
 use App\Models\JadwalPiketKebersihan;
 use App\Models\Kegiatan;
@@ -46,6 +47,10 @@ class LandingController extends Controller
             ->orderByRaw("FIELD(waktu_sholat, 'subuh','dzuhur','ashar','maghrib','isya','jumat')")
             ->get();
 
+        $jadwalJumat = JadwalJumat::with(['khatib', 'imam', 'bilal'])
+            ->get()
+            ->sortBy(fn ($item) => array_search($item->pasaran, ['legi', 'pahing', 'pon', 'wage', 'kliwon']));
+
         $jadwalBilal = JadwalBilal::with('anggota')
             ->get()
             ->sortBy(fn ($item) => array_search($item->pasaran, ['legi', 'pahing', 'pon', 'wage', 'kliwon']));
@@ -77,6 +82,7 @@ class LandingController extends Controller
             'profil',
             'pengumuman',
             'jadwalImamMuazin',
+            'jadwalJumat',
             'jadwalBilal',
             'jadwalPiket',
             'kegiatan',
