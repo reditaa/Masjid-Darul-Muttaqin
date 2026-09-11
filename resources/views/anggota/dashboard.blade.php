@@ -95,9 +95,9 @@
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Imam & Muazin</p>
                     <div class="space-y-2">
                         @forelse ($jadwalImam as $j)
-                            <div class="flex justify-between items-center gap-3 border rounded-lg p-3 transition
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border rounded-lg p-3 transition
                                 {{ $j->hari_ini ? 'border-green-400 bg-green-50' : 'border-gray-200' }}">
-                                <div>
+                                <div class="min-w-0 flex-1">
                                     <p class="font-medium capitalize flex items-center gap-2 flex-wrap">
                                         {{ $j->hari }} - {{ ucfirst($j->waktu_sholat) }}
                                         @if ($j->hari_ini)
@@ -107,13 +107,31 @@
                                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
                                         @endif
                                     </p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        Imam: {{ $j->imam->pluck('nama')->join(', ') ?: '-' }}
-                                        &middot; Muazin: {{ $j->muazin->pluck('nama')->join(', ') ?: '-' }}
-                                    </p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                                        <div>
+                                            <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white uppercase tracking-wide">Imam</span>
+                                            <div class="mt-1 space-y-0.5">
+                                                @forelse ($j->imam as $imam)
+                                                    <p class="text-xs text-gray-600">{{ $imam->nama }}</p>
+                                                @empty
+                                                    <p class="text-xs text-gray-400">-</p>
+                                                @endforelse
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500 text-white uppercase tracking-wide">Muazin</span>
+                                            <div class="mt-1 space-y-0.5">
+                                                @forelse ($j->muazin as $muazin)
+                                                    <p class="text-xs text-gray-600">{{ $muazin->nama }}</p>
+                                                @empty
+                                                    <p class="text-xs text-gray-400">-</p>
+                                                @endforelse
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 @if ($j->milik_saya)
-                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0"
+                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0 self-start sm:self-auto"
                                         data-type="{{ \App\Models\JadwalImamMuazin::class }}" data-id="{{ $j->id }}"
                                         data-label="{{ ucfirst($j->hari) }} - {{ ucfirst($j->waktu_sholat) }}">
                                         Presensi
@@ -131,9 +149,9 @@
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Jumat (Khatib & Imam)</p>
                     <div class="space-y-2">
                         @forelse ($jadwalJumat as $jj)
-                            <div class="flex justify-between items-center gap-3 border rounded-lg p-3 transition
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border rounded-lg p-3 transition
                                 {{ $jj->hari_ini ? 'border-green-400 bg-green-50' : 'border-gray-200' }}">
-                                <div>
+                                <div class="min-w-0 flex-1">
                                     <p class="font-medium flex items-center gap-2 flex-wrap">
                                         Pasaran {{ ucfirst($jj->pasaran) }}
                                         @if ($jj->hari_ini)
@@ -143,13 +161,31 @@
                                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">TUGAS SAYA</span>
                                         @endif
                                     </p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        Khatib: {{ $jj->khatib->pluck('nama')->join(', ') ?: '-' }}
-                                        &middot; Imam: {{ $jj->imam->pluck('nama')->join(', ') ?: '-' }}
-                                    </p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                                        <div>
+                                            <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600 text-white uppercase tracking-wide">Khatib</span>
+                                            <div class="mt-1 space-y-0.5">
+                                                @forelse ($jj->khatib as $khatib)
+                                                    <p class="text-xs text-gray-600">{{ $khatib->nama }}</p>
+                                                @empty
+                                                    <p class="text-xs text-gray-400">-</p>
+                                                @endforelse
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white uppercase tracking-wide">Imam</span>
+                                            <div class="mt-1 space-y-0.5">
+                                                @forelse ($jj->imam as $imam)
+                                                    <p class="text-xs text-gray-600">{{ $imam->nama }}</p>
+                                                @empty
+                                                    <p class="text-xs text-gray-400">-</p>
+                                                @endforelse
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 @if ($jj->milik_saya)
-                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0"
+                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0 self-start sm:self-auto"
                                         data-type="{{ \App\Models\JadwalJumat::class }}" data-id="{{ $jj->id }}"
                                         data-label="Jumat Pasaran {{ ucfirst($jj->pasaran) }}">
                                         Presensi
