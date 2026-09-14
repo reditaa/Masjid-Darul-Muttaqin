@@ -1,16 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Tambah Jadwal Imam & Muazin
+        <h2 class="font-semibold text-xl text-green-800 leading-tight">
+            <i class="fas fa-mosque text-green-600 mr-2"></i>Tambah Jadwal Imam & Muazin
         </h2>
     </x-slot>
 
     <div class="py-6">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow rounded-lg p-6">
+            <div class="bg-[#fbf9f0] border-2 border-green-700 rounded-2xl shadow-md p-6 sm:p-8">
 
                 @if ($errors->any())
-                    <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">
+                    <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
                         <ul class="list-disc list-inside">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -19,13 +19,13 @@
                     </div>
                 @endif
 
-                <form action="{{ route('jadwal-imam-muazin.store') }}" method="POST" class="space-y-4">
+                <form action="{{ route('jadwal-imam-muazin.store') }}" method="POST" class="space-y-5">
                     @csrf
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Hari</label>
-                            <select name="hari" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                            <label class="block text-sm font-semibold text-green-800 mb-1">Hari</label>
+                            <select name="hari" class="form-hijau" required>
                                 <option value="">-- Pilih Hari --</option>
                                 <option value="senin" {{ old('hari') == 'senin' ? 'selected' : '' }}>Senin</option>
                                 <option value="selasa" {{ old('hari') == 'selasa' ? 'selected' : '' }}>Selasa</option>
@@ -37,8 +37,8 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Waktu Sholat</label>
-                            <select name="waktu_sholat" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                            <label class="block text-sm font-semibold text-green-800 mb-1">Waktu Sholat</label>
+                            <select name="waktu_sholat" class="form-hijau" required>
                                 <option value="">-- Pilih Waktu --</option>
                                 <option value="subuh" {{ old('waktu_sholat') == 'subuh' ? 'selected' : '' }}>Subuh</option>
                                 <option value="dzuhur" {{ old('waktu_sholat') == 'dzuhur' ? 'selected' : '' }}>Dzuhur</option>
@@ -50,21 +50,21 @@
                     </div>
 
                     {{-- Live Search Filter Box (berlaku untuk Imam & Muazin sekaligus) --}}
-                    <div class="bg-blue-50/70 p-3 rounded-lg border border-blue-100">
-                        <label class="block text-xs font-semibold text-blue-800 mb-1">
-                            <i class="fas fa-search text-blue-500 mr-1"></i> Cari Nama Imam / Muazin:
+                    <div class="bg-green-50 p-3 rounded-xl border border-green-200">
+                        <label class="block text-xs font-semibold text-green-800 mb-1">
+                            <i class="fas fa-search text-green-600 mr-1"></i> Cari Nama Imam / Muazin:
                         </label>
                         <input type="text" id="search-imam-global" placeholder="Ketik nama petugas untuk menyaring pilihan..."
-                               class="w-full text-xs border border-blue-200 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                               class="w-full text-xs border border-green-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Imam (urutan cadangan)</label>
+                        <label class="block text-sm font-semibold text-green-800 mb-2">Imam (urutan cadangan)</label>
 
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
-                                <span class="w-24 text-xs font-semibold text-gray-600">1. Utama:</span>
-                                <select name="imam_ids[]" id="select-imam-1" class="select-imam-list block w-full border-gray-300 rounded-md text-sm" required>
+                                <span class="w-24 text-xs font-semibold text-green-700">1. Utama:</span>
+                                <select name="imam_ids[]" id="select-imam-1" class="select-imam-list form-hijau text-sm" required>
                                     <option value="">-- Pilih Imam Utama --</option>
                                     @foreach ($pengurus as $p)
                                         <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}">
@@ -74,8 +74,8 @@
                                 </select>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-24 text-xs font-semibold text-gray-600">2. Cadangan 1:</span>
-                                <select name="imam_ids[]" id="select-imam-2" class="select-imam-list block w-full border-gray-300 rounded-md text-sm">
+                                <span class="w-24 text-xs font-semibold text-green-700">2. Cadangan 1:</span>
+                                <select name="imam_ids[]" id="select-imam-2" class="select-imam-list form-hijau text-sm">
                                     <option value="">-- Cadangan 1 (opsional) --</option>
                                     @foreach ($pengurus as $p)
                                         <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}">
@@ -85,8 +85,8 @@
                                 </select>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-24 text-xs font-semibold text-gray-600">3. Cadangan 2:</span>
-                                <select name="imam_ids[]" id="select-imam-3" class="select-imam-list block w-full border-gray-300 rounded-md text-sm">
+                                <span class="w-24 text-xs font-semibold text-green-700">3. Cadangan 2:</span>
+                                <select name="imam_ids[]" id="select-imam-3" class="select-imam-list form-hijau text-sm">
                                     <option value="">-- Cadangan 2 (opsional) --</option>
                                     @foreach ($pengurus as $p)
                                         <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}">
@@ -99,12 +99,12 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Muazin (urutan cadangan)</label>
+                        <label class="block text-sm font-semibold text-green-800 mb-2">Muazin (urutan cadangan)</label>
 
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
-                                <span class="w-24 text-xs font-semibold text-gray-600">1. Utama:</span>
-                                <select name="muazin_ids[]" id="select-muazin-1" class="select-imam-list block w-full border-gray-300 rounded-md text-sm" required>
+                                <span class="w-24 text-xs font-semibold text-green-700">1. Utama:</span>
+                                <select name="muazin_ids[]" id="select-muazin-1" class="select-imam-list form-hijau text-sm" required>
                                     <option value="">-- Pilih Muazin Utama --</option>
                                     @foreach ($pengurus as $p)
                                         <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}">
@@ -114,8 +114,8 @@
                                 </select>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-24 text-xs font-semibold text-gray-600">2. Cadangan 1:</span>
-                                <select name="muazin_ids[]" id="select-muazin-2" class="select-imam-list block w-full border-gray-300 rounded-md text-sm">
+                                <span class="w-24 text-xs font-semibold text-green-700">2. Cadangan 1:</span>
+                                <select name="muazin_ids[]" id="select-muazin-2" class="select-imam-list form-hijau text-sm">
                                     <option value="">-- Cadangan 1 (opsional) --</option>
                                     @foreach ($pengurus as $p)
                                         <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}">
@@ -125,8 +125,8 @@
                                 </select>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-24 text-xs font-semibold text-gray-600">3. Cadangan 2:</span>
-                                <select name="muazin_ids[]" id="select-muazin-3" class="select-imam-list block w-full border-gray-300 rounded-md text-sm">
+                                <span class="w-24 text-xs font-semibold text-green-700">3. Cadangan 2:</span>
+                                <select name="muazin_ids[]" id="select-muazin-3" class="select-imam-list form-hijau text-sm">
                                     <option value="">-- Cadangan 2 (opsional) --</option>
                                     @foreach ($pengurus as $p)
                                         <option value="{{ $p->id }}" data-nama="{{ strtolower($p->nama) }}">
@@ -139,15 +139,17 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Keterangan (opsional)</label>
-                        <textarea name="keterangan" rows="2" class="mt-1 block w-full border-gray-300 rounded-md">{{ old('keterangan') }}</textarea>
+                        <label class="block text-sm font-semibold text-green-800 mb-1">Keterangan (opsional)</label>
+                        <textarea name="keterangan" rows="2" class="form-hijau">{{ old('keterangan') }}</textarea>
                     </div>
 
-                    <div class="flex justify-end gap-2 pt-4">
+                    <div class="flex justify-end gap-2 pt-4 border-t border-green-100">
                         <a href="{{ route('jadwal-imam-muazin.index') }}"
-                           class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Batal</a>
+                           class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200">Batal</a>
                         <button type="submit"
-                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Simpan</button>
+                                class="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 shadow">
+                            <i class="fas fa-floppy-disk mr-1"></i> Simpan
+                        </button>
                     </div>
 
                 </form>

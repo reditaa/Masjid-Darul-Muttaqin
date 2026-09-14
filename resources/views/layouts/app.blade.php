@@ -11,6 +11,59 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        .form-hijau {
+            display: block;
+            width: 100%;
+            border: 1px solid #86efac;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: #ffffff;
+            color: #1f2937;
+        }
+        .form-hijau:focus {
+            outline: none;
+            border-color: #15803d;
+            box-shadow: 0 0 0 3px rgba(21, 128, 61, .15);
+        }
+
+        .kartu-notebook {
+            position: relative;
+            background: #fbf9f0;
+            border: 2px solid #15803d;
+            border-radius: 6px 6px 20px 20px;
+            box-shadow: 0 10px 25px -8px rgba(21, 128, 61, .2);
+            padding: 28px 20px 20px;
+        }
+        .ring-spiral {
+            position: absolute;
+            top: -12px; left: 0; right: 0;
+            display: flex; justify-content: center; gap: 14px;
+        }
+        .ring-spiral span {
+            width: 13px; height: 13px; border-radius: 50%;
+            background: #fbf9f0; border: 2.5px solid #15803d;
+        }
+        .ornamen-pojok {
+            position: absolute; top: 10px; right: 12px;
+            width: 20px; height: 20px; color: rgba(21, 128, 61, .35);
+        }
+        .judul-kartu {
+            text-align: center; font-weight: 800; font-size: 1.15rem; color: #14532d;
+        }
+        .garis-bawah {
+            width: 48px; height: 4px; background: #15803d;
+            border-radius: 999px; margin: 6px auto 16px;
+        }
+        .label-kartu {
+            font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
+            color: #16a34a; font-weight: 700; margin-bottom: 2px;
+        }
+        .isi-kartu {
+            font-size: .875rem; color: #1f2937; line-height: 1.4;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 overflow-hidden">
