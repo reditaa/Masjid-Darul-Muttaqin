@@ -410,7 +410,7 @@
 </section>
 
 <!-- ================= JADWAL IMAM & MUAZIN ================= -->
-<section id="jadwal" class="py-14 bg-gray-100">
+<section id="jadwal" class="py-14 bg-green-50">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Imam & Muazin</h2>
         <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Jadwal petugas sholat sepanjang pekan. Klik hari untuk lihat detail.</p>
@@ -535,7 +535,7 @@
 </section>
 
 <!-- ================= JADWAL BILAL ================= -->
-<section class="py-14 bg-gray-100">
+<section class="py-14 bg-green-50">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Bilal</h2>
         <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Petugas bilal berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
@@ -543,7 +543,7 @@
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalBilal as $item)
                 @php $idBilal = 'jadwal-bilal-' . Str::slug($item->pasaran) . '-' . $loop->index; @endphp
-                <div class="bg-gray-50 rounded-2xl shadow overflow-hidden">
+                <div class="bg-white rounded-2xl shadow overflow-hidden">
                     <button type="button"
                             onclick="toggleJadwalHari('{{ $idBilal }}')"
                             class="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:bg-green-50/50 transition">
@@ -563,7 +563,7 @@
                     </div>
                 </div>
             @empty
-                <p class="text-center text-gray-400 bg-gray-50 rounded-2xl shadow py-8">Belum ada jadwal bilal.</p>
+                <p class="text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal bilal.</p>
             @endforelse
         </div>
     </div>
@@ -604,7 +604,7 @@
     </div>
 </section>
 <!-- ================= GALERI ================= -->
-<section id="galeri" class="py-14 bg-gray-100">
+<section id="galeri" class="py-14 bg-green-50">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Galeri</h2>
         <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Dokumentasi foto dan video kegiatan masjid.</p>
