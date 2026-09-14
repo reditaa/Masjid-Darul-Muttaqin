@@ -152,24 +152,24 @@
                     {{ $profil && $profil->deskripsi ? $profil->deskripsi : 'Masjid Darul Muttaqin merupakan pusat kegiatan keagamaan di lingkungan sekolah. Website ini dibuat untuk mempermudah pengelolaan jadwal imam, jadwal Jumat, pengurus DKM, serta penyampaian pengumuman kepada seluruh warga sekolah.' }}
                 </p>
 
-                <div class="grid grid-cols-2 gap-4 mt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                     <button type="button" onclick="bukaModalVisiMisi()"
-                            class="bg-green-50 rounded-xl p-4 text-left w-full hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
-                        <svg class="w-7 h-7 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            class="bg-green-50 rounded-xl p-5 text-left w-full hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
+                        <svg class="w-8 h-8 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
                         </svg>
-                        <h3 class="font-bold mt-2 text-sm">Visi</h3>
-                        <p class="text-gray-600 text-xs mt-1 line-clamp-3">
+                        <h3 class="font-bold mt-3 text-lg">Visi</h3>
+                        <p class="text-gray-600 text-base mt-2 leading-relaxed line-clamp-3">
                             {{ $profil && $profil->visi ? Str::limit($profil->visi, 90) : 'Belum diatur.' }}
                         </p>
                     </button>
                     <button type="button" onclick="bukaModalVisiMisi()"
-                            class="bg-blue-50 rounded-xl p-4 text-left w-full hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
-                        <svg class="w-7 h-7 text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            class="bg-blue-50 rounded-xl p-5 text-left w-full hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
+                        <svg class="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
                         </svg>
-                        <h3 class="font-bold mt-2 text-sm">Misi</h3>
-                        <p class="text-gray-600 text-xs mt-1 line-clamp-3">
+                        <h3 class="font-bold mt-3 text-lg">Misi</h3>
+                        <p class="text-gray-600 text-base mt-2 leading-relaxed line-clamp-3">
                             {{ $profil && $profil->misi ? Str::limit($profil->misi, 90) : 'Belum diatur.' }}
                         </p>
                     </button>
@@ -707,8 +707,8 @@
                 <svg class="w-9 h-9 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
                 </svg>
-                <h4 class="font-bold mt-3">Visi</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">
+                <h4 class="font-bold mt-3 text-lg">Visi</h4>
+                <p class="text-gray-600 text-base mt-2 leading-relaxed">
                     {{ $profil && $profil->visi ? $profil->visi : 'Belum diatur.' }}
                 </p>
             </div>
@@ -717,9 +717,9 @@
                 <svg class="w-9 h-9 text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
                 </svg>
-                <h4 class="font-bold mt-3">Misi</h4>
+                <h4 class="font-bold mt-3 text-lg">Misi</h4>
                 @if ($profil && $profil->misi)
-                    <ol class="text-gray-600 text-sm mt-2 leading-relaxed list-decimal list-inside space-y-1">
+                    <ol class="text-gray-600 text-base mt-2 leading-relaxed list-decimal list-inside space-y-1.5">
                         @foreach (explode("\n", $profil->misi) as $point)
                             @if (trim($point) !== '')
                                 <li>{{ trim($point) }}</li>
@@ -727,7 +727,7 @@
                         @endforeach
                     </ol>
                 @else
-                    <p class="text-gray-600 text-sm mt-2">Belum diatur.</p>
+                    <p class="text-gray-600 text-base mt-2">Belum diatur.</p>
                 @endif
             </div>
         </div>
