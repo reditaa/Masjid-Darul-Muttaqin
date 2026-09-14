@@ -217,8 +217,8 @@
 <!-- ================= STATISTIK ================= -->
 <section id="statistik" class="py-14 bg-gradient-to-b from-green-50 via-emerald-50 to-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Statistik Masjid</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Data diperbarui secara otomatis.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_statistik ?? 'Statistik Masjid' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_statistik ?? 'Data diperbarui secara otomatis.' }}</p>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
 
@@ -266,8 +266,8 @@
 <!-- ================= PENGUMUMAN ================= -->
 <section id="pengumuman" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Pengumuman Terbaru</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Informasi dan kegiatan terkini masjid.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_pengumuman ?? 'Pengumuman Terbaru' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_pengumuman ?? 'Informasi dan kegiatan terkini masjid.' }}</p>
 
         <div class="grid md:grid-cols-3 gap-5 mt-8">
             @forelse ($pengumuman as $item)
@@ -327,8 +327,8 @@
 <!-- ================= KEGIATAN ================= -->
 <section id="kegiatan" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Kegiatan Masjid</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Riwayat agenda masjid terkini.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_kegiatan ?? 'Kegiatan Masjid' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_kegiatan ?? 'Riwayat agenda masjid terkini.' }}</p>
 
         <div class="grid md:grid-cols-3 gap-5 mt-8">
             @forelse ($kegiatan as $item)
@@ -412,8 +412,8 @@
 <!-- ================= JADWAL IMAM & MUAZIN ================= -->
 <section id="jadwal" class="py-14 bg-green-50">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Jadwal Imam & Muazin</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Jadwal petugas sholat sepanjang pekan. Klik hari untuk lihat detail.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_jadwal_imam_muazin ?? 'Jadwal Imam & Muazin' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_jadwal_imam_muazin ?? 'Jadwal petugas sholat sepanjang pekan. Klik hari untuk lihat detail.' }}</p>
 
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalImamMuazin->groupBy('hari') as $hari => $itemHari)
@@ -476,8 +476,8 @@
 <!-- ================= JADWAL JUMAT ================= -->
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Jadwal Jumat</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Jadwal Khatib, Imam & Bilal shalat Jumat berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_jadwal_jumat ?? 'Jadwal Jumat' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_jadwal_jumat ?? 'Jadwal Khatib, Imam & Bilal shalat Jumat berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.' }}</p>
 
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalJumat as $item)
@@ -537,8 +537,8 @@
 <!-- ================= JADWAL BILAL ================= -->
 <section class="py-14 bg-green-50">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Jadwal Bilal</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Petugas bilal berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_jadwal_bilal ?? 'Jadwal Bilal' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_jadwal_bilal ?? 'Petugas bilal berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.' }}</p>
 
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalBilal as $item)
@@ -572,8 +572,8 @@
 <!-- ================= JADWAL PIKET KEBERSIHAN ================= -->
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Jadwal Piket Kebersihan</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Petugas kebersihan masjid setiap harinya. Klik hari untuk lihat detail.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_jadwal_piket ?? 'Jadwal Piket Kebersihan' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_jadwal_piket ?? 'Petugas kebersihan masjid setiap harinya. Klik hari untuk lihat detail.' }}</p>
 
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalPiket as $item)
@@ -606,8 +606,8 @@
 <!-- ================= GALERI ================= -->
 <section id="galeri" class="py-14 bg-green-50">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Galeri</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Foto aset dan perlengkapan masjid.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_galeri ?? 'Galeri' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_galeri ?? 'Foto aset dan perlengkapan masjid.' }}</p>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             @forelse ($galeri as $item)
@@ -639,8 +639,8 @@
 <!-- ================= INVENTARIS ================= -->
 <section id="inventaris" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">Inventaris Masjid</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Data aset dan perlengkapan masjid.</p>
+        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_inventaris ?? 'Inventaris Masjid' }}</h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_inventaris ?? 'Data aset dan perlengkapan masjid.' }}</p>
 
         {{-- Mobile: card view --}}
         <div class="sm:hidden mt-8 space-y-3">

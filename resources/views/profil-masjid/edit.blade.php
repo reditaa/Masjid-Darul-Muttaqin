@@ -253,6 +253,155 @@
                 </div>
             </div>
 
+            {{-- ============ SECTION: TEKS HALAMAN UTAMA ============ --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4">
+                    <h3 class="text-white font-semibold text-base flex items-center gap-2">
+                        <i class="fas fa-align-left"></i> Teks Halaman Utama
+                    </h3>
+                    <p class="text-green-100 text-xs mt-0.5">Judul & subjudul yang tampil di tiap section pada halaman utama website</p>
+                </div>
+
+                <div class="p-6 space-y-5">
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Statistik Masjid</label>
+                            <input type="text" name="judul_statistik" value="{{ old('judul_statistik', $profil->judul_statistik) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Statistik Masjid">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Statistik Masjid</label>
+                            <input type="text" name="teks_statistik" value="{{ old('teks_statistik', $profil->teks_statistik) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Data diperbarui secara otomatis.">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Pengumuman Terbaru</label>
+                            <input type="text" name="judul_pengumuman" value="{{ old('judul_pengumuman', $profil->judul_pengumuman) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Pengumuman Terbaru">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Pengumuman Terbaru</label>
+                            <input type="text" name="teks_pengumuman" value="{{ old('teks_pengumuman', $profil->teks_pengumuman) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Informasi dan kegiatan terkini masjid.">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Kegiatan Masjid</label>
+                            <input type="text" name="judul_kegiatan" value="{{ old('judul_kegiatan', $profil->judul_kegiatan) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Kegiatan Masjid">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Kegiatan Masjid</label>
+                            <input type="text" name="teks_kegiatan" value="{{ old('teks_kegiatan', $profil->teks_kegiatan) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Riwayat agenda masjid terkini.">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Jadwal Imam & Muazin</label>
+                            <input type="text" name="judul_jadwal_imam_muazin" value="{{ old('judul_jadwal_imam_muazin', $profil->judul_jadwal_imam_muazin) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Jadwal Imam & Muazin">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Jadwal Imam & Muazin</label>
+                            <input type="text" name="teks_jadwal_imam_muazin" value="{{ old('teks_jadwal_imam_muazin', $profil->teks_jadwal_imam_muazin) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Jadwal petugas sholat sepanjang pekan. Klik hari untuk lihat detail.">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Jadwal Jumat</label>
+                            <input type="text" name="judul_jadwal_jumat" value="{{ old('judul_jadwal_jumat', $profil->judul_jadwal_jumat) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Jadwal Jumat">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Jadwal Jumat</label>
+                            <input type="text" name="teks_jadwal_jumat" value="{{ old('teks_jadwal_jumat', $profil->teks_jadwal_jumat) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Jadwal Khatib, Imam & Bilal shalat Jumat berdasarkan siklus pasaran.">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Jadwal Bilal</label>
+                            <input type="text" name="judul_jadwal_bilal" value="{{ old('judul_jadwal_bilal', $profil->judul_jadwal_bilal) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Jadwal Bilal">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Jadwal Bilal</label>
+                            <input type="text" name="teks_jadwal_bilal" value="{{ old('teks_jadwal_bilal', $profil->teks_jadwal_bilal) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Petugas bilal berdasarkan siklus pasaran.">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Jadwal Piket Kebersihan</label>
+                            <input type="text" name="judul_jadwal_piket" value="{{ old('judul_jadwal_piket', $profil->judul_jadwal_piket) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Jadwal Piket Kebersihan">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Jadwal Piket Kebersihan</label>
+                            <input type="text" name="teks_jadwal_piket" value="{{ old('teks_jadwal_piket', $profil->teks_jadwal_piket) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Petugas kebersihan masjid setiap harinya.">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Galeri</label>
+                            <input type="text" name="judul_galeri" value="{{ old('judul_galeri', $profil->judul_galeri) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Galeri">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Galeri</label>
+                            <input type="text" name="teks_galeri" value="{{ old('teks_galeri', $profil->teks_galeri) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Foto aset dan perlengkapan masjid.">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Judul &middot; Inventaris Masjid</label>
+                            <input type="text" name="judul_inventaris" value="{{ old('judul_inventaris', $profil->judul_inventaris) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Inventaris Masjid">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sub &middot; Inventaris Masjid</label>
+                            <input type="text" name="teks_inventaris" value="{{ old('teks_inventaris', $profil->teks_inventaris) }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                   placeholder="Data aset dan perlengkapan masjid.">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
             {{-- ============ SECTION: KONTAK & MEDIA SOSIAL ============ --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4">

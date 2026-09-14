@@ -37,6 +37,26 @@ class ProfilMasjidController extends Controller
             'tahun_berdiri'   => 'nullable|integer|min:1900|max:' . date('Y'),
             'kapasitas_jamaah'=> 'nullable|integer|min:0',
             'alamat'          => 'nullable|string',
+
+            'teks_statistik'          => 'nullable|string|max:255',
+            'teks_pengumuman'         => 'nullable|string|max:255',
+            'teks_kegiatan'           => 'nullable|string|max:255',
+            'teks_jadwal_imam_muazin' => 'nullable|string|max:255',
+            'teks_jadwal_jumat'       => 'nullable|string|max:255',
+            'teks_jadwal_bilal'       => 'nullable|string|max:255',
+            'teks_jadwal_piket'       => 'nullable|string|max:255',
+            'teks_galeri'             => 'nullable|string|max:255',
+            'teks_inventaris'         => 'nullable|string|max:255',
+
+            'judul_statistik'          => 'nullable|string|max:255',
+            'judul_pengumuman'         => 'nullable|string|max:255',
+            'judul_kegiatan'           => 'nullable|string|max:255',
+            'judul_jadwal_imam_muazin' => 'nullable|string|max:255',
+            'judul_jadwal_jumat'       => 'nullable|string|max:255',
+            'judul_jadwal_bilal'       => 'nullable|string|max:255',
+            'judul_jadwal_piket'       => 'nullable|string|max:255',
+            'judul_galeri'             => 'nullable|string|max:255',
+            'judul_inventaris'         => 'nullable|string|max:255',
         ]);
 
         // Handle foto hero upload

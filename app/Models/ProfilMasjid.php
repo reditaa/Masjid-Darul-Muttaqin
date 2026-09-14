@@ -14,6 +14,12 @@ class ProfilMasjid extends Model
         'no_telepon', 'email', 'website', 'tahun_berdiri', 'luas_tanah',
         'luas_bangunan', 'kapasitas_jamaah', 'sejarah', 'visi', 'misi',
         'logo', 'foto_utama', 'foto_hero',
+        'teks_statistik', 'teks_pengumuman', 'teks_kegiatan',
+        'teks_jadwal_imam_muazin', 'teks_jadwal_jumat', 'teks_jadwal_bilal',
+        'teks_jadwal_piket', 'teks_galeri', 'teks_inventaris',
+        'judul_statistik', 'judul_pengumuman', 'judul_kegiatan',
+        'judul_jadwal_imam_muazin', 'judul_jadwal_jumat', 'judul_jadwal_bilal',
+        'judul_jadwal_piket', 'judul_galeri', 'judul_inventaris',
     ];
 
     protected $casts = [
