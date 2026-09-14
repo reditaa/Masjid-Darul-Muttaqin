@@ -144,7 +144,7 @@
                 <span class="text-green-700 font-semibold text-sm">Tentang Masjid</span>
                 <h2 class="text-3xl font-bold mt-2">{{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}</h2>
 
-                <p class="text-gray-600 mt-4 leading-7 text-sm">
+                <p class="text-gray-700 mt-4 leading-8 text-lg sm:text-xl">
                     {{ $profil && $profil->deskripsi ? $profil->deskripsi : 'Masjid Darul Muttaqin merupakan pusat kegiatan keagamaan di lingkungan sekolah. Website ini dibuat untuk mempermudah pengelolaan jadwal imam, jadwal Jumat, pengurus DKM, serta penyampaian pengumuman kepada seluruh warga sekolah.' }}
                 </p>
 
