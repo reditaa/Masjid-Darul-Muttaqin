@@ -215,7 +215,7 @@
 </section>
 
 <!-- ================= STATISTIK ================= -->
-<section id="statistik" class="py-14 bg-gray-100">
+<section id="statistik" class="py-14 bg-gradient-to-b from-green-50 via-emerald-50 to-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Statistik Masjid</h2>
         <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Data diperbarui secara otomatis.</p>
