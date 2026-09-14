@@ -28,6 +28,22 @@
         section[id] {
             scroll-margin-top: 5.5rem;
         }
+
+        @keyframes heroFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-fade-in {
+            opacity: 0;
+            animation: heroFadeIn .7s ease-out forwards;
+        }
     </style>
 </head>
 
@@ -103,24 +119,35 @@
     </div>
 </nav>
 
-<section class="hero min-h-[70vh] sm:min-h-[85vh] flex items-center pt-28 pb-16 sm:py-28" style="background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-white">
-        <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
-            {{ $profil ? Str::words($profil->nama_masjid, 1, '') : 'Masjid' }}<br>{{ $profil ? trim(Str::after($profil->nama_masjid, ' ')) : 'Darul Muttaqin' }}
+<section class="hero relative min-h-[75vh] sm:min-h-[92vh] flex items-center pt-28 pb-20 sm:py-28 overflow-hidden" style="background-image: url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(6,30,18,.35) 0%, rgba(6,30,18,.55) 45%, rgba(4,20,12,.9) 100%);"></div>
+
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 text-white">
+        <span class="hero-fade-in inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 text-green-100 text-xs sm:text-sm font-medium px-4 py-1.5 rounded-full" style="animation-delay: .05s;">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-3.5-2.5-7-5.5-7-10a7 7 0 1 1 14 0c0 4.5-3.5 7.5-7 10Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 13.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+            </svg>
+            Sistem Informasi Masjid Digital
+        </span>
+
+        <h1 class="hero-fade-in text-4xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] mt-5" style="animation-delay: .15s;">
+            {{ $profil ? Str::words($profil->nama_masjid, 1, '') : 'Masjid' }}<br>
+            <span class="text-green-400">{{ $profil ? trim(Str::after($profil->nama_masjid, ' ')) : 'Darul Muttaqin' }}</span>
         </h1>
 
-        <p class="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl max-w-2xl text-gray-100">
+        <p class="hero-fade-in mt-5 sm:mt-6 text-base sm:text-lg md:text-xl max-w-2xl text-gray-100" style="animation-delay: .25s;">
             {{ $profil && $profil->slogan ? $profil->slogan : 'Sistem Informasi Masjid Sekolah untuk memudahkan pengelolaan jadwal imam, jadwal Jumat, pengurus, dan pengumuman kegiatan.' }}
         </p>
 
-        <div class="mt-6 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <a href="#jadwal" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 px-6 py-3 rounded-xl text-base sm:text-lg">
+        <div class="hero-fade-in mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4" style="animation-delay: .35s;">
+            <a href="#jadwal" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 hover:-translate-y-0.5 shadow-lg shadow-green-900/30 px-6 py-3.5 rounded-xl text-base sm:text-lg font-semibold transition">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                 </svg>
                 Lihat Jadwal
             </a>
-            <a href="#pengumuman" class="inline-flex items-center justify-center gap-2 bg-white text-green-700 px-6 py-3 rounded-xl text-base sm:text-lg">
+            <a href="#pengumuman" class="inline-flex items-center justify-center gap-2 bg-white/95 hover:bg-white text-green-700 hover:-translate-y-0.5 shadow-lg px-6 py-3.5 rounded-xl text-base sm:text-lg font-semibold transition">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
                 </svg>
@@ -128,6 +155,12 @@
             </a>
         </div>
     </div>
+
+    <a href="#tentang" class="hero-fade-in absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition" style="animation-delay: .5s;" aria-label="Scroll ke bawah">
+        <svg class="w-7 h-7 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        </svg>
+    </a>
 </section>
 
 <!-- ================= TENTANG ================= -->
@@ -135,13 +168,15 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-8 items-center">
             <div>
-                @if($profil && $profil->foto_utama)
-                    <img src="{{ Storage::url($profil->foto_utama) }}"
-                         class="rounded-2xl shadow-lg w-full h-64 sm:h-[380px] object-cover">
-                @else
-                    <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1200"
-                         class="rounded-2xl shadow-lg w-full h-64 sm:h-[380px] object-cover">
-                @endif
+                <div class="rounded-2xl shadow-lg bg-gray-100 overflow-hidden aspect-[4/3] sm:aspect-[4/3] flex items-center justify-center">
+                    @if($profil && $profil->foto_utama)
+                        <img src="{{ Storage::url($profil->foto_utama) }}"
+                             class="w-full h-full object-contain">
+                    @else
+                        <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1200"
+                             class="w-full h-full object-contain">
+                    @endif
+                </div>
             </div>
 
             <div>
