@@ -607,7 +607,7 @@
 <section id="galeri" class="py-14 bg-green-50">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Galeri</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Foto dan aset perlengkapan masjid.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Foto aset dan perlengkapan masjid.</p>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             @forelse ($galeri as $item)
