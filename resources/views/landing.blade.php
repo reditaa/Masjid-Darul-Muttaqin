@@ -63,6 +63,7 @@
         </div>
 
         <div class="hidden lg:flex items-center gap-8">
+            <a href="#" class="hover:text-green-700">Beranda</a>
             <a href="#tentang" class="hover:text-green-700">Tentang</a>
             <a href="#statistik" class="hover:text-green-700">Statistik</a>
             <a href="#pengumuman" class="hover:text-green-700">Pengumuman</a>
@@ -96,6 +97,7 @@
     </div>
 
     <div id="menu-mobile" class="hidden lg:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
+        <a href="#" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Beranda</a>
         <a href="#tentang" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Tentang</a>
         <a href="#statistik" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Statistik</a>
         <a href="#pengumuman" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Pengumuman</a>
@@ -168,15 +170,13 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-8 items-center">
             <div>
-                <div class="rounded-2xl shadow-lg bg-gray-100 overflow-hidden aspect-[4/3] sm:aspect-[4/3] flex items-center justify-center">
-                    @if($profil && $profil->foto_utama)
-                        <img src="{{ Storage::url($profil->foto_utama) }}"
-                             class="w-full h-full object-contain">
-                    @else
-                        <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1200"
-                             class="w-full h-full object-contain">
-                    @endif
-                </div>
+                @if($profil && $profil->foto_utama)
+                    <img src="{{ Storage::url($profil->foto_utama) }}"
+                         class="rounded-2xl shadow-lg w-full h-auto max-h-[500px] object-contain bg-gray-100">
+                @else
+                    <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1200"
+                         class="rounded-2xl shadow-lg w-full h-auto max-h-[500px] object-contain bg-gray-100">
+                @endif
             </div>
 
             <div>
