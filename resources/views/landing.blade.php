@@ -11,6 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        html {
+            font-size: 118%;
+        }
+
         * {
             font-family: 'Poppins', sans-serif;
             scroll-behavior: smooth;
@@ -179,7 +183,7 @@
 <section id="statistik" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Statistik Masjid</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Data diperbarui secara otomatis.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Data diperbarui secara otomatis.</p>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
 
@@ -228,7 +232,7 @@
 <section id="pengumuman" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Pengumuman Terbaru</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Informasi dan kegiatan terkini masjid.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Informasi dan kegiatan terkini masjid.</p>
 
         <div class="grid md:grid-cols-3 gap-5 mt-8">
             @forelse ($pengumuman as $item)
@@ -289,7 +293,7 @@
 <section id="kegiatan" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Kegiatan Masjid</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Riwayat agenda masjid terkini.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Riwayat agenda masjid terkini.</p>
 
         <div class="grid md:grid-cols-3 gap-5 mt-8">
             @forelse ($kegiatan as $item)
@@ -374,7 +378,7 @@
 <section id="jadwal" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Imam & Muazin</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Jadwal petugas sholat sepanjang pekan. Klik hari untuk lihat detail.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Jadwal petugas sholat sepanjang pekan. Klik hari untuk lihat detail.</p>
 
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalImamMuazin->groupBy('hari') as $hari => $itemHari)
@@ -438,7 +442,7 @@
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Jumat</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Jadwal Khatib, Imam & Bilal shalat Jumat berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Jadwal Khatib, Imam & Bilal shalat Jumat berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
 
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalJumat as $item)
@@ -499,7 +503,7 @@
 <section class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Bilal</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Petugas bilal berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Petugas bilal berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.</p>
 
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalBilal as $item)
@@ -534,7 +538,7 @@
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Jadwal Piket Kebersihan</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Petugas kebersihan masjid setiap harinya. Klik hari untuk lihat detail.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Petugas kebersihan masjid setiap harinya. Klik hari untuk lihat detail.</p>
 
         <div class="mt-8 max-w-4xl mx-auto space-y-3">
             @forelse ($jadwalPiket as $item)
@@ -568,7 +572,7 @@
 <section id="galeri" class="py-14 bg-gray-100">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Galeri</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Dokumentasi foto dan video kegiatan masjid.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Dokumentasi foto dan video kegiatan masjid.</p>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             @forelse ($galeri as $item)
@@ -601,7 +605,7 @@
 <section id="inventaris" class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-center">Inventaris Masjid</h2>
-        <p class="text-center text-gray-500 mt-2 text-sm">Data aset dan perlengkapan masjid.</p>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">Data aset dan perlengkapan masjid.</p>
 
         {{-- Mobile: card view --}}
         <div class="sm:hidden mt-8 space-y-3">
