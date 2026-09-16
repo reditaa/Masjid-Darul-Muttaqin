@@ -45,6 +45,28 @@
             animation: heroFadeIn .7s ease-out forwards;
         }
 
+        /* ===== Blob dekoratif melayang di hero ===== */
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -25px) scale(1.08); }
+        }
+
+        .hero-blob {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(70px);
+            opacity: .35;
+            pointer-events: none;
+            animation: blobFloat 10s ease-in-out infinite;
+        }
+
+        /* ===== Divider lengkung antar section ===== */
+        .divider-wave {
+            display: block;
+            width: 100%;
+            height: 60px;
+        }
+
         /* ===== Tema Notebook Hijau untuk Jadwal ===== */
         .kartu-notebook {
             position: relative;
@@ -260,7 +282,7 @@
 <body class="bg-gray-100">
 
 <!-- ================= NAVBAR ================= -->
-<nav class="fixed w-full bg-white/95 backdrop-blur shadow z-50">
+<nav class="fixed w-full bg-white/80 backdrop-blur-md shadow-sm z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center py-3 px-4 sm:px-6">
         <div class="flex items-center gap-2 sm:gap-3 min-w-0">
             <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-700 flex items-center justify-center overflow-hidden shrink-0">
@@ -281,22 +303,22 @@
 
             @auth
                 @if (Auth::user()->role === 'admin')
-                    <a href="{{ route('dashboard') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
+                    <a href="{{ route('dashboard') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-full shadow-sm hover:shadow-md transition">
                         Dashboard Admin
                     </a>
                 @else
-                    <a href="{{ route('anggota.dashboard') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
+                    <a href="{{ route('anggota.dashboard') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-full shadow-sm hover:shadow-md transition">
                         Dashboard Saya
                     </a>
                 @endif
             @else
-                <a href="{{ route('login') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
+                <a href="{{ route('login') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-full shadow-sm hover:shadow-md transition">
                     Login Admin
                 </a>
             @endauth
         </div>
 
-        <button type="button" onclick="toggleMenuMobile()" class="lg:hidden shrink-0 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100">
+        <button type="button" onclick="toggleMenuMobile()" class="lg:hidden shrink-0 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
             <svg id="icon-menu-buka" class="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
             </svg>
@@ -306,36 +328,45 @@
         </button>
     </div>
 
-    <div id="menu-mobile" class="hidden lg:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
-        <a href="#" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Beranda</a>
-        <a href="#tentang" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Tentang</a>
-        <a href="#statistik" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Statistik</a>
-        <a href="#pengumuman" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Pengumuman</a>
-        <a href="#jadwal" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Jadwal</a>
+    <div id="menu-mobile" class="hidden lg:hidden border-t border-gray-100 bg-white/95 backdrop-blur px-4 py-3 space-y-1">
+        <a href="#" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-xl hover:bg-gray-50">Beranda</a>
+        <a href="#tentang" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-xl hover:bg-gray-50">Tentang</a>
+        <a href="#statistik" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-xl hover:bg-gray-50">Statistik</a>
+        <a href="#pengumuman" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-xl hover:bg-gray-50">Pengumuman</a>
+        <a href="#jadwal" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-xl hover:bg-gray-50">Jadwal</a>
 
         @auth
             @if (Auth::user()->role === 'admin')
-                <a href="{{ route('dashboard') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
+                <a href="{{ route('dashboard') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-full mt-2">
                     Dashboard Admin
                 </a>
             @else
-                <a href="{{ route('anggota.dashboard') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
+                <a href="{{ route('anggota.dashboard') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-full mt-2">
                     Dashboard Saya
                 </a>
             @endif
         @else
-            <a href="{{ route('login') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
+            <a href="{{ route('login') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-full mt-2">
                 Login Admin
             </a>
         @endauth
     </div>
 </nav>
 
-<section class="hero relative min-h-[75vh] sm:min-h-[92vh] flex items-center pt-28 pb-20 sm:py-28 overflow-hidden" style="background-image: url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
-    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(6,30,18,.35) 0%, rgba(6,30,18,.55) 45%, rgba(4,20,12,.9) 100%);"></div>
+<section class="hero relative min-h-[75vh] sm:min-h-[92vh] flex items-center pt-28 pb-24 sm:py-28 overflow-hidden" style="background-image: url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
+    <!-- Overlay gradient lembut + sedikit blur, bukan hitam solid -->
+    <div class="absolute inset-0" style="background: linear-gradient(160deg, rgba(6,40,26,.25) 0%, rgba(6,35,22,.55) 55%, rgba(3,18,11,.85) 100%);"></div>
+    <div class="absolute inset-0 backdrop-blur-[1px]"></div>
+
+    <!-- Blob dekoratif hijau melayang biar tidak terasa kotak -->
+    <div class="hero-blob w-72 h-72 sm:w-96 sm:h-96 bg-emerald-400 -top-16 -left-16"></div>
+    <div class="hero-blob w-64 h-64 sm:w-80 sm:h-80 bg-teal-300 bottom-0 -right-10" style="animation-delay: 2.5s;"></div>
+
+    <!-- Vignette lembut di tepi supaya foto menyatu dengan section berikutnya -->
+    <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white/95 to-transparent"></div>
 
     <div class="relative max-w-6xl mx-auto px-4 sm:px-6 text-white">
-        <span class="hero-fade-in inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 text-green-100 text-xs sm:text-sm font-medium px-4 py-1.5 rounded-full" style="animation-delay: .05s;">
+        <span class="hero-fade-in inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/25 text-green-50 text-xs sm:text-sm font-medium px-4 py-1.5 rounded-full shadow-lg shadow-black/10" style="animation-delay: .05s;">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-3.5-2.5-7-5.5-7-10a7 7 0 1 1 14 0c0 4.5-3.5 7.5-7 10Z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 13.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
@@ -343,7 +374,7 @@
             Sistem Informasi Masjid Digital
         </span>
 
-        <h1 class="hero-fade-in text-3xl sm:text-5xl md:text-6xl font-extrabold leading-[1.05] mt-5" style="animation-delay: .15s;">
+        <h1 class="hero-fade-in text-3xl sm:text-5xl md:text-6xl font-extrabold leading-[1.05] mt-5 drop-shadow-sm" style="animation-delay: .15s;">
             {{ $profil ? Str::words($profil->nama_masjid, 1, '') : 'Masjid' }}<br>
             <span class="text-green-400">{{ $profil ? trim(Str::after($profil->nama_masjid, ' ')) : 'Darul Muttaqin' }}</span>
         </h1>
@@ -353,13 +384,13 @@
         </p>
 
         <div class="hero-fade-in mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4" style="animation-delay: .35s;">
-            <a href="#jadwal" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 hover:-translate-y-0.5 shadow-lg shadow-green-900/30 px-6 py-3.5 rounded-xl text-base sm:text-lg font-semibold transition">
+            <a href="#jadwal" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 hover:-translate-y-0.5 shadow-xl shadow-green-900/40 px-6 py-3.5 rounded-2xl text-base sm:text-lg font-semibold transition">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                 </svg>
                 Lihat Jadwal
             </a>
-            <a href="#pengumuman" class="inline-flex items-center justify-center gap-2 bg-white/95 hover:bg-white text-green-700 hover:-translate-y-0.5 shadow-lg px-6 py-3.5 rounded-xl text-base sm:text-lg font-semibold transition">
+            <a href="#pengumuman" class="inline-flex items-center justify-center gap-2 bg-white/95 hover:bg-white text-green-700 hover:-translate-y-0.5 shadow-xl px-6 py-3.5 rounded-2xl text-base sm:text-lg font-semibold transition backdrop-blur-md">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
                 </svg>
@@ -368,7 +399,7 @@
         </div>
     </div>
 
-    <a href="#tentang" class="hero-fade-in absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition" style="animation-delay: .5s;" aria-label="Scroll ke bawah">
+    <a href="#tentang" class="hero-fade-in absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition z-10" style="animation-delay: .5s;" aria-label="Scroll ke bawah">
         <svg class="w-7 h-7 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
         </svg>
@@ -382,10 +413,10 @@
             <div>
                 @if($profil && $profil->foto_utama)
                     <img src="{{ Storage::url($profil->foto_utama) }}"
-                         class="rounded-2xl shadow-lg w-full h-auto max-h-[500px] object-contain bg-gray-100">
+                         class="rounded-3xl shadow-lg w-full h-auto max-h-[500px] object-contain bg-gray-100">
                 @else
                     <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1200"
-                         class="rounded-2xl shadow-lg w-full h-auto max-h-[500px] object-contain bg-gray-100">
+                         class="rounded-3xl shadow-lg w-full h-auto max-h-[500px] object-contain bg-gray-100">
                 @endif
             </div>
 
@@ -399,7 +430,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                     <button type="button" onclick="bukaModalVisiMisi()"
-                            class="bg-green-50 rounded-xl p-5 text-left w-full hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
+                            class="bg-green-50 rounded-2xl p-5 text-left w-full hover:-translate-y-1 hover:shadow-lg transition cursor-pointer">
                         <svg class="w-8 h-8 text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
                         </svg>
@@ -409,7 +440,7 @@
                         </p>
                     </button>
                     <button type="button" onclick="bukaModalVisiMisi()"
-                            class="bg-blue-50 rounded-xl p-5 text-left w-full hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
+                            class="bg-blue-50 rounded-2xl p-5 text-left w-full hover:-translate-y-1 hover:shadow-lg transition cursor-pointer">
                         <svg class="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
                         </svg>
@@ -433,7 +464,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
 
             <button type="button" onclick="bukaModalPengurus()"
-                    class="bg-white rounded-2xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-md transition cursor-pointer w-full flex flex-col items-center justify-center min-h-[160px] sm:min-h-[180px]">
+                    class="bg-white rounded-3xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-lg transition cursor-pointer w-full flex flex-col items-center justify-center min-h-[160px] sm:min-h-[180px]">
                 <svg class="w-8 h-8 mx-auto text-green-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                 </svg>
@@ -443,7 +474,7 @@
             </button>
 
             <a href="#kegiatan"
-               class="bg-white rounded-2xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center min-h-[160px] sm:min-h-[180px]">
+               class="bg-white rounded-3xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-lg transition cursor-pointer flex flex-col items-center justify-center min-h-[160px] sm:min-h-[180px]">
                 <svg class="w-8 h-8 mx-auto text-blue-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                 </svg>
@@ -452,7 +483,7 @@
             </a>
 
             <a href="#pengumuman"
-               class="bg-white rounded-2xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center min-h-[160px] sm:min-h-[180px]">
+               class="bg-white rounded-3xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-lg transition cursor-pointer flex flex-col items-center justify-center min-h-[160px] sm:min-h-[180px]">
                 <svg class="w-8 h-8 mx-auto text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
                 </svg>
@@ -461,7 +492,7 @@
             </a>
 
             <a href="#jadwal"
-               class="bg-white rounded-2xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center min-h-[160px] sm:min-h-[180px]">
+               class="bg-white rounded-3xl shadow p-5 text-center hover:-translate-y-1 hover:shadow-lg transition cursor-pointer flex flex-col items-center justify-center min-h-[160px] sm:min-h-[180px]">
                 <svg class="w-8 h-8 mx-auto text-yellow-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
@@ -482,7 +513,7 @@
         <div class="grid md:grid-cols-3 gap-5 mt-8">
             @forelse ($pengumuman as $item)
                 <a href="{{ route('pengumuman.public', $item->slug) }}"
-                   class="block bg-gray-50 rounded-2xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-md transition">
+                   class="block bg-gray-50 rounded-3xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-lg transition">
                     @if ($item->gambar)
                         <img src="{{ Storage::url($item->gambar) }}" class="w-full h-44 object-cover">
                     @else
@@ -569,7 +600,7 @@
                         data-deskripsi="{{ $item->deskripsi ? strip_tags($item->deskripsi) : '' }}"
                         data-poster="{{ $item->poster ? Storage::url($item->poster) : '' }}"
                         data-pengumuman='@json($item->pengumumans->map(fn($p) => ["judul" => $p->judul, "slug" => $p->slug]))'
-                        class="text-left w-full bg-gray-50 rounded-2xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
+                        class="text-left w-full bg-gray-50 rounded-3xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-lg transition cursor-pointer">
                     @if ($item->poster)
                         <img src="{{ Storage::url($item->poster) }}" class="w-full h-36 object-cover">
                     @else
@@ -683,7 +714,7 @@
                     @endforeach
                 </div>
             @empty
-                <p class="col-span-3 text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal.</p>
+                <p class="col-span-3 text-center text-gray-400 bg-white rounded-3xl shadow py-8">Belum ada jadwal.</p>
             @endforelse
         </div>
     </div>
@@ -749,7 +780,7 @@
                     @endif
                 </div>
             @empty
-                <p class="col-span-3 text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal Jumat.</p>
+                <p class="col-span-3 text-center text-gray-400 bg-white rounded-3xl shadow py-8">Belum ada jadwal Jumat.</p>
             @endforelse
         </div>
     </div>
@@ -791,7 +822,7 @@
                     </div>
                 </div>
             @empty
-                <p class="col-span-3 text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal bilal.</p>
+                <p class="col-span-3 text-center text-gray-400 bg-white rounded-3xl shadow py-8">Belum ada jadwal bilal.</p>
             @endforelse
         </div>
     </div>
@@ -833,7 +864,7 @@
                     </div>
                 </div>
             @empty
-                <p class="col-span-3 text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal piket.</p>
+                <p class="col-span-3 text-center text-gray-400 bg-white rounded-3xl shadow py-8">Belum ada jadwal piket.</p>
             @endforelse
         </div>
     </div>
@@ -847,13 +878,7 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             @forelse ($galeri as $item)
-                <button type="button"
-                        onclick="bukaModalGaleri(this)"
-                        data-judul="{{ $item->judul }}"
-                        data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}"
-                        data-tipe="{{ $item->tipe }}"
-                        data-file="{{ Storage::url($item->file) }}"
-                        class="group relative rounded-2xl overflow-hidden shadow bg-white aspect-square text-left w-full cursor-pointer">
+                <div class="group relative rounded-3xl overflow-hidden shadow bg-white aspect-square">
                     @if ($item->tipe === 'video')
                         <video src="{{ Storage::url($item->file) }}" class="w-full h-full object-cover"></video>
                         <div class="absolute inset-0 flex items-center justify-center bg-black/20">
@@ -870,7 +895,7 @@
                             {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
                         </p>
                     </div>
-                </button>
+                </div>
             @empty
                 <p class="col-span-4 text-center text-gray-400">Belum ada galeri.</p>
             @endforelse
@@ -887,7 +912,7 @@
         {{-- Mobile: card view --}}
         <div class="sm:hidden mt-8 space-y-3">
             @forelse ($inventaris as $item)
-                <div class="bg-gray-50 rounded-2xl shadow px-5 py-4">
+                <div class="bg-gray-50 rounded-3xl shadow px-5 py-4">
                     <div class="flex items-center justify-between gap-2">
                         <span @class([
                             'text-xs px-2 py-1 rounded-full shrink-0 order-2',
@@ -903,12 +928,12 @@
                     <p class="text-sm text-gray-600 mt-1">{{ $item->jumlah }} {{ $item->satuan }}</p>
                 </div>
             @empty
-                <p class="text-center text-gray-400 bg-gray-50 rounded-2xl shadow py-8">Belum ada data inventaris.</p>
+                <p class="text-center text-gray-400 bg-gray-50 rounded-3xl shadow py-8">Belum ada data inventaris.</p>
             @endforelse
         </div>
 
         {{-- Desktop: table view --}}
-        <div class="hidden sm:block overflow-x-auto mt-8 bg-gray-50 rounded-2xl shadow">
+        <div class="hidden sm:block overflow-x-auto mt-8 bg-gray-50 rounded-3xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-green-700 text-white">
                     <tr>
@@ -965,7 +990,7 @@
 
 <!-- ================= MODAL VISI & MISI ================= -->
 <div id="modal-visi-misi" class="fixed inset-0 z-[100] hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="tutupModalVisiMisi()"></div>
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="tutupModalVisiMisi()"></div>
 
     <div class="relative max-w-2xl mx-auto mt-16 mb-16 bg-white rounded-3xl shadow-2xl max-h-[80vh] flex flex-col">
         <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
@@ -1025,7 +1050,7 @@
 
 <!-- ================= MODAL DETAIL KEGIATAN ================= -->
 <div id="modal-kegiatan" class="fixed inset-0 z-[100] hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="tutupModalKegiatan()"></div>
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="tutupModalKegiatan()"></div>
 
     <div class="relative max-w-2xl mx-auto mt-16 mb-16 bg-white rounded-3xl shadow-2xl max-h-[80vh] flex flex-col overflow-hidden">
         <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
@@ -1060,7 +1085,7 @@
 
 <!-- ================= MODAL BAGAN PENGURUS ================= -->
 <div id="modal-pengurus" class="fixed inset-0 z-[100] hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="tutupModalPengurus()"></div>
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="tutupModalPengurus()"></div>
 
     <div class="relative max-w-5xl mx-auto mt-10 mb-10 bg-white rounded-3xl shadow-2xl max-h-[85vh] flex flex-col">
         <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100 shrink-0">
@@ -1101,28 +1126,6 @@
                     <p class="text-center text-gray-400 py-8">Struktur pengurus belum tersedia.</p>
                 @endforelse
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- ================= MODAL GALERI (LIGHTBOX) ================= -->
-<div id="modal-galeri" class="fixed inset-0 z-[100] hidden">
-    <div class="absolute inset-0 bg-black/80" onclick="tutupModalGaleri()"></div>
-
-    <div class="relative max-w-4xl mx-auto mt-10 mb-10 px-4 flex flex-col max-h-[90vh]">
-        <button onclick="tutupModalGaleri()"
-                class="self-end mb-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 hover:bg-white text-gray-700 text-lg shrink-0">
-            &times;
-        </button>
-
-        <div class="bg-black rounded-2xl overflow-hidden flex items-center justify-center">
-            <img id="galeri-img" src="" class="max-h-[70vh] w-auto max-w-full object-contain hidden">
-            <video id="galeri-video" src="" controls class="max-h-[70vh] w-auto max-w-full hidden"></video>
-        </div>
-
-        <div class="bg-white rounded-b-2xl px-5 py-4 -mt-1">
-            <p id="galeri-judul" class="font-bold text-gray-800 text-lg"></p>
-            <p id="galeri-tanggal" class="text-gray-500 text-sm mt-1"></p>
         </div>
     </div>
 </div>
@@ -1235,43 +1238,11 @@
         document.body.classList.remove('overflow-hidden');
     }
 
-    function bukaModalGaleri(btn) {
-        const img = document.getElementById('galeri-img');
-        const video = document.getElementById('galeri-video');
-
-        if (btn.dataset.tipe === 'video') {
-            video.src = btn.dataset.file;
-            video.classList.remove('hidden');
-            img.classList.add('hidden');
-            img.src = '';
-        } else {
-            img.src = btn.dataset.file;
-            img.classList.remove('hidden');
-            video.classList.add('hidden');
-            video.pause();
-            video.src = '';
-        }
-
-        document.getElementById('galeri-judul').textContent = btn.dataset.judul;
-        document.getElementById('galeri-tanggal').textContent = btn.dataset.tanggal;
-
-        document.getElementById('modal-galeri').classList.remove('hidden');
-        document.body.classList.add('overflow-hidden');
-    }
-
-    function tutupModalGaleri() {
-        const video = document.getElementById('galeri-video');
-        video.pause();
-        document.getElementById('modal-galeri').classList.add('hidden');
-        document.body.classList.remove('overflow-hidden');
-    }
-
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             tutupModalKegiatan();
             tutupModalVisiMisi();
             tutupModalPengurus();
-            tutupModalGaleri();
         }
     });
 </script>
