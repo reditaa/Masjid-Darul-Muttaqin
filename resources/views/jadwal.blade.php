@@ -278,22 +278,6 @@
             <a href="{{ url('/') }}#statistik" class="hover:text-green-700">Statistik</a>
             <a href="{{ url('/') }}#pengumuman" class="hover:text-green-700">Pengumuman</a>
             <a href="{{ route('jadwal') }}" class="text-green-700 font-semibold">Jadwal</a>
-
-            @auth
-                @if (Auth::user()->role === 'admin')
-                    <a href="{{ route('dashboard') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
-                        Dashboard Admin
-                    </a>
-                @else
-                    <a href="{{ route('anggota.dashboard') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
-                        Dashboard Saya
-                    </a>
-                @endif
-            @else
-                <a href="{{ route('login') }}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg">
-                    Login Admin
-                </a>
-            @endauth
         </div>
 
         <button type="button" onclick="toggleMenuMobile()" class="lg:hidden shrink-0 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100">
@@ -312,22 +296,6 @@
         <a href="{{ url('/') }}#statistik" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Statistik</a>
         <a href="{{ url('/') }}#pengumuman" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg hover:bg-gray-50">Pengumuman</a>
         <a href="{{ route('jadwal') }}" onclick="tutupMenuMobile()" class="block px-3 py-2 rounded-lg bg-green-50 text-green-700 font-semibold">Jadwal</a>
-
-        @auth
-            @if (Auth::user()->role === 'admin')
-                <a href="{{ route('dashboard') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
-                    Dashboard Admin
-                </a>
-            @else
-                <a href="{{ route('anggota.dashboard') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
-                    Dashboard Saya
-                </a>
-            @endif
-        @else
-            <a href="{{ route('login') }}" class="block text-center bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg mt-2">
-                Login Admin
-            </a>
-        @endauth
     </div>
 </nav>
 
