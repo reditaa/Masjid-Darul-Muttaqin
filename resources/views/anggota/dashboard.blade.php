@@ -10,10 +10,10 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <nav class="bg-green-800 text-white px-4 py-3 sm:py-4 shadow">
+    <nav class="bg-green-800 text-white px-4 py-2.5 sm:py-3 shadow">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <div class="flex items-center gap-3 min-w-0">
-                <i class="fas fa-mosque text-2xl shrink-0"></i>
+                <i class="fas fa-mosque text-xl shrink-0"></i>
                 <div class="min-w-0">
                     <p class="font-bold truncate">SIMADI</p>
                     <p class="text-xs text-green-200 truncate">{{ $pengurus->nama ?? Auth::user()->name }}</p>
@@ -35,7 +35,7 @@
         </div>
     </nav>
 
-    <div class="max-w-3xl mx-auto p-4 space-y-6">
+    <div class="max-w-2xl mx-auto p-3 space-y-4">
 
         @if (session('success'))
             <div class="p-4 bg-green-100 text-green-800 rounded-xl shadow-sm">{{ session('success') }}</div>
@@ -51,7 +51,7 @@
         @endif
 
         @if (! empty($tugasHariIni))
-            <div class="p-4 bg-blue-600 text-white rounded-xl shadow">
+            <div class="p-3 bg-blue-600 text-white rounded-xl shadow text-sm">
                 <p class="font-bold flex items-center gap-2">
                     <i class="fas fa-bell"></i> Anda ada tugas hari ini!
                 </p>
@@ -64,24 +64,24 @@
         @endif
 
         {{-- Saldo Kas Masjid --}}
-        <div class="bg-white rounded-xl shadow p-5">
+        <div class="bg-white rounded-xl shadow p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Saldo Kas Masjid</p>
-                    <p class="text-2xl font-bold text-green-700 mt-1">
+                    <p class="text-xl font-bold text-green-700 mt-1">
                         Rp {{ number_format($saldoKas, 0, ',', '.') }}
                     </p>
                 </div>
-                <div class="w-12 h-12 rounded-full bg-green-100 text-green-700 flex items-center justify-center">
-                    <i class="fas fa-wallet text-xl"></i>
+                <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center">
+                    <i class="fas fa-wallet text-base"></i>
                 </div>
             </div>
         </div>
 
                {{-- Jadwal Kegiatan Masjid --}}
-        <div class="bg-white rounded-xl shadow p-5">
-            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <h2 class="font-bold text-lg">Jadwal Kegiatan Masjid</h2>
+        <div class="bg-white rounded-xl shadow p-4">
+            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+                <h2 class="font-bold text-base">Jadwal Kegiatan Masjid</h2>
                 <div class="flex items-center gap-3 text-xs text-gray-500">
                     <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span> Hari ini</span>
                     <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Tugas saya</span>
@@ -131,7 +131,7 @@
                                     </div>
                                 </div>
                                 @if ($j->milik_saya)
-                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0 self-start sm:self-auto"
+                                    <button type="button" class="btn-presensi px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition flex-shrink-0 self-start sm:self-auto"
                                         data-type="{{ \App\Models\JadwalImamMuazin::class }}" data-id="{{ $j->id }}"
                                         data-label="{{ ucfirst($j->hari) }} - {{ ucfirst($j->waktu_sholat) }}">
                                         Presensi
@@ -185,7 +185,7 @@
                                     </div>
                                 </div>
                                 @if ($jj->milik_saya)
-                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0 self-start sm:self-auto"
+                                    <button type="button" class="btn-presensi px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition flex-shrink-0 self-start sm:self-auto"
                                         data-type="{{ \App\Models\JadwalJumat::class }}" data-id="{{ $jj->id }}"
                                         data-label="Jumat Pasaran {{ ucfirst($jj->pasaran) }}">
                                         Presensi
@@ -225,7 +225,7 @@
                                     </div>
                                 </div>
                                 @if ($jb->milik_saya)
-                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0 self-start sm:self-auto"
+                                    <button type="button" class="btn-presensi px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition flex-shrink-0 self-start sm:self-auto"
                                         data-type="{{ \App\Models\JadwalBilal::class }}" data-id="{{ $jb->id }}"
                                         data-label="Pasaran {{ ucfirst($jb->pasaran) }}">
                                         Presensi
@@ -265,7 +265,7 @@
                                     </div>
                                 </div>
                                 @if ($jp->milik_saya)
-                                    <button type="button" class="btn-presensi px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition flex-shrink-0 self-start sm:self-auto"
+                                    <button type="button" class="btn-presensi px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition flex-shrink-0 self-start sm:self-auto"
                                         data-type="{{ \App\Models\JadwalPiketKebersihan::class }}" data-id="{{ $jp->id }}"
                                         data-label="Piket {{ ucfirst($jp->hari) }}">
                                         Presensi
@@ -278,9 +278,6 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
-                
             </div>
         </div>
 
@@ -404,8 +401,8 @@
         </div>
 
         {{-- Pengumuman --}}
-        <div class="bg-white rounded-xl shadow p-5">
-            <h2 class="font-bold text-lg mb-3">Pengumuman Terbaru</h2>
+        <div class="bg-white rounded-xl shadow p-4">
+            <h2 class="font-bold text-base mb-2">Pengumuman Terbaru</h2>
             @forelse ($pengumuman as $p)
                 <div class="border-b py-4 last:border-0 first:pt-0">
                     <div class="flex gap-3">
@@ -455,8 +452,8 @@
         </div>
 
         {{-- Kegiatan --}}
-        <div class="bg-white rounded-xl shadow p-5">
-            <h2 class="font-bold text-lg mb-3">Kegiatan Mendatang</h2>
+        <div class="bg-white rounded-xl shadow p-4">
+            <h2 class="font-bold text-base mb-2">Kegiatan Mendatang</h2>
             @forelse ($kegiatan as $k)
                 <div class="border-b py-2 last:border-0">
                     <p class="font-medium text-sm">{{ $k->judul }}</p>
