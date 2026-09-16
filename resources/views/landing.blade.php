@@ -44,6 +44,79 @@
             opacity: 0;
             animation: heroFadeIn .7s ease-out forwards;
         }
+
+        /* ===== Tema Notebook Hijau untuk Jadwal ===== */
+        .kartu-notebook {
+            position: relative;
+            background: #fbf9f0;
+            border: 2px solid #15803d;
+            border-radius: 6px 6px 20px 20px;
+            box-shadow: 0 10px 25px -8px rgba(21, 128, 61, .25);
+            padding: 28px 20px 20px;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .kartu-notebook:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 30px -8px rgba(21, 128, 61, .3);
+        }
+
+        .ring-spiral {
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .ring-spiral span {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #fbf9f0;
+            border: 2.5px solid #15803d;
+        }
+
+        .ornamen-pojok {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 20px;
+            height: 20px;
+            color: rgba(21, 128, 61, .35);
+        }
+
+        .judul-kartu {
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: #14532d;
+        }
+
+        .garis-bawah {
+            width: 48px;
+            height: 4px;
+            background: #15803d;
+            border-radius: 999px;
+            margin: 6px auto 16px;
+        }
+
+        .label-kartu {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: #16a34a;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .isi-kartu {
+            font-size: .875rem;
+            color: #1f2937;
+            line-height: 1.4;
+        }
     </style>
 </head>
 
@@ -410,64 +483,70 @@
 </section>
 
 <!-- ================= JADWAL IMAM & MUAZIN ================= -->
-<section id="jadwal" class="py-14 bg-green-50">
+<section id="jadwal" class="py-14 bg-gradient-to-b from-green-50 via-emerald-50 to-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_jadwal_imam_muazin ?? 'Jadwal Imam & Muazin' }}</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_jadwal_imam_muazin ?? 'Jadwal petugas sholat sepanjang pekan. Klik hari untuk lihat detail.' }}</p>
+        <h2 class="text-3xl font-bold text-center text-green-800">
+            {{ $profil->judul_jadwal_imam_muazin ?? 'Jadwal Imam & Muazin' }}
+        </h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">
+            {{ $profil->teks_jadwal_imam_muazin ?? 'Jadwal petugas sholat sepanjang pekan.' }}
+        </p>
 
-        <div class="mt-8 max-w-4xl mx-auto space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-12 mt-12">
             @forelse ($jadwalImamMuazin->groupBy('hari') as $hari => $itemHari)
                 @php $idHari = 'jadwal-hari-' . Str::slug($hari); @endphp
-                <div class="bg-white rounded-2xl shadow overflow-hidden">
-                    <button type="button"
-                            onclick="toggleJadwalHari('{{ $idHari }}')"
-                            class="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:bg-green-50/50 transition">
-                        <span class="font-bold text-green-700 capitalize text-base sm:text-lg">{{ $hari }}</span>
-                        <svg id="{{ $idHari }}-icon" class="w-5 h-5 text-green-700 shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </button>
 
-                    <div id="{{ $idHari }}" class="hidden border-t border-gray-100">
-                        <div class="flex flex-wrap gap-2 px-5 sm:px-6 py-4 bg-gray-50/60">
-                            @foreach ($itemHari as $index => $item)
-                                @php $idWaktu = $idHari . '-waktu-' . $index; @endphp
-                                <button type="button"
-                                        id="{{ $idWaktu }}-btn"
-                                        onclick="pilihWaktuSholat('{{ $idHari }}', {{ $index }})"
-                                        class="waktu-btn-{{ $idHari }} px-4 py-1.5 rounded-full text-sm font-medium capitalize transition {{ $index === 0 ? 'bg-green-700 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-green-400' }}">
-                                    {{ $item->waktu_sholat }}
-                                </button>
-                            @endforeach
-                        </div>
+                <div class="kartu-notebook">
+                    <div class="ring-spiral">
+                        @for ($r = 0; $r < 6; $r++)
+                            <span></span>
+                        @endfor
+                    </div>
 
+                    <svg class="ornamen-pojok" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+
+                    <h3 class="judul-kartu capitalize">{{ $hari }}</h3>
+                    <div class="garis-bawah"></div>
+
+                    <div class="flex flex-wrap justify-center gap-1.5 mb-4">
                         @foreach ($itemHari as $index => $item)
                             @php $idWaktu = $idHari . '-waktu-' . $index; @endphp
-                            <div id="{{ $idWaktu }}" class="{{ $index === 0 ? '' : 'hidden' }} waktu-panel-{{ $idHari }} px-5 sm:px-6 py-4 border-t border-gray-100">
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-3">
-                                    <div>
-                                        <p class="text-xs text-gray-400">Imam</p>
-                                        @forelse ($item->imam as $imam)
-                                            <p class="text-sm text-gray-800">{{ $imam->nama }}</p>
-                                        @empty
-                                            <p class="text-sm text-gray-400">-</p>
-                                        @endforelse
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-400">Muazin</p>
-                                        @forelse ($item->muazin as $muazin)
-                                            <p class="text-sm text-gray-800">{{ $muazin->nama }}</p>
-                                        @empty
-                                            <p class="text-sm text-gray-400">-</p>
-                                        @endforelse
-                                    </div>
-                                </div>
-                            </div>
+                            <button type="button"
+                                    id="{{ $idWaktu }}-btn"
+                                    onclick="pilihWaktuSholat('{{ $idHari }}', {{ $index }})"
+                                    class="waktu-btn-{{ $idHari }} px-3 py-1 rounded-full text-xs font-semibold capitalize transition {{ $index === 0 ? 'bg-green-700 text-white' : 'bg-white text-green-700 border border-green-300 hover:border-green-500' }}">
+                                {{ $item->waktu_sholat }}
+                            </button>
                         @endforeach
                     </div>
+
+                    @foreach ($itemHari as $index => $item)
+                        @php $idWaktu = $idHari . '-waktu-' . $index; @endphp
+                        <div id="{{ $idWaktu }}"
+                             class="{{ $index === 0 ? '' : 'hidden' }} waktu-panel-{{ $idHari }} grid grid-cols-2 gap-3 border-t border-dashed border-green-300 pt-3">
+                            <div>
+                                <p class="label-kartu">Imam</p>
+                                @forelse ($item->imam as $imam)
+                                    <p class="isi-kartu">{{ $imam->nama }}</p>
+                                @empty
+                                    <p class="isi-kartu text-gray-400">-</p>
+                                @endforelse
+                            </div>
+                            <div>
+                                <p class="label-kartu">Muazin</p>
+                                @forelse ($item->muazin as $muazin)
+                                    <p class="isi-kartu">{{ $muazin->nama }}</p>
+                                @empty
+                                    <p class="isi-kartu text-gray-400">-</p>
+                                @endforelse
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             @empty
-                <p class="text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal.</p>
+                <p class="col-span-3 text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal.</p>
             @endforelse
         </div>
     </div>
@@ -476,94 +555,106 @@
 <!-- ================= JADWAL JUMAT ================= -->
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_jadwal_jumat ?? 'Jadwal Jumat' }}</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_jadwal_jumat ?? 'Jadwal Khatib, Imam & Bilal shalat Jumat berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.' }}</p>
+        <h2 class="text-3xl font-bold text-center text-green-800">
+            {{ $profil->judul_jadwal_jumat ?? 'Jadwal Jumat' }}
+        </h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">
+            {{ $profil->teks_jadwal_jumat ?? 'Jadwal Khatib, Imam & Bilal shalat Jumat berdasarkan siklus pasaran.' }}
+        </p>
 
-        <div class="mt-8 max-w-4xl mx-auto space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-12 mt-12">
             @forelse ($jadwalJumat as $item)
-                @php $idJumat = 'jadwal-jumat-' . Str::slug($item->pasaran) . '-' . $loop->index; @endphp
-                <div class="bg-gray-50 rounded-2xl shadow overflow-hidden">
-                    <button type="button"
-                            onclick="toggleJadwalHari('{{ $idJumat }}')"
-                            class="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:bg-green-50/50 transition">
-                        <span class="font-bold text-green-700 capitalize text-base sm:text-lg">{{ $item->pasaran }}</span>
-                        <svg id="{{ $idJumat }}-icon" class="w-5 h-5 text-green-700 shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </button>
-
-                    <div id="{{ $idJumat }}" class="hidden border-t border-gray-100 px-5 sm:px-6 py-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div>
-                                <p class="text-xs text-gray-400">Khatib</p>
-                                @forelse ($item->khatib as $khatib)
-                                    <p class="text-sm text-gray-800">{{ $khatib->nama }}</p>
-                                @empty
-                                    <p class="text-sm text-gray-400">-</p>
-                                @endforelse
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-400">Imam</p>
-                                @forelse ($item->imam as $imam)
-                                    <p class="text-sm text-gray-800">{{ $imam->nama }}</p>
-                                @empty
-                                    <p class="text-sm text-gray-400">-</p>
-                                @endforelse
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-400">Bilal</p>
-                                @forelse ($item->bilal as $bilal)
-                                    <p class="text-sm text-gray-800">{{ $bilal->nama }}</p>
-                                @empty
-                                    <p class="text-sm text-gray-400">-</p>
-                                @endforelse
-                            </div>
-                        </div>
-
-                        @if ($item->keterangan)
-                            <p class="text-xs text-gray-500 mt-4 pt-4 border-t border-gray-100">
-                                {{ $item->keterangan }}
-                            </p>
-                        @endif
+                <div class="kartu-notebook">
+                    <div class="ring-spiral">
+                        @for ($r = 0; $r < 6; $r++)
+                            <span></span>
+                        @endfor
                     </div>
+
+                    <svg class="ornamen-pojok" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+
+                    <h3 class="judul-kartu capitalize">{{ $item->pasaran }}</h3>
+                    <div class="garis-bawah"></div>
+
+                    <div class="grid grid-cols-3 gap-2 border-t border-dashed border-green-300 pt-3">
+                        <div>
+                            <p class="label-kartu">Khatib</p>
+                            @forelse ($item->khatib as $khatib)
+                                <p class="isi-kartu">{{ $khatib->nama }}</p>
+                            @empty
+                                <p class="isi-kartu text-gray-400">-</p>
+                            @endforelse
+                        </div>
+                        <div>
+                            <p class="label-kartu">Imam</p>
+                            @forelse ($item->imam as $imam)
+                                <p class="isi-kartu">{{ $imam->nama }}</p>
+                            @empty
+                                <p class="isi-kartu text-gray-400">-</p>
+                            @endforelse
+                        </div>
+                        <div>
+                            <p class="label-kartu">Bilal</p>
+                            @forelse ($item->bilal as $bilal)
+                                <p class="isi-kartu">{{ $bilal->nama }}</p>
+                            @empty
+                                <p class="isi-kartu text-gray-400">-</p>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    @if ($item->keterangan)
+                        <p class="text-xs text-gray-500 mt-3 pt-3 border-t border-dashed border-green-200">
+                            {{ $item->keterangan }}
+                        </p>
+                    @endif
                 </div>
             @empty
-                <p class="text-center text-gray-400 bg-gray-50 rounded-2xl shadow py-8">Belum ada jadwal Jumat.</p>
+                <p class="col-span-3 text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal Jumat.</p>
             @endforelse
         </div>
     </div>
 </section>
 
 <!-- ================= JADWAL BILAL ================= -->
-<section class="py-14 bg-green-50">
+<section class="py-14 bg-gradient-to-b from-green-50 via-emerald-50 to-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_jadwal_bilal ?? 'Jadwal Bilal' }}</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_jadwal_bilal ?? 'Petugas bilal berdasarkan siklus pasaran. Klik pasaran untuk lihat detail.' }}</p>
+        <h2 class="text-3xl font-bold text-center text-green-800">
+            {{ $profil->judul_jadwal_bilal ?? 'Jadwal Bilal' }}
+        </h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">
+            {{ $profil->teks_jadwal_bilal ?? 'Petugas bilal berdasarkan siklus pasaran.' }}
+        </p>
 
-        <div class="mt-8 max-w-4xl mx-auto space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-12 mt-12">
             @forelse ($jadwalBilal as $item)
-                @php $idBilal = 'jadwal-bilal-' . Str::slug($item->pasaran) . '-' . $loop->index; @endphp
-                <div class="bg-white rounded-2xl shadow overflow-hidden">
-                    <button type="button"
-                            onclick="toggleJadwalHari('{{ $idBilal }}')"
-                            class="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:bg-green-50/50 transition">
-                        <span class="font-bold text-green-700 capitalize text-base sm:text-lg">{{ $item->pasaran }}</span>
-                        <svg id="{{ $idBilal }}-icon" class="w-5 h-5 text-green-700 shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </button>
+                <div class="kartu-notebook">
+                    <div class="ring-spiral">
+                        @for ($r = 0; $r < 6; $r++)
+                            <span></span>
+                        @endfor
+                    </div>
 
-                    <div id="{{ $idBilal }}" class="hidden border-t border-gray-100 px-5 sm:px-6 py-4">
-                        <p class="text-xs text-gray-400">Petugas</p>
+                    <svg class="ornamen-pojok" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+
+                    <h3 class="judul-kartu capitalize">{{ $item->pasaran }}</h3>
+                    <div class="garis-bawah"></div>
+
+                    <div class="border-t border-dashed border-green-300 pt-3">
+                        <p class="label-kartu">Petugas</p>
                         @forelse ($item->anggota as $anggota)
-                            <p class="text-sm text-gray-800">{{ $anggota->nama }}</p>
+                            <p class="isi-kartu">{{ $anggota->nama }}</p>
                         @empty
-                            <p class="text-sm text-gray-400">-</p>
+                            <p class="isi-kartu text-gray-400">-</p>
                         @endforelse
                     </div>
                 </div>
             @empty
-                <p class="text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal bilal.</p>
+                <p class="col-span-3 text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal bilal.</p>
             @endforelse
         </div>
     </div>
@@ -572,37 +663,45 @@
 <!-- ================= JADWAL PIKET KEBERSIHAN ================= -->
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center">{{ $profil->judul_jadwal_piket ?? 'Jadwal Piket Kebersihan' }}</h2>
-        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">{{ $profil->teks_jadwal_piket ?? 'Petugas kebersihan masjid setiap harinya. Klik hari untuk lihat detail.' }}</p>
+        <h2 class="text-3xl font-bold text-center text-green-800">
+            {{ $profil->judul_jadwal_piket ?? 'Jadwal Piket Kebersihan' }}
+        </h2>
+        <p class="text-center text-gray-600 mt-2 text-lg sm:text-xl">
+            {{ $profil->teks_jadwal_piket ?? 'Petugas kebersihan masjid setiap harinya.' }}
+        </p>
 
-        <div class="mt-8 max-w-4xl mx-auto space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-12 mt-12">
             @forelse ($jadwalPiket as $item)
-                @php $idPiket = 'jadwal-piket-' . Str::slug($item->hari) . '-' . $loop->index; @endphp
-                <div class="bg-gray-50 rounded-2xl shadow overflow-hidden">
-                    <button type="button"
-                            onclick="toggleJadwalHari('{{ $idPiket }}')"
-                            class="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:bg-green-50/50 transition">
-                        <span class="font-bold text-green-700 capitalize text-base sm:text-lg">{{ $item->hari }}</span>
-                        <svg id="{{ $idPiket }}-icon" class="w-5 h-5 text-green-700 shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </button>
+                <div class="kartu-notebook">
+                    <div class="ring-spiral">
+                        @for ($r = 0; $r < 6; $r++)
+                            <span></span>
+                        @endfor
+                    </div>
 
-                    <div id="{{ $idPiket }}" class="hidden border-t border-gray-100 px-5 sm:px-6 py-4">
-                        <p class="text-xs text-gray-400">Petugas</p>
+                    <svg class="ornamen-pojok" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+
+                    <h3 class="judul-kartu capitalize">{{ $item->hari }}</h3>
+                    <div class="garis-bawah"></div>
+
+                    <div class="border-t border-dashed border-green-300 pt-3">
+                        <p class="label-kartu">Petugas</p>
                         @forelse ($item->anggota as $anggota)
-                            <p class="text-sm text-gray-800">{{ $anggota->nama }}</p>
+                            <p class="isi-kartu">{{ $anggota->nama }}</p>
                         @empty
-                            <p class="text-sm text-gray-400">-</p>
+                            <p class="isi-kartu text-gray-400">-</p>
                         @endforelse
                     </div>
                 </div>
             @empty
-                <p class="text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal piket.</p>
+                <p class="col-span-3 text-center text-gray-400 bg-white rounded-2xl shadow py-8">Belum ada jadwal piket.</p>
             @endforelse
         </div>
     </div>
 </section>
+
 <!-- ================= GALERI ================= -->
 <section id="galeri" class="py-14 bg-green-50">
     <div class="max-w-7xl mx-auto px-6">
@@ -873,21 +972,10 @@
             btn.classList.toggle('bg-green-700', aktif);
             btn.classList.toggle('text-white', aktif);
             btn.classList.toggle('bg-white', !aktif);
-            btn.classList.toggle('text-gray-600', !aktif);
+            btn.classList.toggle('text-green-700', !aktif);
             btn.classList.toggle('border', !aktif);
-            btn.classList.toggle('border-gray-200', !aktif);
+            btn.classList.toggle('border-green-300', !aktif);
         });
-    }
-
-    function toggleJadwalHari(id) {
-        const konten = document.getElementById(id);
-        const icon = document.getElementById(id + '-icon');
-        if (!konten) return;
-
-        konten.classList.toggle('hidden');
-        if (icon) {
-            icon.classList.toggle('rotate-180');
-        }
     }
 
     function toggleMenuMobile() {
