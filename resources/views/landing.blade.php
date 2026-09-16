@@ -978,15 +978,112 @@
 </section>
 
 <!-- ================= FOOTER ================= -->
-<footer class="bg-green-900 text-green-100 py-6">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-        <p class="font-bold text-white text-base">Masjid Darul Muttaqin</p>
-        <p class="text-xs mt-1">SMK Negeri 1 Bangsri</p>
-        <p class="text-xs mt-3 text-green-300">
-            &copy; {{ date('Y') }} SIMMADI — Sistem Manajemen Masjid Digital
-        </p>
+<footer class="bg-[#062617] text-green-100/80 pt-14 pb-6">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+            <!-- Profil singkat -->
+            <div class="lg:col-span-1">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-green-700 flex items-center justify-center overflow-hidden shrink-0 ring-2 ring-green-600/40">
+                        <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS Darul Muttaqin" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <p class="font-bold text-white text-base leading-tight">Masjid Darul Muttaqin</p>
+                        <p class="text-xs text-green-300/80">SMK Negeri 1 Bangsri</p>
+                    </div>
+                </div>
+                <p class="text-sm text-green-100/70 mt-4 leading-relaxed">
+                    Media digital untuk informasi jadwal, kegiatan, dan pengumuman Masjid Darul Muttaqin bagi seluruh warga sekolah.
+                </p>
+
+                <div class="flex items-center gap-3 mt-5">
+                    <a href="#" aria-label="Instagram" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition">
+                        <svg class="w-4.5 h-4.5 text-green-100" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 7.5h.008v.008H16.5V7.5Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3h10.5A3.75 3.75 0 0 1 21 6.75v10.5A3.75 3.75 0 0 1 17.25 21H6.75A3.75 3.75 0 0 1 3 17.25V6.75A3.75 3.75 0 0 1 6.75 3Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="YouTube" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition">
+                        <svg class="w-4.5 h-4.5 text-green-100" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12c0-1.892.11-3.451.31-4.704.257-1.6 1.545-2.815 3.156-2.98C7.42 4.14 9.502 4 12 4s4.58.14 6.284.316c1.611.165 2.9 1.38 3.156 2.98.2 1.253.31 2.812.31 4.704s-.11 3.451-.31 4.704c-.257 1.6-1.545 2.815-3.156 2.98C16.58 19.86 14.498 20 12 20s-4.58-.14-6.284-.316c-1.611-.165-2.9-1.38-3.156-2.98C2.36 15.451 2.25 13.892 2.25 12Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 9.75 15 12l-4.5 2.25v-4.5Z" />
+                        </svg>
+                    </a>
+                    <a href="https://wa.me/" aria-label="WhatsApp" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition">
+                        <svg class="w-4.5 h-4.5 text-green-100" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.47 1.33 4.98L2 22l5.2-1.36a9.94 9.94 0 0 0 4.84 1.24h.01c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2Zm5.86 14.12c-.25.7-1.24 1.28-2.02 1.44-.55.11-1.26.2-3.68-.79-2.94-1.2-4.83-4.14-4.98-4.33-.15-.19-1.19-1.58-1.19-3.02 0-1.43.75-2.14 1.02-2.43.25-.28.55-.35.73-.35h.53c.17 0 .4-.06.62.48.25.6.85 2.06.92 2.21.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.48-.14.13-.28.28-.12.55.16.28.71 1.18 1.53 1.92 1.06.94 1.94 1.24 2.22 1.38.28.14.44.12.6-.07.16-.19.7-.81.88-1.09.19-.28.37-.23.62-.14.25.09 1.61.76 1.89.9.28.14.46.21.53.33.07.12.07.68-.18 1.38Z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Menu Utama -->
+            <div>
+                <h4 class="text-white font-semibold text-sm tracking-wide uppercase mb-4">Menu Utama</h4>
+                <ul class="space-y-2.5 text-sm">
+                    <li><a href="#" class="hover:text-white transition">Beranda</a></li>
+                    <li><a href="#tentang" class="hover:text-white transition">Tentang</a></li>
+                    <li><a href="#kegiatan" class="hover:text-white transition">Kegiatan</a></li>
+                    <li><a href="#pengumuman" class="hover:text-white transition">Pengumuman</a></li>
+                    <li><a href="#galeri" class="hover:text-white transition">Galeri</a></li>
+                </ul>
+            </div>
+
+            <!-- Informasi -->
+            <div>
+                <h4 class="text-white font-semibold text-sm tracking-wide uppercase mb-4">Informasi</h4>
+                <ul class="space-y-2.5 text-sm">
+                    <li><a href="#statistik" class="hover:text-white transition">Statistik Masjid</a></li>
+                    <li><a href="#jadwal" class="hover:text-white transition">Jadwal Imam & Muazin</a></li>
+                    <li><a href="#inventaris" class="hover:text-white transition">Inventaris</a></li>
+                    <li><button type="button" onclick="bukaModalPengurus()" class="hover:text-white transition text-left">Struktur Pengurus</button></li>
+                </ul>
+            </div>
+
+            <!-- Kontak -->
+            <div>
+                <h4 class="text-white font-semibold text-sm tracking-wide uppercase mb-4">Kontak Kami</h4>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-start gap-2.5">
+                        <svg class="w-4.5 h-4.5 text-green-400 mt-0.5 shrink-0" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                        <span>{{ $profil->alamat ?? 'SMK Negeri 1 Bangsri, Jepara, Jawa Tengah' }}</span>
+                    </li>
+                    <li class="flex items-center gap-2.5">
+                        <svg class="w-4.5 h-4.5 text-green-400 shrink-0" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a1.5 1.5 0 0 0 1.5-1.5v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106a1.5 1.5 0 0 0-1.423.39l-.97.97a.5.5 0 0 1-.58.095 12.042 12.042 0 0 1-5.65-5.65.5.5 0 0 1 .096-.579l.969-.97a1.5 1.5 0 0 0 .39-1.423L6.963 3.852a1.125 1.125 0 0 0-1.091-.852H4.5a1.5 1.5 0 0 0-1.5 1.5v2.25Z" />
+                        </svg>
+                        <span>{{ $profil->telepon ?? '+62 857 1259 5555' }}</span>
+                    </li>
+                    <li class="flex items-center gap-2.5">
+                        <svg class="w-4.5 h-4.5 text-green-400 shrink-0" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                        </svg>
+                        <span>masjid.darulmuttaqin@smkn1bangsri.sch.id</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-green-300/70">
+            <p>&copy; {{ date('Y') }} Masjid Darul Muttaqin. All rights reserved.</p>
+            <p>SIMMADI — Sistem Manajemen Masjid Digital</p>
+        </div>
     </div>
 </footer>
+
+<!-- Tombol WhatsApp mengambang -->
+<a href="https://wa.me/" target="_blank" rel="noopener"
+   class="fixed bottom-5 right-5 z-40 w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 shadow-xl shadow-green-900/40 flex items-center justify-center transition hover:scale-105"
+   aria-label="Hubungi via WhatsApp">
+    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.47 1.33 4.98L2 22l5.2-1.36a9.94 9.94 0 0 0 4.84 1.24h.01c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2Zm5.86 14.12c-.25.7-1.24 1.28-2.02 1.44-.55.11-1.26.2-3.68-.79-2.94-1.2-4.83-4.14-4.98-4.33-.15-.19-1.19-1.58-1.19-3.02 0-1.43.75-2.14 1.02-2.43.25-.28.55-.35.73-.35h.53c.17 0 .4-.06.62.48.25.6.85 2.06.92 2.21.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.48-.14.13-.28.28-.12.55.16.28.71 1.18 1.53 1.92 1.06.94 1.94 1.24 2.22 1.38.28.14.44.12.6-.07.16-.19.7-.81.88-1.09.19-.28.37-.23.62-.14.25.09 1.61.76 1.89.9.28.14.46.21.53.33.07.12.07.68-.18 1.38Z"/>
+    </svg>
+</a>
 
 <!-- ================= MODAL VISI & MISI ================= -->
 <div id="modal-visi-misi" class="fixed inset-0 z-[100] hidden">
