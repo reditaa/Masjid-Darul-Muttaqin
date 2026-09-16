@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex justify-between items-center gap-3">
+            <h2 class="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
                 Ringkasan Keuangan
             </h2>
             <a href="{{ route('keuangan.create') }}"
-               class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+               class="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap">
                 <i class="fas fa-plus mr-1"></i> Tambah Transaksi
             </a>
         </div>
@@ -20,28 +20,75 @@
                 </div>
             @endif
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-6">
-                <div class="bg-white rounded-2xl shadow p-6 border-l-4 border-green-600">
-                    <p class="text-gray-500 text-sm">Saldo Saat Ini</p>
-                    <h3 class="text-2xl font-bold mt-1 {{ $saldo >= 0 ? 'text-green-700' : 'text-red-600' }}">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white rounded-xl shadow p-4 sm:p-5 border-l-4 border-green-600">
+                    <p class="text-gray-500 text-xs sm:text-sm">Saldo Saat Ini</p>
+                    <h3 class="text-xl sm:text-2xl font-bold mt-1 {{ $saldo >= 0 ? 'text-green-700' : 'text-red-600' }}">
                         Rp {{ number_format($saldo, 0, ',', '.') }}
                     </h3>
                 </div>
-                <div class="bg-white rounded-2xl shadow p-6 border-l-4 border-blue-600">
-                    <p class="text-gray-500 text-sm">Pemasukan Bulan Ini</p>
-                    <h3 class="text-2xl font-bold mt-1 text-blue-700">
+                <div class="bg-white rounded-xl shadow p-4 sm:p-5 border-l-4 border-blue-600">
+                    <p class="text-gray-500 text-xs sm:text-sm">Pemasukan Bulan Ini</p>
+                    <h3 class="text-xl sm:text-2xl font-bold mt-1 text-blue-700">
                         Rp {{ number_format($pemasukanBulanIni, 0, ',', '.') }}
                     </h3>
                 </div>
-                <div class="bg-white rounded-2xl shadow p-6 border-l-4 border-red-500">
-                    <p class="text-gray-500 text-sm">Pengeluaran Bulan Ini</p>
-                    <h3 class="text-2xl font-bold mt-1 text-red-600">
+                <div class="bg-white rounded-xl shadow p-4 sm:p-5 border-l-4 border-red-500">
+                    <p class="text-gray-500 text-xs sm:text-sm">Pengeluaran Bulan Ini</p>
+                    <h3 class="text-xl sm:text-2xl font-bold mt-1 text-red-600">
                         Rp {{ number_format($pengeluaranBulanIni, 0, ',', '.') }}
                     </h3>
                 </div>
             </div>
 
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            {{-- Mobile: card view --}}
+            <div class="sm:hidden space-y-3">
+                @forelse ($transaksi as $item)
+                    <div class="bg-white shadow rounded-xl p-4">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <p class="text-xs text-gray-400">{{ $item->tanggal->translatedFormat('d M Y') }}</p>
+                                <p class="font-medium text-gray-800 break-words">{{ $item->kategori->nama_kategori ?? '-' }}</p>
+                            </div>
+                            <span class="shrink-0 px-2 py-1 text-xs rounded-full
+                                {{ $item->jenis === 'pemasukan' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                {{ ucfirst($item->jenis) }}
+                            </span>
+                        </div>
+
+                        <p class="mt-2 font-bold text-base {{ $item->jenis === 'pemasukan' ? 'text-green-700' : 'text-red-600' }}">
+                            {{ $item->jenis === 'pemasukan' ? '+' : '-' }} Rp {{ number_format($item->jumlah, 0, ',', '.') }}
+                        </p>
+
+                        <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                            <a href="{{ route('keuangan.show', $item) }}"
+                               class="flex-1 text-center py-2 rounded-lg bg-blue-50 text-blue-600 text-sm">
+                                <i class="fas fa-eye"></i> Lihat
+                            </a>
+                            <a href="{{ route('keuangan.edit', $item) }}"
+                               class="flex-1 text-center py-2 rounded-lg bg-yellow-50 text-yellow-600 text-sm">
+                                <i class="fas fa-pen"></i> Edit
+                            </a>
+                            <form action="{{ route('keuangan.destroy', $item) }}" method="POST"
+                                  onsubmit="return confirm('Yakin hapus transaksi ini?')" class="flex-1">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="w-full py-2 rounded-lg bg-red-50 text-red-600 text-sm">
+                                    <i class="fas fa-trash"></i> Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center text-gray-400 bg-white rounded-xl shadow py-8">
+                        Belum ada transaksi.
+                    </p>
+                @endforelse
+            </div>
+
+            {{-- Desktop: table view --}}
+            <div class="hidden sm:block bg-white shadow rounded-lg overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
