@@ -847,7 +847,13 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             @forelse ($galeri as $item)
-                <div class="group relative rounded-2xl overflow-hidden shadow bg-white aspect-square">
+                <button type="button"
+                        onclick="bukaModalGaleri(this)"
+                        data-judul="{{ $item->judul }}"
+                        data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}"
+                        data-tipe="{{ $item->tipe }}"
+                        data-file="{{ Storage::url($item->file) }}"
+                        class="group relative rounded-2xl overflow-hidden shadow bg-white aspect-square text-left w-full cursor-pointer">
                     @if ($item->tipe === 'video')
                         <video src="{{ Storage::url($item->file) }}" class="w-full h-full object-cover"></video>
                         <div class="absolute inset-0 flex items-center justify-center bg-black/20">
@@ -864,7 +870,7 @@
                             {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
                         </p>
                     </div>
-                </div>
+                </button>
             @empty
                 <p class="col-span-4 text-center text-gray-400">Belum ada galeri.</p>
             @endforelse
@@ -1099,6 +1105,28 @@
     </div>
 </div>
 
+<!-- ================= MODAL GALERI (LIGHTBOX) ================= -->
+<div id="modal-galeri" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/80" onclick="tutupModalGaleri()"></div>
+
+    <div class="relative max-w-4xl mx-auto mt-10 mb-10 px-4 flex flex-col max-h-[90vh]">
+        <button onclick="tutupModalGaleri()"
+                class="self-end mb-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 hover:bg-white text-gray-700 text-lg shrink-0">
+            &times;
+        </button>
+
+        <div class="bg-black rounded-2xl overflow-hidden flex items-center justify-center">
+            <img id="galeri-img" src="" class="max-h-[70vh] w-auto max-w-full object-contain hidden">
+            <video id="galeri-video" src="" controls class="max-h-[70vh] w-auto max-w-full hidden"></video>
+        </div>
+
+        <div class="bg-white rounded-b-2xl px-5 py-4 -mt-1">
+            <p id="galeri-judul" class="font-bold text-gray-800 text-lg"></p>
+            <p id="galeri-tanggal" class="text-gray-500 text-sm mt-1"></p>
+        </div>
+    </div>
+</div>
+
 <script>
     function pilihWaktuSholat(idHari, index) {
         const idWaktuAktif = idHari + '-waktu-' + index;
@@ -1207,11 +1235,43 @@
         document.body.classList.remove('overflow-hidden');
     }
 
+    function bukaModalGaleri(btn) {
+        const img = document.getElementById('galeri-img');
+        const video = document.getElementById('galeri-video');
+
+        if (btn.dataset.tipe === 'video') {
+            video.src = btn.dataset.file;
+            video.classList.remove('hidden');
+            img.classList.add('hidden');
+            img.src = '';
+        } else {
+            img.src = btn.dataset.file;
+            img.classList.remove('hidden');
+            video.classList.add('hidden');
+            video.pause();
+            video.src = '';
+        }
+
+        document.getElementById('galeri-judul').textContent = btn.dataset.judul;
+        document.getElementById('galeri-tanggal').textContent = btn.dataset.tanggal;
+
+        document.getElementById('modal-galeri').classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function tutupModalGaleri() {
+        const video = document.getElementById('galeri-video');
+        video.pause();
+        document.getElementById('modal-galeri').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             tutupModalKegiatan();
             tutupModalVisiMisi();
             tutupModalPengurus();
+            tutupModalGaleri();
         }
     });
 </script>
