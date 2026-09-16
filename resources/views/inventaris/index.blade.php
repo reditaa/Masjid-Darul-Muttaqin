@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex justify-between items-center gap-3">
+            <h2 class="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
                 Inventaris
             </h2>
             <a href="{{ route('inventaris.create') }}"
-               class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+               class="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap">
                 <i class="fas fa-plus mr-1"></i> Tambah Barang
             </a>
         </div>
@@ -20,7 +20,57 @@
                 </div>
             @endif
 
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            {{-- Mobile: card view --}}
+            <div class="sm:hidden space-y-3">
+                @forelse ($inventaris as $item)
+                    <div class="bg-white shadow rounded-xl p-4">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <p class="text-xs text-gray-400">{{ $item->kode_inventaris }}</p>
+                                <p class="font-medium text-gray-800 break-words">{{ $item->nama_barang }}</p>
+                            </div>
+                            <span class="shrink-0 px-2 py-1 text-xs rounded-full
+                                {{ $item->kondisi === 'baik' ? 'bg-green-100 text-green-800' : ($item->kondisi === 'hilang' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                                {{ ucfirst(str_replace('_', ' ', $item->kondisi)) }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center gap-2 flex-wrap mt-2">
+                            <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+                                {{ ucfirst(str_replace('_', ' ', $item->kategori)) }}
+                            </span>
+                            <span class="text-xs text-gray-500">{{ $item->jumlah }} {{ $item->satuan }}</span>
+                        </div>
+
+                        <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                            <a href="{{ route('inventaris.show', $item) }}"
+                               class="flex-1 text-center py-2 rounded-lg bg-blue-50 text-blue-600 text-sm">
+                                <i class="fas fa-eye"></i> Lihat
+                            </a>
+                            <a href="{{ route('inventaris.edit', $item) }}"
+                               class="flex-1 text-center py-2 rounded-lg bg-yellow-50 text-yellow-600 text-sm">
+                                <i class="fas fa-pen"></i> Edit
+                            </a>
+                            <form action="{{ route('inventaris.destroy', $item) }}" method="POST"
+                                  onsubmit="return confirm('Yakin hapus data ini?')" class="flex-1">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="w-full py-2 rounded-lg bg-red-50 text-red-600 text-sm">
+                                    <i class="fas fa-trash"></i> Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center text-gray-400 bg-white rounded-xl shadow py-8">
+                        Belum ada data inventaris.
+                    </p>
+                @endforelse
+            </div>
+
+            {{-- Desktop: table view --}}
+            <div class="hidden sm:block bg-white shadow rounded-lg overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
