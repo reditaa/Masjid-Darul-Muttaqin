@@ -117,6 +117,143 @@
             color: #1f2937;
             line-height: 1.4;
         }
+
+        /* ===== Bagan Struktur Pengurus ===== */
+        .bagan-pengurus {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 8px;
+        }
+
+        .bagan-trunk {
+            width: 2px;
+            height: 26px;
+            background: #86efac;
+        }
+
+        .bagan-jabatan-label {
+            background: #dcfce7;
+            color: #15803d;
+            font-weight: 700;
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            padding: 6px 18px;
+            border-radius: 9999px;
+            border: 1.5px solid #86efac;
+            white-space: nowrap;
+        }
+
+        .bagan-nodes {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            row-gap: 28px;
+        }
+
+        .bagan-node {
+            position: relative;
+            padding: 20px 14px 0 14px;
+        }
+
+        .bagan-node::before,
+        .bagan-node::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid #86efac;
+            width: 50%;
+            height: 20px;
+        }
+
+        .bagan-node::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid #86efac;
+        }
+
+        .bagan-node:first-child::before {
+            border: 0 none;
+        }
+
+        .bagan-node:last-child::after {
+            border: 0 none;
+        }
+
+        .bagan-node:last-child::before {
+            border-right: 2px solid #86efac;
+            border-radius: 0 8px 0 0;
+        }
+
+        .bagan-node:first-child::after {
+            border-radius: 8px 0 0 0;
+        }
+
+        .bagan-node:only-child {
+            padding-top: 20px;
+        }
+
+        .bagan-node:only-child::before {
+            display: none;
+        }
+
+        .bagan-node:only-child::after {
+            right: auto;
+            left: 50%;
+            width: 0;
+            border-top: none;
+            border-left: 2px solid #86efac;
+            border-radius: 0;
+        }
+
+        .bagan-card {
+            background: #ffffff;
+            border: 1.5px solid #bbf7d0;
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 130px;
+            box-shadow: 0 2px 8px -2px rgba(21, 128, 61, .15);
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+
+        .bagan-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px -4px rgba(21, 128, 61, .25);
+        }
+
+        .bagan-avatar,
+        .bagan-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 9999px;
+        }
+
+        .bagan-avatar {
+            background: #dcfce7;
+            color: #15803d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .bagan-avatar-img {
+            object-fit: cover;
+        }
+
+        .bagan-nama {
+            font-size: .8rem;
+            font-weight: 600;
+            color: #1f2937;
+            text-align: center;
+            line-height: 1.3;
+        }
     </style>
 </head>
 
@@ -919,42 +1056,45 @@
 <div id="modal-pengurus" class="fixed inset-0 z-[100] hidden">
     <div class="absolute inset-0 bg-black/50" onclick="tutupModalPengurus()"></div>
 
-    <div class="relative max-w-2xl mx-auto mt-16 mb-16 bg-white rounded-3xl shadow-2xl max-h-[80vh] flex flex-col">
-        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+    <div class="relative max-w-5xl mx-auto mt-10 mb-10 bg-white rounded-3xl shadow-2xl max-h-[85vh] flex flex-col">
+        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100 shrink-0">
             <div>
                 <h3 class="text-2xl font-bold text-gray-800">Struktur Pengurus DKM</h3>
                 <p class="text-sm text-gray-500 mt-1">Masjid Darul Muttaqin</p>
             </div>
             <button onclick="tutupModalPengurus()"
-                    class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-lg">
+                    class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-lg shrink-0 ml-4">
                 &times;
             </button>
         </div>
 
-        <div class="px-6 py-5 overflow-y-auto space-y-6">
-            @forelse ($strukturPengurus as $namaJabatan => $anggota)
-                <div>
-                    <h4 class="text-green-700 font-bold text-sm uppercase tracking-wide mb-3">
-                        {{ $namaJabatan }}
-                    </h4>
-                    <div class="grid sm:grid-cols-2 gap-3">
+        <div class="px-6 py-8 overflow-auto">
+            <div class="bagan-pengurus min-w-max mx-auto">
+                @forelse ($strukturPengurus as $namaJabatan => $anggota)
+                    @if (!$loop->first)
+                        <div class="bagan-trunk"></div>
+                    @endif
+
+                    <div class="bagan-jabatan-label">{{ $namaJabatan }}</div>
+
+                    <div class="bagan-nodes">
                         @foreach ($anggota as $item)
-                            <div class="flex items-center gap-3 bg-gray-50 rounded-2xl px-4 py-3">
-                                @if ($item->foto)
-                                    <img src="{{ Storage::url($item->foto) }}" class="w-10 h-10 rounded-full object-cover">
-                                @else
-                                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-bold">
-                                        {{ strtoupper(substr($item->nama, 0, 1)) }}
-                                    </div>
-                                @endif
-                                <span class="text-sm font-medium text-gray-800">{{ $item->nama }}</span>
+                            <div class="bagan-node">
+                                <div class="bagan-card">
+                                    @if ($item->foto)
+                                        <img src="{{ Storage::url($item->foto) }}" class="bagan-avatar-img" alt="{{ $item->nama }}">
+                                    @else
+                                        <div class="bagan-avatar">{{ strtoupper(substr($item->nama, 0, 1)) }}</div>
+                                    @endif
+                                    <span class="bagan-nama">{{ $item->nama }}</span>
+                                </div>
                             </div>
                         @endforeach
                     </div>
-                </div>
-            @empty
-                <p class="text-center text-gray-400 py-8">Struktur pengurus belum tersedia.</p>
-            @endforelse
+                @empty
+                    <p class="text-center text-gray-400 py-8">Struktur pengurus belum tersedia.</p>
+                @endforelse
+            </div>
         </div>
     </div>
 </div>
