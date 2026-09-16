@@ -32,6 +32,9 @@ use App\Http\Controllers\ProfilMasjidController;
 Route::get('/', [LandingController::class, 'index'])
     ->name('landing');
 
+Route::get('/jadwal', [LandingController::class, 'jadwal'])
+    ->name('jadwal');
+
     /*
 |--------------------------------------------------------------------------
 | LOGIN VIA SIPINTU (OAuth SSO)

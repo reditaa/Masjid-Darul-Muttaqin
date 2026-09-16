@@ -2,8 +2,8 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="font-bold text-2xl text-gray-800 leading-tight">
-                    🧹 Jadwal Piket Kebersihan
+                <h2 class="font-bold text-2xl text-gray-800 leading-tight flex items-center gap-2">
+                    <i class="fas fa-broom text-orange-500"></i> Jadwal Piket Kebersihan
                 </h2>
                 <p class="text-sm text-gray-500 mt-1">Kelola jadwal petugas piket kebersihan masjid</p>
             </div>
@@ -44,7 +44,7 @@
 
             @if ($jadwal->isEmpty())
                 <div class="bg-white rounded-2xl shadow p-12 text-center">
-                    <div class="text-5xl mb-3">🗓️</div>
+                    <i class="fas fa-calendar-days text-5xl mb-3 text-gray-300"></i>
                     <p class="text-gray-400">Belum ada jadwal piket.</p>
                 </div>
             @else

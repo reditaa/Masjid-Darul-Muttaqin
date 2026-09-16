@@ -96,4 +96,38 @@ class LandingController extends Controller
             'jumlahInventaris'
         ));
     }
+
+    /**
+     * Halaman khusus Jadwal (Imam & Muazin, Jumat, Bilal, Piket Kebersihan)
+     * dengan tab, terpisah dari halaman beranda.
+     */
+    public function jadwal()
+    {
+        $profil = ProfilMasjid::current();
+
+        $jadwalImamMuazin = JadwalImamMuazin::with(['imam', 'muazin'])
+            ->orderByRaw("FIELD(hari, 'senin','selasa','rabu','kamis','jumat','sabtu','minggu')")
+            ->orderByRaw("FIELD(waktu_sholat, 'subuh','dzuhur','ashar','maghrib','isya','jumat')")
+            ->get();
+
+        $jadwalJumat = JadwalJumat::with(['khatib', 'imam', 'bilal'])
+            ->get()
+            ->sortBy(fn ($item) => array_search($item->pasaran, ['legi', 'pahing', 'pon', 'wage', 'kliwon']));
+
+        $jadwalBilal = JadwalBilal::with('anggota')
+            ->get()
+            ->sortBy(fn ($item) => array_search($item->pasaran, ['legi', 'pahing', 'pon', 'wage', 'kliwon']));
+
+        $jadwalPiket = JadwalPiketKebersihan::with('anggota')
+            ->get()
+            ->sortBy(fn ($item) => array_search($item->hari, ['senin','selasa','rabu','kamis','jumat','sabtu','minggu']));
+
+        return view('jadwal', compact(
+            'profil',
+            'jadwalImamMuazin',
+            'jadwalJumat',
+            'jadwalBilal',
+            'jadwalPiket'
+        ));
+    }
 }

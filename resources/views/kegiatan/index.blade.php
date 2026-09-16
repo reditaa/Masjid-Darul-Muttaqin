@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex justify-between items-center gap-3">
+            <h2 class="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
                 Kegiatan
             </h2>
             <a href="{{ route('kegiatan.create') }}"
-               class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+               class="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap">
                 <i class="fas fa-plus mr-1"></i> Tambah Kegiatan
             </a>
         </div>
@@ -22,18 +22,82 @@
 
             <div class="flex gap-2 mb-4">
                 <a href="{{ route('kegiatan.index', ['tab' => 'kalender']) }}"
-                   class="px-4 py-2 rounded-lg text-sm font-medium
+                   class="flex-1 sm:flex-none text-center px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium
                    {{ $tab === 'kalender' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border' }}">
                     <i class="fas fa-calendar-days mr-1"></i> Kalender Kegiatan
                 </a>
                 <a href="{{ route('kegiatan.index', ['tab' => 'riwayat']) }}"
-                   class="px-4 py-2 rounded-lg text-sm font-medium
+                   class="flex-1 sm:flex-none text-center px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium
                    {{ $tab === 'riwayat' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border' }}">
                     <i class="fas fa-clock-rotate-left mr-1"></i> Riwayat Kegiatan
                 </a>
             </div>
 
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            {{-- Mobile: card view --}}
+            <div class="sm:hidden space-y-3">
+                @forelse ($kegiatan as $item)
+                    @php
+                        $tanggalAcuan = $item->tanggal_selesai ?? $item->tanggal_mulai;
+                        $sudahLewat = $tanggalAcuan && $tanggalAcuan->lt(now()->startOfDay());
+                        $sudahSelesai = $item->status === 'selesai' || $sudahLewat;
+
+                        if ($item->status === 'dibatalkan') {
+                            $labelStatus = 'Dibatalkan';
+                            $warnaStatus = 'bg-red-100 text-red-800';
+                        } elseif ($sudahSelesai) {
+                            $labelStatus = 'Selesai';
+                            $warnaStatus = 'bg-green-100 text-green-800';
+                        } else {
+                            $labelStatus = ucfirst(str_replace('_', ' ', $item->status));
+                            $warnaStatus = 'bg-blue-100 text-blue-800';
+                        }
+                    @endphp
+                    <div class="bg-white shadow rounded-xl p-4">
+                        <div class="flex items-start justify-between gap-2">
+                            <p class="font-medium text-gray-800 break-words min-w-0">{{ $item->judul }}</p>
+                            <span class="shrink-0 px-2 py-1 text-xs rounded-full {{ $warnaStatus }}">
+                                {{ $labelStatus }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center gap-2 flex-wrap mt-2">
+                            <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+                                {{ ucfirst(str_replace('_', ' ', $item->kategori)) }}
+                            </span>
+                            <span class="text-xs text-gray-500">
+                                {{ $item->tanggal_mulai->translatedFormat('d M Y') }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                            <a href="{{ route('kegiatan.show', $item) }}"
+                               class="flex-1 text-center py-2 rounded-lg bg-blue-50 text-blue-600 text-sm">
+                                <i class="fas fa-eye"></i> Lihat
+                            </a>
+                            <a href="{{ route('kegiatan.edit', $item) }}"
+                               class="flex-1 text-center py-2 rounded-lg bg-yellow-50 text-yellow-600 text-sm">
+                                <i class="fas fa-pen"></i> Edit
+                            </a>
+                            <form action="{{ route('kegiatan.destroy', $item) }}" method="POST"
+                                  onsubmit="return confirm('Yakin hapus kegiatan ini?')" class="flex-1">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="w-full py-2 rounded-lg bg-red-50 text-red-600 text-sm">
+                                    <i class="fas fa-trash"></i> Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center text-gray-400 bg-white rounded-xl shadow py-8">
+                        Belum ada kegiatan.
+                    </p>
+                @endforelse
+            </div>
+
+            {{-- Desktop: table view --}}
+            <div class="hidden sm:block bg-white shadow rounded-lg overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
