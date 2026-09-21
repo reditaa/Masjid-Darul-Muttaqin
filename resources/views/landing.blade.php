@@ -20,9 +20,31 @@
             scroll-behavior: smooth;
         }
 
+        /* Foto hero ditampilkan utuh lewat <img class="object-contain">,
+           sisi kosong diisi versi blur dari foto yang sama.
+           Warna ini hanya cadangan saat foto belum termuat. */
         .hero {
-            background-size: cover;
-            background-position: center;
+            background-color: #04241a;
+        }
+
+        /* Vignette lembut di tepi kiri & kanan supaya foto menyatu rapi
+           dengan latar hijau di sekelilingnya, bukan terasa "ditempel". */
+        .hero-vignette {
+            background: radial-gradient(120% 90% at 50% 30%, transparent 55%, rgba(4,36,26,.55) 100%);
+        }
+
+        /* Motif lengkung khas arsitektur masjid, ditaruh transparan di
+           tepi bawah hero sebagai aksen dekoratif. */
+        .hero-arch-pattern {
+            background-image: repeating-linear-gradient(
+                90deg,
+                rgba(255,255,255,.10) 0px,
+                rgba(255,255,255,.10) 2px,
+                transparent 2px,
+                transparent 48px
+            );
+            mask-image: radial-gradient(circle at 50% 0%, black 0%, transparent 70%);
+            -webkit-mask-image: radial-gradient(circle at 50% 0%, black 0%, transparent 70%);
         }
 
         section[id] {
@@ -299,49 +321,78 @@
     </div>
 </nav>
 
-<section class="hero relative min-h-[75vh] sm:min-h-[92vh] flex items-center pt-28 pb-24 sm:py-28 overflow-hidden rounded-b-[2.5rem] sm:rounded-b-[4rem]" style="background-image: url('{{ $profil && $profil->foto_hero ? Storage::url($profil->foto_hero) : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000' }}');">
-    <div class="absolute inset-0 backdrop-blur-[1.5px]" style="background: linear-gradient(180deg, rgba(6,54,38,.30) 0%, rgba(5,46,32,.5) 45%, rgba(4,36,26,.82) 100%);"></div>
+@php
+    $fotoHero = $profil && $profil->foto_hero
+        ? Storage::url($profil->foto_hero)
+        : 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2000';
+@endphp
+
+<section class="hero relative min-h-[75vh] sm:min-h-[92vh] flex items-center pt-28 pb-24 sm:py-28 overflow-hidden rounded-b-[2.5rem] sm:rounded-b-[4rem]">
+
+    <!-- Lapisan 1: foto blur untuk mengisi sisi kiri/kanan -->
+    <div class="absolute inset-0 bg-cover bg-center scale-110 blur-2xl"
+         style="background-image: url('{{ $fotoHero }}');"></div>
+
+    <!-- Lapisan 2: foto utuh, tidak ter-crop (di desktop digeser ke kanan) -->
+    <img src="{{ $fotoHero }}" alt="Masjid Darul Muttaqin"
+         class="absolute inset-0 w-full h-full object-contain object-center lg:object-right">
+
+    <!-- Vignette supaya foto menyatu rapi di seluruh lebar layar -->
+    <div class="hero-vignette absolute inset-0 pointer-events-none"></div>
+
+    <!-- Gradasi gelap untuk keterbacaan teks, lebih pekat di kiri & bawah -->
+    <div class="absolute inset-0" style="background: linear-gradient(115deg, rgba(4,36,26,.88) 0%, rgba(5,46,32,.62) 32%, rgba(6,54,38,.22) 58%, rgba(4,36,26,.15) 100%), linear-gradient(180deg, transparent 55%, rgba(4,36,26,.55) 100%);"></div>
+
+    <!-- Motif lengkung dekoratif di tepi bawah -->
+    <div class="hero-arch-pattern absolute inset-x-0 bottom-0 h-40 sm:h-56 pointer-events-none"></div>
 
     <!-- Aksen dekoratif lembut -->
     <div class="absolute -top-20 -left-16 w-72 h-72 sm:w-96 sm:h-96 bg-emerald-400/25 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-28 -right-16 w-72 h-72 sm:w-96 sm:h-96 bg-green-300/20 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 text-white">
-        <span class="hero-fade-in inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 text-green-100 text-xs sm:text-sm font-medium px-4 py-1.5 rounded-full" style="animation-delay: .05s;">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-3.5-2.5-7-5.5-7-10a7 7 0 1 1 14 0c0 4.5-3.5 7.5-7 10Z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 13.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-            </svg>
-            Sistem Informasi Masjid Digital
-        </span>
+    <!-- Bingkai lengkung tipis di tepi hero, aksen khas masjid -->
+    <div class="absolute inset-3 sm:inset-5 border border-white/15 rounded-b-[2rem] sm:rounded-b-[3.5rem] pointer-events-none"></div>
 
-        <h1 class="hero-fade-in text-3xl sm:text-5xl md:text-6xl font-extrabold leading-[1.05] mt-5" style="animation-delay: .15s;">
-            {{ $profil ? Str::words($profil->nama_masjid, 1, '') : 'Masjid' }}<br>
-            <span class="text-green-400">{{ $profil ? trim(Str::after($profil->nama_masjid, ' ')) : 'Darul Muttaqin' }}</span>
-        </h1>
+    <div class="relative w-full px-4 sm:px-6 lg:px-16 text-white">
+        <!-- Kartu kaca (blur) berisi teks hero, ditaruh di sisi kiri -->
+        <div class="max-w-xl backdrop-blur-md bg-white/10 border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/20">
+            <span class="hero-fade-in inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/25 text-green-50 text-xs sm:text-sm font-medium px-4 py-1.5 rounded-full shadow-lg shadow-black/10" style="animation-delay: .05s;">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
+                </span>
+                Sistem Informasi Masjid Digital
+            </span>
 
-        <p class="hero-fade-in mt-4 sm:mt-5 text-sm sm:text-base md:text-lg max-w-2xl text-gray-100" style="animation-delay: .25s;">
-            {{ $profil && $profil->slogan ? $profil->slogan : 'Sistem Informasi Masjid Sekolah untuk memudahkan pengelolaan jadwal imam, jadwal Jumat, pengurus, dan pengumuman kegiatan.' }}
-        </p>
+            <h1 class="hero-fade-in text-3xl sm:text-5xl md:text-5xl font-extrabold leading-[1.05] mt-5 drop-shadow-[0_2px_12px_rgba(0,0,0,.35)]" style="animation-delay: .15s;">
+                {{ $profil ? Str::words($profil->nama_masjid, 1, '') : 'Masjid' }}<br>
+                <span class="bg-gradient-to-r from-green-300 via-emerald-400 to-green-300 bg-clip-text text-transparent">{{ $profil ? trim(Str::after($profil->nama_masjid, ' ')) : 'Darul Muttaqin' }}</span>
+            </h1>
 
-        <div class="hero-fade-in mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4" style="animation-delay: .35s;">
-            <a href="{{ route('jadwal') }}" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 hover:-translate-y-0.5 shadow-lg shadow-green-900/30 px-6 py-3.5 rounded-xl text-base sm:text-lg font-semibold transition">
-                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                </svg>
-                Lihat Jadwal
-            </a>
-            <a href="#pengumuman" class="inline-flex items-center justify-center gap-2 bg-white/95 hover:bg-white text-green-700 hover:-translate-y-0.5 shadow-lg px-6 py-3.5 rounded-xl text-base sm:text-lg font-semibold transition">
-                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
-                </svg>
-                Pengumuman
-            </a>
+            <p class="hero-fade-in mt-4 sm:mt-5 text-sm sm:text-base md:text-lg max-w-2xl text-gray-100" style="animation-delay: .25s;">
+                {{ $profil && $profil->slogan ? $profil->slogan : 'Sistem Informasi Masjid Sekolah untuk memudahkan pengelolaan jadwal imam, jadwal Jumat, pengurus, dan pengumuman kegiatan.' }}
+            </p>
+
+            <div class="hero-fade-in mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4" style="animation-delay: .35s;">
+                <a href="{{ route('jadwal') }}" class="group inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 hover:-translate-y-0.5 shadow-lg shadow-green-900/40 px-6 py-3.5 rounded-xl text-base sm:text-lg font-semibold transition ring-1 ring-white/10">
+                    <svg class="w-5 h-5 shrink-0 group-hover:scale-110 transition" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                    Lihat Jadwal
+                </a>
+                <a href="#pengumuman" class="group inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md hover:bg-white text-white hover:text-green-700 hover:-translate-y-0.5 shadow-lg border border-white/30 px-6 py-3.5 rounded-xl text-base sm:text-lg font-semibold transition">
+                    <svg class="w-5 h-5 shrink-0 group-hover:scale-110 transition" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
+                    </svg>
+                    Pengumuman
+                </a>
+            </div>
         </div>
     </div>
 
-    <a href="#tentang" class="hero-fade-in absolute bottom-10 sm:bottom-8 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition" style="animation-delay: .5s;" aria-label="Scroll ke bawah">
-        <svg class="w-7 h-7 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+    <a href="#tentang" class="hero-fade-in absolute bottom-10 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/70 hover:text-white transition z-10" style="animation-delay: .5s;" aria-label="Scroll ke bawah">
+        <span class="text-[10px] uppercase tracking-widest">Scroll</span>
+        <svg class="w-6 h-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
         </svg>
     </a>
