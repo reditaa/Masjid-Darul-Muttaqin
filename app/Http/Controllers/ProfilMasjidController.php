@@ -27,16 +27,24 @@ class ProfilMasjidController extends Controller
 
         $validated = $request->validate([
             'nama_masjid'     => 'required|string|max:255',
+            'sub_judul'       => 'nullable|string|max:255',
             'slogan'          => 'nullable|string|max:255',
+            'footer_text'     => 'nullable|string',
             'deskripsi'       => 'nullable|string',
             'sejarah'         => 'nullable|string',
             'visi'            => 'nullable|string',
             'misi'            => 'nullable|string',
+            'logo'            => 'nullable|image|max:2048',
             'foto_hero'       => 'nullable|image|max:4096',
             'foto_utama'      => 'nullable|image|max:4096',
             'tahun_berdiri'   => 'nullable|integer|min:1900|max:' . date('Y'),
             'kapasitas_jamaah'=> 'nullable|integer|min:0',
             'alamat'          => 'nullable|string',
+
+            'no_telepon'      => 'nullable|string|max:30',
+            'email'           => 'nullable|email|max:255',
+            'instagram'       => 'nullable|string|max:255',
+            'tiktok'          => 'nullable|string|max:255',
 
             'teks_statistik'          => 'nullable|string|max:255',
             'teks_pengumuman'         => 'nullable|string|max:255',
@@ -58,6 +66,14 @@ class ProfilMasjidController extends Controller
             'judul_galeri'             => 'nullable|string|max:255',
             'judul_inventaris'         => 'nullable|string|max:255',
         ]);
+
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            if ($profil->logo) {
+                Storage::disk('public')->delete($profil->logo);
+            }
+            $validated['logo'] = $request->file('logo')->store('profil', 'public');
+        }
 
         // Handle foto hero upload
         if ($request->hasFile('foto_hero')) {

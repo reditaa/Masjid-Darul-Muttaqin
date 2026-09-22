@@ -301,12 +301,12 @@
         }
 
         .footer-sosmed {
-            width: 3rem;
-            height: 3rem;
+            width: 2.25rem;
+            height: 2.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: .85rem;
+            border-radius: .65rem;
             background: rgba(255, 255, 255, .08);
             border: 1px solid rgba(255, 255, 255, .12);
             color: #dcfce7;
@@ -329,11 +329,13 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center py-3 px-4 sm:px-6">
         <div class="flex items-center gap-2 sm:gap-3 min-w-0">
             <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-700 flex items-center justify-center overflow-hidden shrink-0">
-                <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS Darul Muttaqin" class="w-full h-full object-cover">
+                <img src="{{ $profil && $profil->logo ? Storage::url($profil->logo) : asset('images/logo-irmas.jpeg') }}"
+                     alt="Logo {{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}"
+                     class="w-full h-full object-cover">
             </div>
             <div class="min-w-0">
-                <h1 class="font-bold text-sm sm:text-xl text-green-700 leading-tight truncate">Masjid Darul Muttaqin</h1>
-                <p class="text-xs sm:text-sm text-black truncate">SMK Negeri 1 Bangsri</p>
+                <h1 class="font-bold text-sm sm:text-xl text-green-700 leading-tight truncate">{{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}</h1>
+                <p class="text-xs sm:text-sm text-black truncate">{{ $profil->sub_judul ?? 'SMK Negeri 1 Bangsri' }}</p>
             </div>
         </div>
 
@@ -857,31 +859,42 @@
             <div class="lg:col-span-4">
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-full bg-white/10 overflow-hidden shrink-0 ring-2 ring-white/20">
-                        <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS Darul Muttaqin" class="w-full h-full object-cover">
+                        <img src="{{ $profil && $profil->logo ? Storage::url($profil->logo) : asset('images/logo-irmas.jpeg') }}"
+                             alt="Logo {{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}"
+                             class="w-full h-full object-cover">
                     </div>
                     <div class="min-w-0">
-                        <h3 class="text-xl sm:text-2xl font-bold text-white leading-tight">Masjid Darul Muttaqin</h3>
-                        <p class="text-base text-green-300">SMK N 1 Bangsri</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white leading-tight">{{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}</h3>
+                        <p class="text-base text-green-300">{{ $profil->sub_judul ?? 'SMK N 1 Bangsri' }}</p>
                     </div>
                 </div>
 
                 <p class="mt-5 text-base leading-relaxed text-green-200/90 max-w-md">
-                    {{ $profil && $profil->slogan ? $profil->slogan : 'Masjid Darul Muttaqin berkomitmen menjadi pusat kegiatan ibadah dan pembinaan karakter warga SMK Negeri 1 Bangsri.' }}
+                    {{ $profil && $profil->footer_text
+                        ? $profil->footer_text
+                        : ($profil && $profil->slogan
+                            ? $profil->slogan
+                            : 'Masjid Darul Muttaqin berkomitmen menjadi pusat kegiatan ibadah dan pembinaan karakter warga SMK Negeri 1 Bangsri.') }}
                 </p>
 
-                <div class="flex items-center gap-3 mt-6">
-                    <a href="https://www.instagram.com/irmaseskasaba" target="_blank" rel="noopener noreferrer" class="footer-sosmed" aria-label="Instagram IRMAS Darul Muttaqin" title="@irmaseskasaba di Instagram">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <rect x="3" y="3" width="18" height="18" rx="5" />
-                            <circle cx="12" cy="12" r="4" />
-                            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-                        </svg>
-                    </a>
-                    <a href="https://www.tiktok.com/@irmaseskasaba" target="_blank" rel="noopener noreferrer" class="footer-sosmed" aria-label="TikTok IRMAS Darul Muttaqin" title="@irmaseskasaba di TikTok">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-                        </svg>
-                    </a>
+                <div class="flex items-center gap-2.5 mt-6">
+                    @if (!empty($profil->instagram))
+                        <a href="{{ $profil->instagram }}" target="_blank" rel="noopener noreferrer" class="footer-sosmed" aria-label="Instagram {{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}" title="Instagram">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <rect x="3" y="3" width="18" height="18" rx="5" />
+                                <circle cx="12" cy="12" r="4" />
+                                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                            </svg>
+                        </a>
+                    @endif
+
+                    @if (!empty($profil->tiktok))
+                        <a href="{{ $profil->tiktok }}" target="_blank" rel="noopener noreferrer" class="footer-sosmed" aria-label="TikTok {{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}" title="TikTok">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                            </svg>
+                        </a>
+                    @endif
                 </div>
             </div>
 
@@ -923,12 +936,12 @@
                         </span>
                     </li>
 
-                    @if (!empty($profil->telepon))
+                    @if (!empty($profil->no_telepon))
                         <li class="flex items-center gap-4">
                             <svg class="w-6 h-6 shrink-0 text-green-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                             </svg>
-                            <span class="text-base">{{ $profil->telepon }}</span>
+                            <span class="text-base">{{ $profil->no_telepon }}</span>
                         </li>
                     @endif
 
@@ -945,7 +958,7 @@
         {{-- Garis + copyright --}}
         <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-green-300/80 text-center sm:text-left">
             <p>&copy; {{ date('Y') }} SIMMADI — Sistem Manajemen Masjid Digital</p>
-            <p>Masjid Darul Muttaqin &middot; SMK Negeri 1 Bangsri</p>
+            <p>{{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }} &middot; {{ $profil->sub_judul ?? 'SMK Negeri 1 Bangsri' }}</p>
         </div>
     </div>
 </footer>
@@ -958,7 +971,7 @@
         <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
             <div>
                 <h3 class="text-2xl font-bold text-gray-800">Visi & Misi</h3>
-                <p class="text-sm text-gray-500 mt-1">Masjid Darul Muttaqin</p>
+                <p class="text-sm text-gray-500 mt-1">{{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}</p>
             </div>
             <button onclick="tutupModalVisiMisi()"
                     class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-lg">
@@ -1053,7 +1066,7 @@
         <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100 shrink-0">
             <div>
                 <h3 class="text-2xl font-bold text-gray-800">Struktur Pengurus DKM</h3>
-                <p class="text-sm text-gray-500 mt-1">Masjid Darul Muttaqin</p>
+                <p class="text-sm text-gray-500 mt-1">{{ $profil->nama_masjid ?? 'Masjid Darul Muttaqin' }}</p>
             </div>
             <button onclick="tutupModalPengurus()"
                     class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-lg shrink-0 ml-4">

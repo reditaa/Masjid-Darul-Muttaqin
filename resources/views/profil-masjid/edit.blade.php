@@ -5,11 +5,6 @@
                 <h2 class="text-xl font-bold text-gray-800">⚙️ Profil Masjid</h2>
                 <p class="text-sm text-gray-500 mt-1">Kelola tampilan halaman utama website masjid</p>
             </div>
-            <a href="/" target="_blank"
-               class="flex items-center gap-2 text-sm bg-green-50 text-green-700 border border-green-200 px-4 py-2 rounded-xl hover:bg-green-100 transition">
-                <i class="fas fa-external-link-alt text-xs"></i> Lihat Halaman
-            </a>
-        </div>
     </x-slot>
 
     <div class="max-w-5xl mx-auto space-y-6">
@@ -129,7 +124,7 @@
                         @error('logo')
                             <p class="text-red-500 text-xs mt-2 text-center">{{ $message }}</p>
                         @enderror
-                        <p class="text-gray-400 text-xs mt-2 text-center">Rekomendasi: gambar persegi (misal 256×256px), maks 2MB.</p>
+                        <p class="text-gray-400 text-xs mt-2 text-center">Rekomendasi: gambar persegi (misal 256×256px), maks 2MB. Dipakai di navbar & footer.</p>
                     </div>
                 </div>
             </div>
@@ -408,13 +403,13 @@
                     <h3 class="text-white font-semibold text-base flex items-center gap-2">
                         <i class="fas fa-share-alt"></i> Kontak & Media Sosial
                     </h3>
-                    <p class="text-green-100 text-xs mt-0.5">Ditampilkan di footer website</p>
+                    <p class="text-green-100 text-xs mt-0.5">Ditampilkan di bagian footer website. Kosongkan kolom yang tidak dipakai — ikonnya otomatis tidak akan tampil.</p>
                 </div>
 
                 <div class="p-6 space-y-5">
                     <div class="grid md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">No. Telepon / WA</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">No. Telepon</label>
                             <input type="text" name="no_telepon" value="{{ old('no_telepon', $profil->no_telepon) }}"
                                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
                                    placeholder="08xxxxxxxxxx">
@@ -427,37 +422,28 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Website</label>
-                        <input type="text" name="website" value="{{ old('website', $profil->website) }}"
-                               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-                               placeholder="https://...">
-                    </div>
-
-                    <div class="grid md:grid-cols-3 gap-5">
+                    <div class="grid md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Instagram</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                <i class="fab fa-instagram text-pink-500 mr-1"></i> Instagram
+                            </label>
                             <input type="text" name="instagram" value="{{ old('instagram', $profil->instagram) }}"
                                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
                                    placeholder="https://instagram.com/...">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Facebook</label>
-                            <input type="text" name="facebook" value="{{ old('facebook', $profil->facebook) }}"
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                <i class="fab fa-tiktok text-gray-800 mr-1"></i> TikTok
+                            </label>
+                            <input type="text" name="tiktok" value="{{ old('tiktok', $profil->tiktok) }}"
                                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-                                   placeholder="https://facebook.com/...">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp</label>
-                            <input type="text" name="whatsapp" value="{{ old('whatsapp', $profil->whatsapp) }}"
-                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-                                   placeholder="628xxxxxxxxxx (untuk link wa.me)">
+                                   placeholder="https://tiktok.com/@...">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1.5">
-                            Teks Footer <span class="font-normal text-gray-400 text-xs ml-1">(kosongkan untuk pakai default)</span>
+                            Teks Footer <span class="font-normal text-gray-400 text-xs ml-1">(kalimat singkat di bawah nama masjid pada footer; kosongkan untuk pakai Slogan)</span>
                         </label>
                         <textarea name="footer_text" rows="2"
                                   class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
