@@ -20,8 +20,9 @@
             scroll-behavior: smooth;
         }
 
-        /* Foto hero ditampilkan utuh lewat <img class="object-contain">,
-           sisi kosong diisi versi blur dari foto yang sama.
+        /* Foto hero: mobile = object-cover penuh (tanpa blur),
+           desktop = object-contain digeser kanan dengan sisi kiri
+           diisi versi blur dari foto yang sama.
            Warna ini hanya cadangan saat foto belum termuat. */
         .hero {
             background-color: #04241a;
@@ -276,6 +277,48 @@
             text-align: center;
             line-height: 1.3;
         }
+
+        /* ===== Footer (gaya SIJAKA: gelap, kolom menu, kontak) ===== */
+        .footer-judul {
+            font-size: .95rem;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .footer-link {
+            display: inline-block;
+            color: #bbf7d0;
+            font-size: 1rem;
+            transition: color .15s ease, transform .15s ease;
+            text-align: left;
+        }
+
+        .footer-link:hover {
+            color: #ffffff;
+            transform: translateX(3px);
+        }
+
+        .footer-sosmed {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: .85rem;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .12);
+            color: #dcfce7;
+            transition: background .15s ease, color .15s ease, transform .15s ease;
+        }
+
+        .footer-sosmed:hover {
+            background: #16a34a;
+            border-color: #16a34a;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
@@ -329,16 +372,17 @@
 
 <section class="hero relative min-h-[75vh] sm:min-h-[92vh] flex items-center pt-28 pb-24 sm:py-28 overflow-hidden rounded-b-[2.5rem] sm:rounded-b-[4rem]">
 
-    <!-- Lapisan 1: foto blur untuk mengisi sisi kiri/kanan -->
-    <div class="absolute inset-0 bg-cover bg-center scale-110 blur-2xl"
+    <!-- Lapisan 1: foto blur, hanya untuk desktop (mengisi sisi kiri saat foto di-contain & digeser kanan) -->
+    <div class="absolute inset-0 bg-cover bg-center scale-110 blur-2xl hidden lg:block"
          style="background-image: url('{{ $fotoHero }}');"></div>
 
-    <!-- Lapisan 2: foto utuh, tidak ter-crop (di desktop digeser ke kanan) -->
+    <!-- Lapisan 2: foto -->
+    <!-- Mobile: object-cover (penuh 1 layar, tidak blur). Desktop: object-contain digeser ke kanan -->
     <img src="{{ $fotoHero }}" alt="Masjid Darul Muttaqin"
-         class="absolute inset-0 w-full h-full object-contain object-center lg:object-right">
+         class="absolute inset-0 w-full h-full object-cover object-center lg:object-contain lg:object-right">
 
-    <!-- Vignette supaya foto menyatu rapi di seluruh lebar layar -->
-    <div class="hero-vignette absolute inset-0 pointer-events-none"></div>
+    <!-- Vignette supaya foto menyatu rapi di seluruh lebar layar (khusus desktop) -->
+    <div class="hero-vignette absolute inset-0 pointer-events-none hidden lg:block"></div>
 
     <!-- Gradasi gelap untuk keterbacaan teks, lebih pekat di kiri & bawah -->
     <div class="absolute inset-0" style="background: linear-gradient(115deg, rgba(4,36,26,.88) 0%, rgba(5,46,32,.62) 32%, rgba(6,54,38,.22) 58%, rgba(4,36,26,.15) 100%), linear-gradient(180deg, transparent 55%, rgba(4,36,26,.55) 100%);"></div>
@@ -390,12 +434,14 @@
         </div>
     </div>
 
-    <a href="#tentang" class="hero-fade-in absolute bottom-10 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/70 hover:text-white transition z-10" style="animation-delay: .5s;" aria-label="Scroll ke bawah">
-        <span class="text-[10px] uppercase tracking-widest">Scroll</span>
-        <svg class="w-6 h-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-        </svg>
-    </a>
+    <div class="hero-fade-in absolute bottom-10 sm:bottom-8 inset-x-0 flex justify-center z-10" style="animation-delay: .5s;">
+        <a href="#tentang" class="flex flex-col items-center gap-1 text-white/70 hover:text-white transition" aria-label="Scroll ke bawah">
+            <span class="text-[10px] uppercase tracking-widest">Scroll</span>
+            <svg class="w-6 h-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+        </a>
+    </div>
 </section>
 
 <!-- ================= TENTANG ================= -->
@@ -801,14 +847,106 @@
     </div>
 </section>
 
-<!-- ================= FOOTER ================= -->
-<footer class="bg-green-900 text-green-100 py-6">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-        <p class="font-bold text-white text-base">Masjid Darul Muttaqin</p>
-        <p class="text-xs mt-1">SMK Negeri 1 Bangsri</p>
-        <p class="text-xs mt-3 text-green-300">
-            &copy; {{ date('Y') }} SIMMADI — Sistem Manajemen Masjid Digital
-        </p>
+<!-- ================= FOOTER (gaya SIJAKA) ================= -->
+<footer class="bg-green-900 text-green-100">
+    <div class="max-w-7xl mx-auto px-6 pt-10 pb-8 lg:pt-14">
+
+        <div class="grid gap-10 lg:grid-cols-12 lg:gap-8">
+
+            {{-- Brand + deskripsi + sosial media --}}
+            <div class="lg:col-span-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-full bg-white/10 overflow-hidden shrink-0 ring-2 ring-white/20">
+                        <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo IRMAS Darul Muttaqin" class="w-full h-full object-cover">
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-xl sm:text-2xl font-bold text-white leading-tight">Masjid Darul Muttaqin</h3>
+                        <p class="text-base text-green-300">SMK N 1 Bangsri</p>
+                    </div>
+                </div>
+
+                <p class="mt-5 text-base leading-relaxed text-green-200/90 max-w-md">
+                    {{ $profil && $profil->slogan ? $profil->slogan : 'Masjid Darul Muttaqin berkomitmen menjadi pusat kegiatan ibadah dan pembinaan karakter warga SMK Negeri 1 Bangsri.' }}
+                </p>
+
+                <div class="flex items-center gap-3 mt-6">
+                    <a href="https://www.instagram.com/irmaseskasaba" target="_blank" rel="noopener noreferrer" class="footer-sosmed" aria-label="Instagram IRMAS Darul Muttaqin" title="@irmaseskasaba di Instagram">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <rect x="3" y="3" width="18" height="18" rx="5" />
+                            <circle cx="12" cy="12" r="4" />
+                            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                        </svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@irmaseskasaba" target="_blank" rel="noopener noreferrer" class="footer-sosmed" aria-label="TikTok IRMAS Darul Muttaqin" title="@irmaseskasaba di TikTok">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            {{-- Menu Utama --}}
+            <div class="lg:col-span-2 lg:col-start-6">
+                <h4 class="footer-judul">Menu Utama</h4>
+                <ul class="mt-5 space-y-3.5">
+                    <li><a href="#" class="footer-link">Beranda</a></li>
+                    <li><a href="#tentang" class="footer-link">Tentang</a></li>
+                    <li><a href="#statistik" class="footer-link">Statistik</a></li>
+                    <li><a href="#pengumuman" class="footer-link">Pengumuman</a></li>
+                    <li><a href="{{ route('jadwal') }}" class="footer-link">Jadwal</a></li>
+                </ul>
+            </div>
+
+            {{-- Informasi --}}
+            <div class="lg:col-span-2">
+                <h4 class="footer-judul">Informasi</h4>
+                <ul class="mt-5 space-y-3.5">
+                    <li><a href="#kegiatan" class="footer-link">Kegiatan</a></li>
+                    <li><a href="#galeri" class="footer-link">Galeri</a></li>
+                    <li><a href="#inventaris" class="footer-link">Inventaris</a></li>
+                    <li><button type="button" onclick="bukaModalPengurus()" class="footer-link">Struktur Pengurus</button></li>
+                    <li><button type="button" onclick="bukaModalVisiMisi()" class="footer-link">Visi &amp; Misi</button></li>
+                </ul>
+            </div>
+
+            {{-- Kontak Kami --}}
+            <div class="lg:col-span-3">
+                <h4 class="footer-judul">Kontak Kami</h4>
+                <ul class="mt-5 space-y-4">
+                    <li class="flex items-start gap-4">
+                        <svg class="w-6 h-6 shrink-0 text-green-300 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                        <span class="text-base leading-relaxed">
+                            {{ $profil->alamat ?? 'Jl. KH Achmad Fauzan No.17, Krasak, Bangsri, Jepara, Jawa Tengah' }}
+                        </span>
+                    </li>
+
+                    @if (!empty($profil->telepon))
+                        <li class="flex items-center gap-4">
+                            <svg class="w-6 h-6 shrink-0 text-green-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                            </svg>
+                            <span class="text-base">{{ $profil->telepon }}</span>
+                        </li>
+                    @endif
+
+                    <li class="flex items-center gap-4">
+                        <svg class="w-6 h-6 shrink-0 text-green-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                        </svg>
+                        <span class="text-base break-all">{{ $profil->email ?? 'info@smkn1bangsri.sch.id' }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {{-- Garis + copyright --}}
+        <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-green-300/80 text-center sm:text-left">
+            <p>&copy; {{ date('Y') }} SIMMADI — Sistem Manajemen Masjid Digital</p>
+            <p>Masjid Darul Muttaqin &middot; SMK Negeri 1 Bangsri</p>
+        </div>
     </div>
 </footer>
 
