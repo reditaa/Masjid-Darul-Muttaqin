@@ -129,12 +129,15 @@
             <span>Keuangan</span>
         </a>
 
+        {{-- Menu Presensi dinonaktifkan sementara --}}
+        {{--
         <a href="{{ route('presensi.index') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
             {{ request()->routeIs('presensi.*') ? 'bg-white text-green-800 shadow-lg' : 'hover:bg-white/10' }}">
             <i class="fas fa-clipboard-check w-6 text-center"></i>
             <span>Presensi</span>
         </a>
+        --}}
     </div>
 
     {{-- User --}}

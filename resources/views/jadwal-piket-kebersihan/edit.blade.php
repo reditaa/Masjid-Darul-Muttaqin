@@ -71,7 +71,7 @@
                                 </label>
                             @endforeach
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">Pilih satu atau lebih petugas.</p>
+                        <p class="text-xs text-gray-500 mt-1">Pilih 3 sampai 6 anak untuk jadwal ini.</p>
                     </div>
 
                     <div class="flex justify-end gap-2 pt-4">
@@ -87,6 +87,15 @@
     </div>
 
     <script>
+        const formPiket = document.querySelector('form');
+        formPiket.addEventListener('submit', function (event) {
+            const jumlahDipilih = document.querySelectorAll('input[name="anggota_ids[]"]:checked').length;
+            if (jumlahDipilih < 3 || jumlahDipilih > 6) {
+                event.preventDefault();
+                alert('Pilih 3 sampai 6 anak terlebih dahulu.');
+            }
+        });
+
         document.getElementById('search-piket').addEventListener('input', function () {
             const keyword = this.value.toLowerCase().trim();
             const items = document.querySelectorAll('.item-piket');

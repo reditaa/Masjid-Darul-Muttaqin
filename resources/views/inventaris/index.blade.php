@@ -24,22 +24,35 @@
             <div class="sm:hidden space-y-3">
                 @forelse ($inventaris as $item)
                     <div class="bg-white shadow rounded-xl p-4">
-                        <div class="flex items-start justify-between gap-2">
-                            <div class="min-w-0">
-                                <p class="text-xs text-gray-400">{{ $item->kode_inventaris }}</p>
-                                <p class="font-medium text-gray-800 break-words">{{ $item->nama_barang }}</p>
-                            </div>
-                            <span class="shrink-0 px-2 py-1 text-xs rounded-full
-                                {{ $item->kondisi === 'baik' ? 'bg-green-100 text-green-800' : ($item->kondisi === 'hilang' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
-                                {{ ucfirst(str_replace('_', ' ', $item->kondisi)) }}
-                            </span>
-                        </div>
+                        <div class="flex items-start gap-3">
+                            @if ($item->foto)
+                                <img src="{{ Storage::url($item->foto) }}"
+                                     class="w-16 h-16 object-cover rounded-lg border flex-shrink-0">
+                            @else
+                                <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-box text-gray-300 text-xl"></i>
+                                </div>
+                            @endif
 
-                        <div class="flex items-center gap-2 flex-wrap mt-2">
-                            <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
-                                {{ ucfirst(str_replace('_', ' ', $item->kategori)) }}
-                            </span>
-                            <span class="text-xs text-gray-500">{{ $item->jumlah }} {{ $item->satuan }}</span>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div class="min-w-0">
+                                        <p class="text-xs text-gray-400">{{ $item->kode_inventaris }}</p>
+                                        <p class="font-medium text-gray-800 break-words">{{ $item->nama_barang }}</p>
+                                    </div>
+                                    <span class="shrink-0 px-2 py-1 text-xs rounded-full
+                                        {{ $item->kondisi === 'baik' ? 'bg-green-100 text-green-800' : ($item->kondisi === 'hilang' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                                        {{ ucfirst(str_replace('_', ' ', $item->kondisi)) }}
+                                    </span>
+                                </div>
+
+                                <div class="flex items-center gap-2 flex-wrap mt-2">
+                                    <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+                                        {{ ucfirst(str_replace('_', ' ', $item->kategori)) }}
+                                    </span>
+                                    <span class="text-xs text-gray-500">{{ $item->jumlah }} {{ $item->satuan }}</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
@@ -74,6 +87,7 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Foto</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Barang</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategori</th>
@@ -85,6 +99,16 @@
                     <tbody class="divide-y divide-gray-200">
                         @forelse ($inventaris as $item)
                             <tr>
+                                <td class="px-6 py-4">
+                                    @if ($item->foto)
+                                        <img src="{{ Storage::url($item->foto) }}"
+                                             class="w-12 h-12 object-cover rounded-lg border">
+                                    @else
+                                        <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center">
+                                            <i class="fas fa-box text-gray-300"></i>
+                                        </div>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 text-xs text-gray-500">{{ $item->kode_inventaris }}</td>
                                 <td class="px-6 py-4 font-medium">{{ $item->nama_barang }}</td>
                                 <td class="px-6 py-4">
@@ -125,7 +149,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-8 text-center text-gray-400">
+                                <td colspan="7" class="px-6 py-8 text-center text-gray-400">
                                     Belum ada data inventaris.
                                 </td>
                             </tr>

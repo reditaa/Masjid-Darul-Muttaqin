@@ -37,23 +37,38 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">🔍 Cari Nama Petugas (Anggota DKM & SiPintu)</label>
-                        <div class="relative">
-                            <input type="text" id="cari-sipintu" placeholder="Ketik nama petugas untuk mencari..."
-                                   class="mt-1 block w-full border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <div id="hasil-sipintu" class="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1 hidden max-h-48 overflow-y-auto"></div>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">Cari nama petugas, klik opsi yang muncul untuk menambahkan ke daftar.</p>
-                    </div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Petugas Piket Kebersihan</label>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Petugas Piket Terpilih</label>
-                        <div id="daftar-petugas" class="space-y-2 border rounded-md p-3 min-h-[60px]">
-                            <p class="text-sm text-gray-400" id="petugas-kosong">Belum ada petugas dipilih.</p>
+                        <div class="relative mb-2">
+                            <input type="text" id="search-piket" name="search-piket-noautofill" autocomplete="off"
+                                   placeholder="🔍 Ketik nama untuk mencari petugas piket..."
+                                   class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
                         </div>
-                    </div>
 
-                    <div id="hidden-inputs"></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 border rounded-md p-3 max-h-64 overflow-y-auto bg-white" id="container-piket">
+                            @foreach ($pengurus as $p)
+                                <label class="item-piket flex items-center justify-between p-2 rounded hover:bg-emerald-50 cursor-pointer text-sm border border-gray-100 transition"
+                                       data-nama="{{ strtolower($p->nama) }}">
+                                    <div class="flex items-center gap-2 min-w-0">
+                                        <input type="checkbox" name="anggota_ids[]" value="{{ $p->id }}"
+                                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                               {{ collect(old('anggota_ids'))->contains($p->id) ? 'checked' : '' }}>
+                                        <span class="truncate">{{ $p->nama }}</span>
+                                    </div>
+                                    @if ($p->asal === 'guru')
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold flex-shrink-0">Guru</span>
+                                    @elseif ($p->asal === 'siswa')
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-semibold flex-shrink-0">Siswa</span>
+                                    @elseif ($p->jabatan)
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 font-semibold flex-shrink-0 truncate max-w-[100px]">{{ $p->jabatan->nama_jabatan }}</span>
+                                    @else
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-semibold flex-shrink-0">Anggota</span>
+                                    @endif
+                                </label>
+                            @endforeach
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Pilih 3 sampai 6 anak yang berbeda.</p>
+                    </div>
 
                     <div class="flex justify-end gap-2 pt-4">
                         <a href="{{ route('jadwal-piket-kebersihan.index') }}"
@@ -68,146 +83,20 @@
     </div>
 
     <script>
-        const inputCari = document.getElementById('cari-sipintu');
-        const hasilBox = document.getElementById('hasil-sipintu');
-        const daftarPetugas = document.getElementById('daftar-petugas');
-        const petugasKosong = document.getElementById('petugas-kosong');
-        const hiddenInputs = document.getElementById('hidden-inputs');
-        const petugasTerpilih = [];
-        let timer = null;
-
-        inputCari.addEventListener('input', function () {
-            clearTimeout(timer);
-            const keyword = this.value.trim();
-
-            if (keyword.length < 1) {
-                hasilBox.classList.add('hidden');
-                return;
-            }
-
-            timer = setTimeout(async () => {
-                const res = await fetch(`{{ route('sipintu.cari') }}?q=${encodeURIComponent(keyword)}`);
-                const json = await res.json();
-
-                hasilBox.innerHTML = '';
-
-                const hasGuru = json.grouped?.guru?.length > 0;
-                const hasSiswa = json.grouped?.siswa?.length > 0;
-
-                if (!hasGuru && !hasSiswa) {
-                    hasilBox.innerHTML = '<div class="p-3 text-sm text-gray-400">Tidak ditemukan.</div>';
-                } else {
-                    if (hasGuru) {
-                        const headerGuru = document.createElement('div');
-                        headerGuru.className = 'px-3 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 border-b flex items-center gap-1.5 sticky top-0';
-                        headerGuru.innerHTML = '<span>👨‍🏫</span> <span>DATA GURU (NIP)</span>';
-                        hasilBox.appendChild(headerGuru);
-
-                        json.grouped.guru.forEach(item => {
-                            const div = document.createElement('div');
-                            div.className = 'p-3 text-sm hover:bg-blue-50 cursor-pointer border-b flex justify-between items-center';
-                            div.innerHTML = `
-                                <div>
-                                    <span class="font-medium text-gray-800">${item.nama}</span>
-                                    <span class="text-xs text-gray-500 block">NIP: ${item.nik}</span>
-                                </div>
-                                <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 font-semibold">Guru</span>
-                            `;
-                            div.addEventListener('click', () => tambahPetugas(item));
-                            hasilBox.appendChild(div);
-                        });
-                    }
-
-                    if (hasSiswa) {
-                        const headerSiswa = document.createElement('div');
-                        headerSiswa.className = 'px-3 py-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border-b flex items-center gap-1.5 sticky top-0';
-                        headerSiswa.innerHTML = '<span>🎓</span> <span>DATA SISWA (NIS)</span>';
-                        hasilBox.appendChild(headerSiswa);
-
-                        json.grouped.siswa.forEach(item => {
-                            const div = document.createElement('div');
-                            div.className = 'p-3 text-sm hover:bg-emerald-50 cursor-pointer border-b last:border-0 flex justify-between items-center';
-                            div.innerHTML = `
-                                <div>
-                                    <span class="font-medium text-gray-800">${item.nama}</span>
-                                    <span class="text-xs text-gray-500 block">NIS: ${item.nik}</span>
-                                </div>
-                                <span class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-semibold">Siswa</span>
-                            `;
-                            div.addEventListener('click', () => tambahPetugas(item));
-                            hasilBox.appendChild(div);
-                        });
-                    }
-                }
-
-                hasilBox.classList.remove('hidden');
-            }, 400);
+        document.getElementById('search-piket').addEventListener('input', function () {
+            const keyword = this.value.toLowerCase().trim();
+            const items = document.querySelectorAll('.item-piket');
+            items.forEach(item => {
+                const name = item.getAttribute('data-nama') || '';
+                item.style.display = name.includes(keyword) ? 'flex' : 'none';
+            });
         });
 
-        async function tambahPetugas(item) {
-            if (petugasTerpilih.some(p => p.nama === item.nama && p.nik === item.nik)) {
-                hasilBox.classList.add('hidden');
-                inputCari.value = '';
-                return;
-            }
-
-            const res = await fetch(`{{ route('sipintu.simpanAtauAmbil') }}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                },
-                body: JSON.stringify({ nama: item.nama, nik: item.nik, asal: item.asal }),
-            });
-            const data = await res.json();
-
-            petugasTerpilih.push({ nama: item.nama, nik: item.nik, pengurus_id: data.pengurus_id });
-            renderPetugas();
-
-            hasilBox.classList.add('hidden');
-            inputCari.value = '';
-        }
-
-        function hapusPetugas(index) {
-            petugasTerpilih.splice(index, 1);
-            renderPetugas();
-        }
-
-        function renderPetugas() {
-            daftarPetugas.innerHTML = '';
-            hiddenInputs.innerHTML = '';
-
-            if (petugasTerpilih.length === 0) {
-                daftarPetugas.appendChild(petugasKosong);
-                return;
-            }
-
-            petugasTerpilih.forEach((p, index) => {
-                const div = document.createElement('div');
-                div.className = 'flex items-center justify-between bg-gray-50 px-3 py-2 rounded';
-                div.innerHTML = `<span class="text-sm">${p.nama}</span>`;
-
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'text-red-500 hover:text-red-700 text-xs';
-                btn.textContent = 'Hapus';
-                btn.addEventListener('click', () => hapusPetugas(index));
-                div.appendChild(btn);
-
-                daftarPetugas.appendChild(div);
-
-                const hidden = document.createElement('input');
-                hidden.type = 'hidden';
-                hidden.name = 'anggota_ids[]';
-                hidden.value = p.pengurus_id;
-                hiddenInputs.appendChild(hidden);
-            });
-        }
-
-        document.addEventListener('click', function (e) {
-            if (!hasilBox.contains(e.target) && e.target !== inputCari) {
-                hasilBox.classList.add('hidden');
+        document.getElementById('form-piket').addEventListener('submit', function (e) {
+            const jumlahDipilih = document.querySelectorAll('input[name="anggota_ids[]"]:checked').length;
+            if (jumlahDipilih < 3 || jumlahDipilih > 6) {
+                e.preventDefault();
+                alert('Pilih 3 sampai 6 anak terlebih dahulu.');
             }
         });
     </script>

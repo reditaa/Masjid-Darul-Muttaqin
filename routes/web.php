@@ -127,9 +127,9 @@ Route::middleware(['auth:web', 'role:admin'])->group(function () {
         // Keuangan
     Route::resource('keuangan', KeuanganController::class);
 
-    // Presensi
-    Route::resource('presensi', PresensiController::class)
-        ->except(['show', 'edit', 'update']);
+    // Presensi (menu admin dinonaktifkan sementara)
+    // Route::resource('presensi', PresensiController::class)
+    //     ->except(['show', 'edit', 'update']);
 
     // Data SiPintu (Bukan Anggota)
     Route::get('/sipintu-data', [SipintuController::class, 'dataIndex'])

@@ -82,8 +82,8 @@ class JadwalPiketKebersihanController extends Controller
 
         return $request->validate([
             'hari'           => $rule,
-            'anggota_ids'    => 'required|array|min:1',
-            'anggota_ids.*'  => 'exists:pengurus,id',
+            'anggota_ids'    => 'required|array|min:3|max:6',
+            'anggota_ids.*'  => 'distinct|exists:pengurus,id',
         ]);
     }
 }
