@@ -35,6 +35,9 @@ Route::get('/', [LandingController::class, 'index'])
 Route::get('/jadwal', [LandingController::class, 'jadwal'])
     ->name('jadwal');
 
+Route::get('/data-inventaris', [LandingController::class, 'inventarisPage'])
+    ->name('inventaris.publik');
+
     /*
 |--------------------------------------------------------------------------
 | LOGIN VIA SIPINTU (OAuth SSO)

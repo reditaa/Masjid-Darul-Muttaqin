@@ -775,106 +775,53 @@
     </div>
 </section>
 
-<!-- ================= INVENTARIS ================= -->
-<section id="inventaris" class="py-14 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center">{{ $profil->judul_inventaris ?? 'Inventaris Masjid' }}</h2>
-        <p class="text-center text-gray-600 mt-2 text-sm sm:text-base">{{ $profil->teks_inventaris ?? 'Data aset dan perlengkapan masjid.' }}</p>
+<!-- ================= INVENTARIS (TEASER) ================= -->
+<section id="inventaris" class="py-14 bg-gradient-to-b from-green-50 via-emerald-50 to-white">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+        <span class="inline-flex items-center gap-2 bg-white/70 border border-green-200 text-green-700 text-xs sm:text-sm font-medium px-4 py-1.5 rounded-full">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+            </svg>
+            Inventaris Masjid
+        </span>
 
-        {{-- Mobile: card view --}}
-        <div class="sm:hidden mt-8 space-y-3">
-            @forelse ($inventaris as $item)
-                <div class="bg-gray-50 rounded-2xl shadow px-5 py-4">
-                    <div class="flex items-start gap-3">
-                        @if ($item->foto)
-                            <img src="{{ Storage::url($item->foto) }}"
-                                 class="w-14 h-14 object-cover rounded-lg border flex-shrink-0">
-                        @else
-                            <div class="w-14 h-14 rounded-lg bg-white border flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                                </svg>
-                            </div>
-                        @endif
-                        <div class="min-w-0 flex-1">
-                            <div class="flex items-center justify-between gap-2">
-                                <span @class([
-                                    'text-xs px-2 py-1 rounded-full shrink-0 order-2',
-                                    'bg-green-100 text-green-700' => $item->kondisi === 'baik',
-                                    'bg-yellow-100 text-yellow-700' => $item->kondisi === 'rusak_ringan',
-                                    'bg-red-100 text-red-700' => in_array($item->kondisi, ['rusak_berat', 'hilang']),
-                                ])>
-                                    {{ ucfirst(str_replace('_', ' ', $item->kondisi)) }}
-                                </span>
-                                <p class="font-medium text-gray-800 order-1 min-w-0 flex-1 break-words">{{ $item->nama_barang }}</p>
-                            </div>
-                            <p class="text-sm text-gray-500 capitalize mt-1">{{ str_replace('_', ' ', $item->kategori) }}</p>
-                            <p class="text-sm text-gray-600 mt-1">{{ $item->jumlah }} {{ $item->satuan }}</p>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <p class="text-center text-gray-400 bg-gray-50 rounded-2xl shadow py-8">Belum ada data inventaris.</p>
-            @endforelse
+        <h2 class="text-2xl sm:text-3xl font-bold text-green-800 mt-4">
+            {{ $profil->judul_inventaris ?? 'Inventaris Masjid' }}
+        </h2>
+        <p class="text-gray-600 mt-2 text-sm sm:text-base max-w-xl mx-auto">
+            {{ $profil->teks_inventaris ?? 'Data aset dan perlengkapan masjid, mulai dari elektronik, mebel, hingga perlengkapan ibadah, tersedia lengkap di halaman Inventaris.' }}
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 text-left">
+            <div class="bg-white rounded-xl shadow p-4">
+                <p class="text-xs font-semibold text-green-700 uppercase">Elektronik</p>
+                <p class="text-xs text-gray-500 mt-1">AC, kipas, sound system</p>
+            </div>
+            <div class="bg-white rounded-xl shadow p-4">
+                <p class="text-xs font-semibold text-green-700 uppercase">Mebel</p>
+                <p class="text-xs text-gray-500 mt-1">Lemari, etalase, meja</p>
+            </div>
+            <div class="bg-white rounded-xl shadow p-4">
+                <p class="text-xs font-semibold text-green-700 uppercase">Ibadah</p>
+                <p class="text-xs text-gray-500 mt-1">Mukena, sajadah, Al-Qur'an</p>
+            </div>
+            <div class="bg-white rounded-xl shadow p-4">
+                <p class="text-xs font-semibold text-green-700 uppercase">Kebersihan</p>
+                <p class="text-xs text-gray-500 mt-1">Karpet, alat kebersihan</p>
+            </div>
         </div>
 
-        {{-- Desktop: table view --}}
-        <div class="hidden sm:block overflow-x-auto mt-8 bg-gray-50 rounded-2xl shadow">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-green-700 text-white">
-                    <tr>
-                        <th class="px-6 py-4 text-left">Foto</th>
-                        <th class="px-6 py-4 text-left">Nama Barang</th>
-                        <th class="px-6 py-4 text-left">Kategori</th>
-                        <th class="px-6 py-4 text-left">Jumlah</th>
-                        <th class="px-6 py-4 text-left">Kondisi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    @forelse ($inventaris as $item)
-                        <tr>
-                            <td class="px-6 py-4">
-                                @if ($item->foto)
-                                    <img src="{{ Storage::url($item->foto) }}"
-                                         class="w-12 h-12 object-cover rounded-lg border">
-                                @else
-                                    <div class="w-12 h-12 rounded-lg bg-white border flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                                        </svg>
-                                    </div>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 font-medium">{{ $item->nama_barang }}</td>
-                            <td class="px-6 py-4 capitalize">{{ str_replace('_', ' ', $item->kategori) }}</td>
-                            <td class="px-6 py-4">{{ $item->jumlah }} {{ $item->satuan }}</td>
-                            <td class="px-6 py-4">
-                                <span @class([
-                                    'text-xs px-2 py-1 rounded-full',
-                                    'bg-green-100 text-green-700' => $item->kondisi === 'baik',
-                                    'bg-yellow-100 text-yellow-700' => $item->kondisi === 'rusak_ringan',
-                                    'bg-red-100 text-red-700' => in_array($item->kondisi, ['rusak_berat', 'hilang']),
-                                ])>
-                                    {{ ucfirst(str_replace('_', ' ', $item->kondisi)) }}
-                                </span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-gray-400">Belum ada data inventaris.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        @if ($jumlahInventaris > 10)
-            <p class="text-center text-gray-400 text-sm mt-4">
-                Menampilkan 10 dari {{ $jumlahInventaris }} item inventaris.
-            </p>
-        @endif
+        <a href="{{ route('inventaris.publik') }}"
+           class="inline-flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 hover:-translate-y-0.5 shadow-lg shadow-green-900/20 px-6 py-3 rounded-xl text-sm sm:text-base font-semibold transition text-white mt-8">
+            <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+            Lihat Semua Inventaris ({{ $jumlahInventaris }})
+        </a>
     </div>
 </section>
+
+
 
 <!-- ================= FOOTER (gaya SIJAKA) ================= -->
 <footer class="bg-green-900 text-green-100">
@@ -1304,4 +1251,4 @@
 </script>
 
 </body>
-</html> 
+</html>

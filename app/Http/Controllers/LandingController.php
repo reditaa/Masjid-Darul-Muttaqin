@@ -72,10 +72,7 @@ class LandingController extends Controller
             ->take(8)
             ->get();
 
-        // Inventaris
-        $inventaris = Inventaris::orderBy('nama_barang')
-            ->take(10)
-            ->get();
+        // Inventaris (hanya dihitung untuk teaser di landing page)
         $jumlahInventaris = Inventaris::count();
 
         return view('landing', compact(
@@ -87,7 +84,6 @@ class LandingController extends Controller
             'jadwalPiket',
             'kegiatan',
             'galeri',
-            'inventaris',
             'jumlahPengurus',
             'strukturPengurus',
             'jumlahPengumuman',
@@ -129,5 +125,20 @@ class LandingController extends Controller
             'jadwalBilal',
             'jadwalPiket'
         ));
+    }
+
+    /**
+     * Halaman khusus Inventaris, terpisah dari halaman beranda,
+     * menampilkan seluruh data inventaris dengan grid foto & filter kategori.
+     */
+    public function inventarisPage()
+    {
+        $profil = ProfilMasjid::current();
+
+        $inventaris = Inventaris::orderBy('nama_barang')->get();
+
+        $daftarKategori = $inventaris->pluck('kategori')->unique()->sort()->values();
+
+        return view('inventaris-publik', compact('profil', 'inventaris', 'daftarKategori'));
     }
 }
