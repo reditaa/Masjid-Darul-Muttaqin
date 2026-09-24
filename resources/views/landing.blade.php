@@ -252,9 +252,10 @@
 
         .bagan-avatar,
         .bagan-avatar-img {
-            width: 42px;
-            height: 42px;
+            width: 52px;
+            height: 52px;
             border-radius: 9999px;
+            flex-shrink: 0;
         }
 
         .bagan-avatar {
@@ -264,10 +265,14 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
+            border: 2px solid #86efac;
         }
 
         .bagan-avatar-img {
             object-fit: cover;
+            border: 2px solid #86efac;
+            background: #f0fdf4;
+            box-shadow: 0 4px 10px -4px rgba(21, 128, 61, 0.35);
         }
 
         .bagan-nama {
@@ -1062,7 +1067,16 @@
                             <div class="bagan-node">
                                 <div class="bagan-card">
                                     @if ($item->foto)
-                                        <img src="{{ Storage::url($item->foto) }}" class="bagan-avatar-img" alt="{{ $item->nama }}">
+                                        <button type="button"
+                                                data-tipe="image"
+                                                data-file="{{ Storage::url($item->foto) }}"
+                                                data-judul="{{ $item->nama }}"
+                                                data-tanggal="{{ $namaJabatan }}"
+                                                data-caption="false"
+                                                onclick="bukaModalGaleri(this)"
+                                                class="focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full">
+                                            <img src="{{ Storage::url($item->foto) }}" class="bagan-avatar-img" alt="{{ $item->nama }}">
+                                        </button>
                                     @else
                                         <div class="bagan-avatar">{{ strtoupper(substr($item->nama, 0, 1)) }}</div>
                                     @endif
@@ -1089,12 +1103,12 @@
             &times;
         </button>
 
-        <div class="bg-black rounded-2xl overflow-hidden flex items-center justify-center">
-            <img id="galeri-img" src="" class="max-h-[70vh] w-auto max-w-full object-contain hidden">
-            <video id="galeri-video" src="" controls class="max-h-[70vh] w-auto max-w-full hidden"></video>
+        <div class="bg-black rounded-2xl overflow-hidden flex items-center justify-center p-4 shadow-2xl">
+            <img id="galeri-img" src="" class="max-h-[78vh] w-auto max-w-full object-contain hidden transition-transform duration-300 scale-100">
+            <video id="galeri-video" src="" controls class="max-h-[78vh] w-auto max-w-full hidden"></video>
         </div>
 
-        <div class="bg-white rounded-b-2xl px-5 py-4 -mt-1">
+        <div id="galeri-caption" class="bg-white rounded-b-2xl px-5 py-4 -mt-1 hidden">
             <p id="galeri-judul" class="font-bold text-gray-800 text-lg"></p>
             <p id="galeri-tanggal" class="text-gray-500 text-sm mt-1"></p>
         </div>
@@ -1212,6 +1226,8 @@
     function bukaModalGaleri(btn) {
         const img = document.getElementById('galeri-img');
         const video = document.getElementById('galeri-video');
+        const caption = document.getElementById('galeri-caption');
+        const showCaption = btn.dataset.caption !== 'false';
 
         if (btn.dataset.tipe === 'video') {
             video.src = btn.dataset.file;
@@ -1226,16 +1242,31 @@
             video.src = '';
         }
 
-        document.getElementById('galeri-judul').textContent = btn.dataset.judul;
-        document.getElementById('galeri-tanggal').textContent = btn.dataset.tanggal;
+        if (showCaption) {
+            document.getElementById('galeri-judul').textContent = btn.dataset.judul || '';
+            document.getElementById('galeri-tanggal').textContent = btn.dataset.tanggal || '';
+            caption.classList.remove('hidden');
+        } else {
+            document.getElementById('galeri-judul').textContent = '';
+            document.getElementById('galeri-tanggal').textContent = '';
+            caption.classList.add('hidden');
+        }
 
         document.getElementById('modal-galeri').classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
+
+        setTimeout(() => {
+            img.classList.remove('scale-100');
+            img.classList.add('scale-105');
+        }, 50);
     }
 
     function tutupModalGaleri() {
         const video = document.getElementById('galeri-video');
+        const img = document.getElementById('galeri-img');
         video.pause();
+        img.classList.remove('scale-105');
+        img.classList.add('scale-100');
         document.getElementById('modal-galeri').classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
     }

@@ -388,7 +388,9 @@
                                 @forelse ($item->imam as $imam)
                                     <div class="flex items-center gap-2 mb-2">
                                         @if ($imam->foto)
-                                            <img src="{{ Storage::url($imam->foto) }}" alt="Foto {{ $imam->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                            <button type="button" onclick="bukaModalFoto('{{ Storage::url($imam->foto) }}', '{{ $imam->nama }}')" class="block focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full">
+                                                <img src="{{ Storage::url($imam->foto) }}" alt="Foto {{ $imam->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200 hover:opacity-80 transition">
+                                            </button>
                                         @else
                                             <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($imam->nama, 0, 1)) }}</span>
                                         @endif
@@ -403,7 +405,9 @@
                                 @forelse ($item->muazin as $muazin)
                                     <div class="flex items-center gap-2 mb-2">
                                         @if ($muazin->foto)
-                                            <img src="{{ Storage::url($muazin->foto) }}" alt="Foto {{ $muazin->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                            <button type="button" onclick="bukaModalFoto('{{ Storage::url($muazin->foto) }}', '{{ $muazin->nama }}')" class="block focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full">
+                                                <img src="{{ Storage::url($muazin->foto) }}" alt="Foto {{ $muazin->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200 hover:opacity-80 transition">
+                                            </button>
                                         @else
                                             <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($muazin->nama, 0, 1)) }}</span>
                                         @endif
@@ -453,7 +457,9 @@
                             @forelse ($item->khatib as $khatib)
                                 <div class="flex items-center gap-2 mb-2">
                                     @if ($khatib->foto)
-                                        <img src="{{ Storage::url($khatib->foto) }}" alt="Foto {{ $khatib->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                        <button type="button" onclick="bukaModalFoto('{{ Storage::url($khatib->foto) }}', '{{ $khatib->nama }}')" class="block focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full">
+                                            <img src="{{ Storage::url($khatib->foto) }}" alt="Foto {{ $khatib->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200 hover:opacity-80 transition">
+                                        </button>
                                     @else
                                         <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($khatib->nama, 0, 1)) }}</span>
                                     @endif
@@ -468,7 +474,9 @@
                             @forelse ($item->imam as $imam)
                                 <div class="flex items-center gap-2 mb-2">
                                     @if ($imam->foto)
-                                        <img src="{{ Storage::url($imam->foto) }}" alt="Foto {{ $imam->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                        <button type="button" onclick="bukaModalFoto('{{ Storage::url($imam->foto) }}', '{{ $imam->nama }}')" class="block focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full">
+                                            <img src="{{ Storage::url($imam->foto) }}" alt="Foto {{ $imam->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200 hover:opacity-80 transition">
+                                        </button>
                                     @else
                                         <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($imam->nama, 0, 1)) }}</span>
                                     @endif
@@ -483,7 +491,9 @@
                             @forelse ($item->bilal as $bilal)
                                 <div class="flex items-center gap-2 mb-2">
                                     @if ($bilal->foto)
-                                        <img src="{{ Storage::url($bilal->foto) }}" alt="Foto {{ $bilal->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                        <button type="button" onclick="bukaModalFoto('{{ Storage::url($bilal->foto) }}', '{{ $bilal->nama }}')" class="block focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full">
+                                            <img src="{{ Storage::url($bilal->foto) }}" alt="Foto {{ $bilal->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200 hover:opacity-80 transition">
+                                        </button>
                                     @else
                                         <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($bilal->nama, 0, 1)) }}</span>
                                     @endif
@@ -537,9 +547,11 @@
                         @forelse ($item->anggota as $anggota)
                             <div class="flex items-center gap-2 mb-2">
                                 @if ($anggota->foto)
-                                    <img src="{{ Storage::url($anggota->foto) }}"
-                                         alt="Foto {{ $anggota->nama }}"
-                                         class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                    <button type="button" onclick="bukaModalFoto('{{ Storage::url($anggota->foto) }}', '{{ $anggota->nama }}')" class="block focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full">
+                                        <img src="{{ Storage::url($anggota->foto) }}"
+                                             alt="Foto {{ $anggota->nama }}"
+                                             class="w-8 h-8 rounded-full object-cover border border-green-200 hover:opacity-80 transition">
+                                    </button>
                                 @else
                                     <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">
                                         {{ strtoupper(substr($anggota->nama, 0, 1)) }}
@@ -586,7 +598,20 @@
                     <div class="border-t border-dashed border-green-300 pt-3">
                         <p class="label-kartu">Petugas</p>
                         @forelse ($item->anggota as $anggota)
-                            <p class="isi-kartu">{{ $anggota->nama }}</p>
+                            <div class="flex items-center gap-2 mb-2">
+                                @if ($anggota->foto)
+                                    <button type="button" onclick="bukaModalFoto('{{ Storage::url($anggota->foto) }}', '{{ $anggota->nama }}')" class="block focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full">
+                                        <img src="{{ Storage::url($anggota->foto) }}"
+                                             alt="Foto {{ $anggota->nama }}"
+                                             class="w-8 h-8 rounded-full object-cover border border-green-200 hover:opacity-80 transition">
+                                    </button>
+                                @else
+                                    <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                                        {{ strtoupper(substr($anggota->nama, 0, 1)) }}
+                                    </span>
+                                @endif
+                                <p class="isi-kartu">{{ $anggota->nama }}</p>
+                            </div>
                         @empty
                             <p class="isi-kartu text-gray-400">-</p>
                         @endforelse
@@ -610,7 +635,43 @@
     </div>
 </footer>
 
+<div id="modal-foto-jadwal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/80" onclick="tutupModalFotoJadwal()"></div>
+
+    <div class="relative h-full flex items-center justify-center p-6">
+        <button type="button" onclick="tutupModalFotoJadwal()"
+                class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white text-2xl transition">
+            &times;
+        </button>
+
+        <div class="relative">
+            <img id="modal-foto-jadwal-img" src="" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain bg-white/5">
+            <p id="modal-foto-jadwal-nama" class="mt-4 text-center text-white text-sm font-medium"></p>
+        </div>
+    </div>
+</div>
+
 <script>
+    function bukaModalFoto(url, nama = '') {
+        const img = document.getElementById('modal-foto-jadwal-img');
+        const namaEl = document.getElementById('modal-foto-jadwal-nama');
+        img.src = url;
+        namaEl.textContent = nama || 'Foto petugas';
+        document.getElementById('modal-foto-jadwal').classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function tutupModalFotoJadwal() {
+        document.getElementById('modal-foto-jadwal').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            tutupModalFotoJadwal();
+        }
+    });
+
     function pilihWaktuSholat(idHari, index) {
         const idWaktuAktif = idHari + '-waktu-' + index;
 
