@@ -500,7 +500,18 @@
                     <div class="border-t border-dashed border-green-300 pt-3">
                         <p class="label-kartu">Petugas</p>
                         @forelse ($item->anggota as $anggota)
-                            <p class="isi-kartu">{{ $anggota->nama }}</p>
+                            <div class="flex items-center gap-2 mb-2">
+                                @if ($anggota->foto)
+                                    <img src="{{ Storage::url($anggota->foto) }}"
+                                         alt="Foto {{ $anggota->nama }}"
+                                         class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                @else
+                                    <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                                        {{ strtoupper(substr($anggota->nama, 0, 1)) }}
+                                    </span>
+                                @endif
+                                <p class="isi-kartu">{{ $anggota->nama }}</p>
+                            </div>
                         @empty
                             <p class="isi-kartu text-gray-400">-</p>
                         @endforelse

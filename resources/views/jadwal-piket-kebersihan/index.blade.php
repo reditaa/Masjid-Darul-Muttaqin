@@ -72,9 +72,15 @@
                                         <div class="flex flex-col gap-2">
                                             @foreach ($anggota as $index => $orang)
                                                 <div class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg px-3 py-2 w-fit">
-                                                    <span class="w-7 h-7 flex items-center justify-center rounded-full text-white text-xs font-bold {{ $avatarColors[$index % count($avatarColors)] }}">
-                                                        {{ strtoupper(substr($orang->nama, 0, 1)) }}
-                                                    </span>
+                                                    @if ($orang->foto)
+                                                        <img src="{{ Storage::url($orang->foto) }}"
+                                                             alt="Foto {{ $orang->nama }}"
+                                                             class="w-9 h-9 rounded-full object-cover border-2 border-white shadow-sm">
+                                                    @else
+                                                        <span class="w-9 h-9 flex items-center justify-center rounded-full text-white text-xs font-bold {{ $avatarColors[$index % count($avatarColors)] }}">
+                                                            {{ strtoupper(substr($orang->nama, 0, 1)) }}
+                                                        </span>
+                                                    @endif
                                                     <span class="text-sm text-gray-700">{{ $orang->nama }}</span>
                                                 </div>
                                             @endforeach

@@ -23,7 +23,7 @@
                     $anggotaTerpilih = old('anggota_ids', $jadwal->anggota->pluck('id')->toArray());
                 @endphp
 
-                <form action="{{ route('jadwal-piket-kebersihan.update', $jadwal) }}" method="POST" class="space-y-4">
+                <form action="{{ route('jadwal-piket-kebersihan.update', $jadwal) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
                     @method('PUT')
 
@@ -57,8 +57,15 @@
                                         <input type="checkbox" name="anggota_ids[]" value="{{ $p->id }}"
                                             class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                                             {{ in_array($p->id, $anggotaTerpilih) ? 'checked' : '' }}>
+                                        @if ($p->foto)
+                                            <img src="{{ Storage::url($p->foto) }}" alt="Foto {{ $p->nama }}" class="w-8 h-8 rounded-full object-cover">
+                                        @else
+                                            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 text-xs font-semibold">{{ strtoupper(substr($p->nama, 0, 1)) }}</span>
+                                        @endif
                                         <span class="truncate">{{ $p->nama }}</span>
                                     </div>
+                                    <input type="file" name="foto[{{ $p->id }}]" accept="image/*"
+                                           class="foto-petugas {{ in_array($p->id, $anggotaTerpilih) ? '' : 'hidden' }} w-32 text-[10px]" title="Ganti foto petugas">
                                     @if ($p->asal === 'guru')
                                         <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold flex-shrink-0">Guru</span>
                                     @elseif ($p->asal === 'siswa')
@@ -88,6 +95,19 @@
 
     <script>
         const formPiket = document.querySelector('form');
+        document.querySelectorAll('input[name="anggota_ids[]"]').forEach(function (checkbox) {
+            const foto = checkbox.closest('.item-piket').querySelector('.foto-petugas');
+            checkbox.addEventListener('change', function () {
+                foto.classList.toggle('hidden', !checkbox.checked);
+            });
+        });
+
+        document.querySelectorAll('.foto-petugas').forEach(function (input) {
+            input.addEventListener('click', function (event) {
+                event.stopPropagation();
+            });
+        });
+
         formPiket.addEventListener('submit', function (event) {
             const jumlahDipilih = document.querySelectorAll('input[name="anggota_ids[]"]:checked').length;
             if (jumlahDipilih < 3 || jumlahDipilih > 6) {
