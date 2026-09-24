@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\JadwalImamMuazin;
 use App\Models\Pengurus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JadwalImamMuazinController extends Controller
 {
@@ -46,6 +47,7 @@ class JadwalImamMuazinController extends Controller
 
         $this->syncAnggota($jadwal, $validated['imam_ids'], 'imam');
         $this->syncAnggota($jadwal, $validated['muazin_ids'], 'muazin');
+        $this->simpanFotoAnggota($request, array_merge($validated['imam_ids'], $validated['muazin_ids']));
 
         return redirect()
             ->route('jadwal-imam-muazin.index')
@@ -75,6 +77,7 @@ class JadwalImamMuazinController extends Controller
 
         $this->syncAnggota($jadwal_imam_muazin, $validated['imam_ids'], 'imam');
         $this->syncAnggota($jadwal_imam_muazin, $validated['muazin_ids'], 'muazin');
+        $this->simpanFotoAnggota($request, array_merge($validated['imam_ids'], $validated['muazin_ids']));
 
         return redirect()
             ->route('jadwal-imam-muazin.index')
@@ -132,6 +135,8 @@ class JadwalImamMuazinController extends Controller
             'muazin_ids'    => 'required|array|min:1|max:3',
             'muazin_ids.*'  => 'nullable|exists:pengurus,id',
             'keterangan'    => 'nullable|string',
+            'foto'          => 'nullable|array',
+            'foto.*'        => 'image|max:2048',
         ]);
 
         // Cegah orang yang sama dipilih dua kali di kolom Imam
@@ -151,5 +156,27 @@ class JadwalImamMuazinController extends Controller
         }
 
         return $validated;
+    }
+
+    private function simpanFotoAnggota(Request $request, array $anggotaIds): void
+    {
+        foreach (array_unique(array_filter($anggotaIds)) as $anggotaId) {
+            if (!$request->hasFile("foto.{$anggotaId}")) {
+                continue;
+            }
+
+            $pengurus = Pengurus::find($anggotaId);
+            if (!$pengurus) {
+                continue;
+            }
+
+            if ($pengurus->foto) {
+                Storage::disk('public')->delete($pengurus->foto);
+            }
+
+            $pengurus->update([
+                'foto' => $request->file("foto.{$anggotaId}")->store('pengurus', 'public'),
+            ]);
+        }
     }
 }

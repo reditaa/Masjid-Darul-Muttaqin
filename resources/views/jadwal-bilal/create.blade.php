@@ -19,7 +19,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('jadwal-bilal.store') }}" method="POST" class="space-y-4">
+                <form action="{{ route('jadwal-bilal.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
 
                     <div>
@@ -51,8 +51,14 @@
                                         <input type="checkbox" name="anggota_ids[]" value="{{ $p->id }}"
                                             class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                             {{ collect(old('anggota_ids'))->contains($p->id) ? 'checked' : '' }}>
+                                        @if ($p->foto)
+                                            <img src="{{ Storage::url($p->foto) }}" alt="Foto {{ $p->nama }}" class="w-8 h-8 rounded-full object-cover">
+                                        @else
+                                            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 text-xs font-semibold">{{ strtoupper(substr($p->nama, 0, 1)) }}</span>
+                                        @endif
                                         <span class="truncate">{{ $p->nama }}</span>
                                     </div>
+                                    <input type="file" name="foto[{{ $p->id }}]" accept="image/*" class="foto-petugas hidden w-32 text-[10px]" title="Foto petugas">
                                     @if ($p->asal === 'guru')
                                         <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold flex-shrink-0">Guru</span>
                                     @elseif ($p->asal === 'siswa')
@@ -92,6 +98,13 @@
                     item.style.display = 'none';
                 }
             });
+        });
+
+        document.querySelectorAll('input[name="anggota_ids[]"]').forEach(function (checkbox) {
+            const foto = checkbox.closest('.item-bilal').querySelector('.foto-petugas');
+            const toggle = () => foto.classList.toggle('hidden', !checkbox.checked);
+            checkbox.addEventListener('change', toggle);
+            toggle();
         });
     </script>
 </x-app-layout>

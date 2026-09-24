@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\JadwalBilal;
 use App\Models\Pengurus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JadwalBilalController extends Controller
 {
@@ -32,6 +33,7 @@ class JadwalBilalController extends Controller
 
         $jadwal = JadwalBilal::create(['pasaran' => $validated['pasaran']]);
         $jadwal->anggota()->sync($validated['anggota_ids']);
+        $this->simpanFotoAnggota($request, $validated['anggota_ids']);
 
         return redirect()
             ->route('jadwal-bilal.index')
@@ -55,6 +57,7 @@ class JadwalBilalController extends Controller
 
         $jadwal_bilal->update(['pasaran' => $validated['pasaran']]);
         $jadwal_bilal->anggota()->sync($validated['anggota_ids']);
+        $this->simpanFotoAnggota($request, $validated['anggota_ids']);
 
         return redirect()
             ->route('jadwal-bilal.index')
@@ -84,6 +87,30 @@ class JadwalBilalController extends Controller
             'pasaran'        => $rule,
             'anggota_ids'    => 'required|array|min:1',
             'anggota_ids.*'  => 'exists:pengurus,id',
+            'foto'           => 'nullable|array',
+            'foto.*'         => 'image|max:2048',
         ]);
+    }
+
+    private function simpanFotoAnggota(Request $request, array $anggotaIds): void
+    {
+        foreach ($anggotaIds as $anggotaId) {
+            if (!$request->hasFile("foto.{$anggotaId}")) {
+                continue;
+            }
+
+            $pengurus = Pengurus::find($anggotaId);
+            if (!$pengurus) {
+                continue;
+            }
+
+            if ($pengurus->foto) {
+                Storage::disk('public')->delete($pengurus->foto);
+            }
+
+            $pengurus->update([
+                'foto' => $request->file("foto.{$anggotaId}")->store('pengurus', 'public'),
+            ]);
+        }
     }
 }

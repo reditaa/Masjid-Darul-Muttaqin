@@ -386,7 +386,14 @@
                             <div>
                                 <p class="label-kartu">Imam</p>
                                 @forelse ($item->imam as $imam)
-                                    <p class="isi-kartu">{{ $imam->nama }}</p>
+                                    <div class="flex items-center gap-2 mb-2">
+                                        @if ($imam->foto)
+                                            <img src="{{ Storage::url($imam->foto) }}" alt="Foto {{ $imam->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                        @else
+                                            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($imam->nama, 0, 1)) }}</span>
+                                        @endif
+                                        <p class="isi-kartu">{{ $imam->nama }}</p>
+                                    </div>
                                 @empty
                                     <p class="isi-kartu text-gray-400">-</p>
                                 @endforelse
@@ -394,7 +401,14 @@
                             <div>
                                 <p class="label-kartu">Muazin</p>
                                 @forelse ($item->muazin as $muazin)
-                                    <p class="isi-kartu">{{ $muazin->nama }}</p>
+                                    <div class="flex items-center gap-2 mb-2">
+                                        @if ($muazin->foto)
+                                            <img src="{{ Storage::url($muazin->foto) }}" alt="Foto {{ $muazin->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                        @else
+                                            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($muazin->nama, 0, 1)) }}</span>
+                                        @endif
+                                        <p class="isi-kartu">{{ $muazin->nama }}</p>
+                                    </div>
                                 @empty
                                     <p class="isi-kartu text-gray-400">-</p>
                                 @endforelse
@@ -437,7 +451,14 @@
                         <div>
                             <p class="label-kartu">Khatib</p>
                             @forelse ($item->khatib as $khatib)
-                                <p class="isi-kartu">{{ $khatib->nama }}</p>
+                                <div class="flex items-center gap-2 mb-2">
+                                    @if ($khatib->foto)
+                                        <img src="{{ Storage::url($khatib->foto) }}" alt="Foto {{ $khatib->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                    @else
+                                        <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($khatib->nama, 0, 1)) }}</span>
+                                    @endif
+                                    <p class="isi-kartu">{{ $khatib->nama }}</p>
+                                </div>
                             @empty
                                 <p class="isi-kartu text-gray-400">-</p>
                             @endforelse
@@ -445,7 +466,14 @@
                         <div>
                             <p class="label-kartu">Imam</p>
                             @forelse ($item->imam as $imam)
-                                <p class="isi-kartu">{{ $imam->nama }}</p>
+                                <div class="flex items-center gap-2 mb-2">
+                                    @if ($imam->foto)
+                                        <img src="{{ Storage::url($imam->foto) }}" alt="Foto {{ $imam->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                    @else
+                                        <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($imam->nama, 0, 1)) }}</span>
+                                    @endif
+                                    <p class="isi-kartu">{{ $imam->nama }}</p>
+                                </div>
                             @empty
                                 <p class="isi-kartu text-gray-400">-</p>
                             @endforelse
@@ -453,7 +481,14 @@
                         <div>
                             <p class="label-kartu">Bilal</p>
                             @forelse ($item->bilal as $bilal)
-                                <p class="isi-kartu">{{ $bilal->nama }}</p>
+                                <div class="flex items-center gap-2 mb-2">
+                                    @if ($bilal->foto)
+                                        <img src="{{ Storage::url($bilal->foto) }}" alt="Foto {{ $bilal->nama }}" class="w-8 h-8 rounded-full object-cover border border-green-200">
+                                    @else
+                                        <span class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-700 text-xs font-bold">{{ strtoupper(substr($bilal->nama, 0, 1)) }}</span>
+                                    @endif
+                                    <p class="isi-kartu">{{ $bilal->nama }}</p>
+                                </div>
                             @empty
                                 <p class="isi-kartu text-gray-400">-</p>
                             @endforelse

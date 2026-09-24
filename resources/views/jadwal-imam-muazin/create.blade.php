@@ -19,7 +19,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('jadwal-imam-muazin.store') }}" method="POST" class="space-y-5">
+                <form action="{{ route('jadwal-imam-muazin.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                     @csrf
 
                     <div class="grid grid-cols-2 gap-4">
@@ -143,6 +143,8 @@
                         <textarea name="keterangan" rows="2" class="form-hijau">{{ old('keterangan') }}</textarea>
                     </div>
 
+                    <div id="foto-petugas-container" class="space-y-2"></div>
+
                     <div class="flex justify-end gap-2 pt-4 border-t border-green-100">
                         <a href="{{ route('jadwal-imam-muazin.index') }}"
                            class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200">Batal</a>
@@ -175,5 +177,20 @@
                 });
             });
         });
+
+        const fotoContainer = document.getElementById('foto-petugas-container');
+        const selectsPetugas = document.querySelectorAll('.select-imam-list');
+        function renderFotoPetugas() {
+            const selected = new Map();
+            selectsPetugas.forEach(select => {
+                if (select.value) selected.set(select.value, select.options[select.selectedIndex].text.trim());
+            });
+            fotoContainer.innerHTML = selected.size ? '<p class="text-xs font-semibold text-green-800">Foto Petugas (opsional)</p>' : '';
+            selected.forEach((nama, id) => {
+                fotoContainer.insertAdjacentHTML('beforeend', `<label class="flex items-center gap-3 text-xs text-gray-700"><span class="w-40 truncate">${nama}</span><input type="file" name="foto[${id}]" accept="image/*" class="text-xs"></label>`);
+            });
+        }
+        selectsPetugas.forEach(select => select.addEventListener('change', renderFotoPetugas));
+        renderFotoPetugas();
     </script>
 </x-app-layout>
