@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $totalPengurus = Pengurus::count();
+        $totalPengurus = Pengurus::whereNull('asal')->count();
         $totalPengumuman = Pengumuman::count();
 
         // Jumlah personel bertugas imam & bilal
