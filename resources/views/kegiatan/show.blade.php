@@ -12,6 +12,9 @@
                 @if ($kegiatan->poster)
                     <img src="{{ Storage::url($kegiatan->poster) }}" class="w-full h-56 object-cover rounded mb-4">
                 @endif
+                @if ($kegiatan->video)
+                    <video src="{{ Storage::url($kegiatan->video) }}" controls playsinline class="w-full max-h-[60vh] bg-black rounded mb-4"></video>
+                @endif
 
                 <div class="flex items-center gap-2 mb-2">
                     <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">

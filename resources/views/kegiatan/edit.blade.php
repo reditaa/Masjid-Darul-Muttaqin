@@ -112,6 +112,19 @@
                         <p class="text-xs text-gray-500 mt-1">Kosongkan kalau tidak ingin mengganti poster.</p>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Video Kegiatan (opsional, maksimal 35 MB)</label>
+                        @if ($kegiatan->video)
+                            <video src="{{ Storage::url($kegiatan->video) }}" controls class="w-full max-w-md rounded mb-2"></video>
+                            <label class="flex items-center gap-2 text-sm text-red-700 mb-2">
+                                <input type="checkbox" name="remove_video" value="1" class="rounded border-gray-300">
+                                Hapus video saat disimpan
+                            </label>
+                        @endif
+                        <input type="file" name="video" accept="video/mp4,video/quicktime,video/webm,video/ogg" class="mt-1 block w-full">
+                        <p class="text-xs text-gray-500 mt-1">Pilih video baru untuk mengganti video yang tersimpan.</p>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Anggaran (opsional)</label>

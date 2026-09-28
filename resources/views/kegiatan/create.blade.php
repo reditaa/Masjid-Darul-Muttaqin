@@ -105,6 +105,11 @@
                         <input type="file" name="poster" accept="image/*" class="mt-1 block w-full">
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Video Kegiatan (opsional, maksimal 35 MB)</label>
+                        <input type="file" name="video" accept="video/mp4,video/quicktime,video/webm,video/ogg" class="mt-1 block w-full">
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Anggaran (opsional)</label>

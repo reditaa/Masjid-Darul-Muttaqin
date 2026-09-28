@@ -15,7 +15,7 @@ class Kegiatan extends Model
     protected $fillable = [
         'judul', 'slug', 'deskripsi', 'kategori', 'tanggal_mulai', 'tanggal_selesai',
         'waktu_mulai', 'waktu_selesai', 'lokasi', 'penanggung_jawab_id', 'status',
-        'poster', 'anggaran', 'jumlah_peserta', 'laporan_hasil',
+        'poster', 'video', 'anggaran', 'jumlah_peserta', 'laporan_hasil',
     ];
 
     protected $casts = [

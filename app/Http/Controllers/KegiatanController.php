@@ -35,6 +35,10 @@ class KegiatanController extends Controller
             $validated['poster'] = $request->file('poster')->store('kegiatan', 'public');
         }
 
+        if ($request->hasFile('video')) {
+            $validated['video'] = $request->file('video')->store('kegiatan/videos', 'public');
+        }
+
         Kegiatan::create($validated);
 
         return redirect()
@@ -67,6 +71,19 @@ class KegiatanController extends Controller
             $validated['poster'] = $request->file('poster')->store('kegiatan', 'public');
         }
 
+        $removeVideo = $request->boolean('remove_video');
+        unset($validated['remove_video']);
+
+        if ($request->hasFile('video')) {
+            if ($kegiatan->video) {
+                Storage::disk('public')->delete($kegiatan->video);
+            }
+            $validated['video'] = $request->file('video')->store('kegiatan/videos', 'public');
+        } elseif ($removeVideo && $kegiatan->video) {
+            Storage::disk('public')->delete($kegiatan->video);
+            $validated['video'] = null;
+        }
+
         $kegiatan->update($validated);
 
         return redirect()
@@ -78,6 +95,9 @@ class KegiatanController extends Controller
     {
         if ($kegiatan->poster) {
             Storage::disk('public')->delete($kegiatan->poster);
+        }
+        if ($kegiatan->video) {
+            Storage::disk('public')->delete($kegiatan->video);
         }
 
         $kegiatan->delete();
@@ -101,6 +121,8 @@ class KegiatanController extends Controller
             'penanggung_jawab_id'  => 'nullable|exists:pengurus,id',
             'status'               => 'required|in:akan_datang,berlangsung,selesai,dibatalkan',
             'poster'               => 'nullable|image|max:2048',
+            'video'                => 'nullable|mimetypes:video/mp4,video/quicktime,video/webm,video/ogg|max:35840',
+            'remove_video'         => 'nullable|boolean',
             'anggaran'             => 'nullable|numeric|min:0|max:9999999999999.99',
             'jumlah_peserta'       => 'nullable|integer|min:0',
             'laporan_hasil'        => 'nullable|string',

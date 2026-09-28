@@ -59,10 +59,8 @@ class LandingController extends Controller
             ->get()
             ->sortBy(fn ($item) => array_search($item->hari, ['senin','selasa','rabu','kamis','jumat','sabtu','minggu']));
 
-        // Kegiatan terbaru / akan datang, beserta pengumuman terkait (published saja)
-        $kegiatan = Kegiatan::with(['pengumumans' => function ($q) {
-                $q->published()->latest('tanggal_publish');
-            }])
+        // Kegiatan terbaru untuk bagian Kegiatan Masjid
+        $kegiatan = Kegiatan::query()
             ->orderByDesc('tanggal_mulai')
             ->take(6)
             ->get();

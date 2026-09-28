@@ -644,10 +644,19 @@
                         data-lokasi="{{ $item->lokasi ?? '' }}"
                         data-deskripsi="{{ $item->deskripsi ? strip_tags($item->deskripsi) : '' }}"
                         data-poster="{{ $item->poster ? Storage::url($item->poster) : '' }}"
-                        data-pengumuman='@json($item->pengumumans->map(fn($p) => ["judul" => $p->judul, "slug" => $p->slug]))'
+                        data-video="{{ $item->video ? Storage::url($item->video) : '' }}"
                         class="text-left w-full bg-gray-50 rounded-2xl shadow overflow-hidden hover:-translate-y-1 hover:shadow-md transition cursor-pointer">
                     @if ($item->poster)
                         <img src="{{ Storage::url($item->poster) }}" class="w-full h-36 object-cover">
+                    @elseif ($item->video)
+                        <div class="relative w-full h-36 bg-gray-900 flex items-center justify-center">
+                            <video src="{{ Storage::url($item->video) }}" class="w-full h-full object-cover" preload="metadata"></video>
+                            <span class="absolute inset-0 flex items-center justify-center bg-black/20">
+                                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            </span>
+                        </div>
                     @else
                         <div class="w-full h-36 bg-blue-100 flex items-center justify-center">
                             <svg class="w-10 h-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -679,11 +688,6 @@
                         @if ($item->deskripsi)
                             <p class="text-gray-600 text-sm mt-2 line-clamp-3">
                                 {{ Str::limit(strip_tags($item->deskripsi), 120) }}
-                            </p>
-                        @endif
-                        @if ($item->pengumumans->count() > 0)
-                            <p class="text-xs text-green-600 mt-2">
-                                {{ $item->pengumumans->count() }} pengumuman terkait
                             </p>
                         @endif
                     </div>
@@ -1016,6 +1020,7 @@
         </div>
 
         <div class="overflow-y-auto">
+            <video id="kegiatan-video" src="" controls playsinline class="w-full max-h-[55vh] bg-black hidden"></video>
             <img id="kegiatan-poster" src="" class="w-full h-56 object-cover hidden">
 
             <div class="px-6 py-5">
@@ -1028,10 +1033,6 @@
 
                 <p id="kegiatan-deskripsi" class="text-gray-600 text-sm mt-4 leading-relaxed whitespace-pre-line"></p>
 
-                <div id="kegiatan-pengumuman-wrap" class="mt-6 hidden">
-                    <h4 class="font-bold text-sm text-gray-700 mb-2">Pengumuman Terkait</h4>
-                    <div id="kegiatan-pengumuman-list" class="space-y-2"></div>
-                </div>
             </div>
         </div>
     </div>
@@ -1176,22 +1177,14 @@
             poster.classList.add('hidden');
         }
 
-        const pengumumanList = document.getElementById('kegiatan-pengumuman-list');
-        const pengumumanWrap = document.getElementById('kegiatan-pengumuman-wrap');
-        const daftarPengumuman = JSON.parse(btn.dataset.pengumuman || '[]');
-
-        pengumumanList.innerHTML = '';
-        if (daftarPengumuman.length > 0) {
-            daftarPengumuman.forEach(p => {
-                const a = document.createElement('a');
-                a.href = `/pengumuman/${p.slug}`;
-                a.className = 'block text-sm text-green-700 hover:underline bg-green-50 rounded-lg px-3 py-2';
-                a.textContent = p.judul;
-                pengumumanList.appendChild(a);
-            });
-            pengumumanWrap.classList.remove('hidden');
+        const video = document.getElementById('kegiatan-video');
+        video.pause();
+        if (btn.dataset.video) {
+            video.src = btn.dataset.video;
+            video.classList.remove('hidden');
         } else {
-            pengumumanWrap.classList.add('hidden');
+            video.removeAttribute('src');
+            video.classList.add('hidden');
         }
 
         document.getElementById('modal-kegiatan').classList.remove('hidden');
@@ -1199,6 +1192,11 @@
     }
 
     function tutupModalKegiatan() {
+        const video = document.getElementById('kegiatan-video');
+        video.pause();
+        if (video.hasAttribute('src')) {
+            video.currentTime = 0;
+        }
         document.getElementById('modal-kegiatan').classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
     }
