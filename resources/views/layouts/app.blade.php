@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>SIMADI - Masjid Darul Muttaqin</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/logo-irmas.jpeg') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

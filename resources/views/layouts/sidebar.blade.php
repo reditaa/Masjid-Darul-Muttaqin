@@ -2,9 +2,8 @@
     {{-- Logo --}}
     <div class="px-6 py-6 border-b border-green-700 flex-shrink-0">
         <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
-                <i class="fas fa-mosque text-3xl text-green-300"></i>
-            </div>
+            <img src="{{ asset('images/logo-irmas.jpeg') }}" alt="Logo Masjid Darul Muttaqin"
+                class="w-14 h-14 rounded-full bg-white object-contain p-1 shadow-md">
             <div>
                 <h1 class="text-2xl font-bold tracking-wide">SIMADI</h1>
                 <p class="text-xs text-green-200">Masjid Darul Muttaqin</p>
