@@ -66,7 +66,7 @@
                 </div>
             </div>
             <button class="mt-3 text-sm text-purple-600 font-semibold">
-                Segera Hadir
+                Kelola
             </button>
         </div>
 
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <button class="mt-3 text-sm text-orange-500 font-semibold">
-                Segera Hadir
+                Kelola
             </button>
         </div>
 
@@ -102,7 +102,7 @@
                 </div>
             </div>
             <button class="mt-3 text-sm text-red-500 font-semibold">
-                Segera Hadir
+                Kelola
             </button>
         </div>
 
@@ -120,7 +120,7 @@
                 </div>
             </div>
             <button class="mt-3 text-sm text-cyan-600 font-semibold">
-                Segera Hadir
+                Kelola
             </button>
         </div>
 

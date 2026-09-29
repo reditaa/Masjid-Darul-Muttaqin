@@ -28,7 +28,7 @@ class LandingController extends Controller
         // Struktur pengurus (untuk modal bagan), dikelompokkan per jabatan sesuai urutan
         $strukturPengurus = Pengurus::whereNull('asal')
             ->aktif()
-            ->whereNotNull('jabatan_id')
+            ->whereHas('jabatan')
             ->with('jabatan')
             ->orderBy('nama')
             ->get()

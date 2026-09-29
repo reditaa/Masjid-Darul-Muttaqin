@@ -139,7 +139,7 @@ class PengurusController extends Controller
 
     private function validateData(Request $request, ?int $ignoreId = null): array
     {
-        return $request->validate([
+        $validated = $request->validate([
             'jabatan_id'       => 'nullable|exists:jabatans,id',
             'nama'             => 'required|string|max:255',
             'nik'              => 'nullable|string|max:20',
@@ -155,5 +155,11 @@ class PengurusController extends Controller
             'periode_selesai'  => 'nullable|date|after_or_equal:periode_mulai',
             'status'           => 'required|in:aktif,nonaktif',
         ]);
+
+        $validated['jabatan_id'] = $request->filled('jabatan_id')
+            ? $validated['jabatan_id']
+            : null;
+
+        return $validated;
     }
 }
