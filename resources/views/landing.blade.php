@@ -142,6 +142,21 @@
             line-height: 1.4;
         }
 
+        .piket-slide {
+            flex: 0 0 100%;
+            width: 100%;
+        }
+
+        [data-jadwal-viewport] {
+            transition: height .45s ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            [data-jadwal-viewport] {
+                transition: none;
+            }
+        }
+
         /* ===== Bagan Struktur Pengurus ===== */
         .bagan-pengurus {
             display: flex;
@@ -714,26 +729,227 @@
             {{ $profil->judul_jadwal_imam_muazin ?? 'Jadwal Imam, Muazin, Jumat, Bilal & Piket' }}
         </h2>
         <p class="text-gray-600 mt-2 text-sm sm:text-base max-w-xl mx-auto">
-            {{ $profil->teks_jadwal_imam_muazin ?? 'Jadwal petugas sholat sepanjang pekan, jadwal Jumat, bilal, dan piket kebersihan tersedia lengkap di halaman Jadwal.' }}
+            {{ $profil->teks_jadwal_imam_muazin ?? 'Jadwal petugas sholat sepanjang pekan, jadwal Jumat, bilal, dan piket harian tersedia lengkap di halaman Jadwal.' }}
         </p>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 text-left">
-            <div class="bg-white rounded-xl shadow p-4">
-                <p class="text-xs font-semibold text-green-700 uppercase">Imam & Muazin</p>
-                <p class="text-xs text-gray-500 mt-1">Jadwal harian sepanjang pekan</p>
+        @php
+            $slidesJadwal = collect();
+
+            if ($jadwalImamMuazin->isNotEmpty()) {
+                $slidesJadwal->push([
+                    'jenis' => 'imam_muazin',
+                    'kategori' => 'Imam & Muazin',
+                    'judul' => ucfirst($hariIni),
+                    'keterangan' => 'Jadwal waktu salat hari ini',
+                    'jadwal' => $jadwalImamMuazin,
+                ]);
+            } else {
+                $slidesJadwal->push([
+                    'jenis' => 'imam_muazin',
+                    'kategori' => 'Imam & Muazin',
+                    'judul' => ucfirst($hariIni),
+                    'keterangan' => 'Belum ada jadwal untuk hari ini',
+                    'jadwal' => collect(),
+                ]);
+            }
+
+            foreach ($jadwalJumat as $item) {
+                $slidesJadwal->push([
+                    'jenis' => 'anggota',
+                    'kategori' => 'Jadwal Jumat',
+                    'judul' => ucfirst($item->pasaran),
+                    'keterangan' => $item->keterangan,
+                    'kelompok' => [
+                        ['label' => 'Khatib', 'anggota' => $item->khatib],
+                        ['label' => 'Imam', 'anggota' => $item->imam],
+                        ['label' => 'Bilal', 'anggota' => $item->bilal],
+                    ],
+                ]);
+            }
+
+            if ($hariIni === 'jumat' && $jadwalJumat->isEmpty()) {
+                $slidesJadwal->push([
+                    'jenis' => 'anggota',
+                    'kategori' => 'Jadwal Jumat',
+                    'judul' => ucfirst($pasaranIni),
+                    'keterangan' => null,
+                    'kelompok' => [
+                        ['label' => 'Petugas Jumat', 'anggota' => collect()],
+                    ],
+                ]);
+            }
+
+            if ($jadwalBilal->isNotEmpty()) {
+                foreach ($jadwalBilal as $item) {
+                $slidesJadwal->push([
+                    'jenis' => 'anggota',
+                    'kategori' => 'Jadwal Bilal',
+                    'judul' => ucfirst($item->pasaran),
+                    'keterangan' => null,
+                    'kelompok' => [
+                        ['label' => 'Petugas Bilal', 'anggota' => $item->anggota],
+                    ],
+                ]);
+                }
+            } else {
+                $slidesJadwal->push([
+                    'jenis' => 'anggota',
+                    'kategori' => 'Jadwal Bilal',
+                    'judul' => ucfirst($pasaranIni),
+                    'keterangan' => null,
+                    'kelompok' => [
+                        ['label' => 'Petugas Bilal', 'anggota' => collect()],
+                    ],
+                ]);
+            }
+
+            if ($jadwalPiket->isNotEmpty()) {
+                foreach ($jadwalPiket as $item) {
+                $slidesJadwal->push([
+                    'jenis' => 'anggota',
+                    'kategori' => 'Piket Harian',
+                    'judul' => ucfirst($item->hari),
+                    'keterangan' => null,
+                    'kelompok' => [
+                        ['label' => 'Petugas Piket', 'anggota' => $item->anggota],
+                    ],
+                ]);
+                }
+            } else {
+                $slidesJadwal->push([
+                    'jenis' => 'anggota',
+                    'kategori' => 'Piket Harian',
+                    'judul' => ucfirst($hariIni),
+                    'keterangan' => null,
+                    'kelompok' => [
+                        ['label' => 'Petugas Piket', 'anggota' => collect()],
+                    ],
+                ]);
+            }
+        @endphp
+        <div class="mt-8 mx-auto max-w-md text-left" id="jadwal-carousel">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <div>
+                    <p class="text-sm font-semibold text-green-900">Jadwal Masjid</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Imam, muazin, Jumat, bilal, dan piket</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" data-jadwal-prev aria-label="Jadwal sebelumnya" title="Jadwal sebelumnya"
+                            class="w-10 h-10 inline-flex items-center justify-center rounded-full bg-white border border-green-200 text-green-800 shadow-sm hover:bg-green-50 transition">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m15 18-6-6 6-6" />
+                        </svg>
+                    </button>
+                    <button type="button" data-jadwal-next aria-label="Jadwal berikutnya" title="Jadwal berikutnya"
+                            class="w-10 h-10 inline-flex items-center justify-center rounded-full bg-green-800 text-white shadow-sm hover:bg-green-900 transition">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div class="bg-white rounded-xl shadow p-4">
-                <p class="text-xs font-semibold text-green-700 uppercase">Jumat</p>
-                <p class="text-xs text-gray-500 mt-1">Khatib, Imam & Bilal</p>
-            </div>
-            <div class="bg-white rounded-xl shadow p-4">
-                <p class="text-xs font-semibold text-green-700 uppercase">Bilal</p>
-                <p class="text-xs text-gray-500 mt-1">Siklus pasaran</p>
-            </div>
-            <div class="bg-white rounded-xl shadow p-4">
-                <p class="text-xs font-semibold text-green-700 uppercase">Piket</p>
-                <p class="text-xs text-gray-500 mt-1">Petugas kebersihan</p>
-            </div>
+
+            @if ($slidesJadwal->isNotEmpty())
+                <div class="overflow-hidden rounded-2xl" data-jadwal-viewport aria-live="polite">
+                    <div class="flex w-full items-start transition-transform duration-500 ease-in-out" data-jadwal-track>
+                        @foreach ($slidesJadwal as $slide)
+                            <article class="piket-slide relative overflow-hidden rounded-2xl border border-green-200 bg-white text-left shadow-xl shadow-green-900/10">
+                                <div class="relative overflow-hidden bg-green-800 px-6 py-5 text-white">
+                                    <div class="absolute -right-5 -top-8 h-32 w-32 rounded-full border-[18px] border-white/10"></div>
+                                    <div class="absolute right-7 top-3 h-20 w-20 rounded-full border border-white/15"></div>
+                                    <div class="relative flex items-center justify-between gap-4">
+                                        <div>
+                                            <p class="text-xs font-semibold uppercase text-green-200">{{ $slide['kategori'] }}</p>
+                                            <h3 class="mt-1 text-3xl font-bold capitalize">{{ $slide['judul'] }}</h3>
+                                            @if ($slide['keterangan'])
+                                                <p class="mt-1 text-sm text-green-100">{{ $slide['keterangan'] }}</p>
+                                            @endif
+                                        </div>
+                                        <span class="text-5xl font-bold text-white/20" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-3 bg-gradient-to-br from-green-50/80 via-white to-emerald-50/60 px-5 py-5 sm:px-6">
+                                    @if ($slide['jenis'] === 'imam_muazin')
+                                        @forelse ($slide['jadwal'] as $waktuSholat)
+                                            <div class="rounded-xl border border-green-100 bg-white/90 p-3.5 shadow-sm">
+                                                <div class="mb-3 flex items-center justify-between">
+                                                    <p class="text-sm font-bold capitalize text-green-900">{{ $waktuSholat->waktu_sholat }}</p>
+                                                    <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">Hari ini</span>
+                                                </div>
+                                                <div class="grid grid-cols-2 gap-3">
+                                                    @foreach (['Imam' => $waktuSholat->imam, 'Muazin' => $waktuSholat->muazin] as $peran => $anggotaList)
+                                                        <div class="min-w-0">
+                                                            <p class="mb-2 text-[10px] font-semibold uppercase text-green-700">{{ $peran }}</p>
+                                                            @forelse ($anggotaList as $anggota)
+                                                                <div class="mb-2 flex min-w-0 items-center gap-2 text-xs font-medium text-gray-700 last:mb-0">
+                                                                    @if ($anggota->foto)
+                                                                        <button type="button" data-foto="{{ Storage::url($anggota->foto) }}" data-nama="{{ $anggota->nama }}" onclick="bukaModalFotoJadwal(this)" aria-label="Lihat foto {{ $anggota->nama }}" class="shrink-0 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400">
+                                                                            <img src="{{ Storage::url($anggota->foto) }}" alt="Foto {{ $anggota->nama }}" class="h-9 w-9 rounded-full border border-green-200 object-cover transition hover:scale-105">
+                                                                        </button>
+                                                                    @else
+                                                                        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-700 text-xs font-bold uppercase text-white">{{ mb_substr(trim($anggota->nama), 0, 1) }}</span>
+                                                                    @endif
+                                                                    <span class="min-w-0 leading-snug">{{ $anggota->nama }}</span>
+                                                                </div>
+                                                            @empty
+                                                                <p class="text-xs text-gray-400">Belum diatur</p>
+                                                            @endforelse
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <p class="rounded-xl border border-green-100 bg-white/90 px-4 py-5 text-sm text-gray-500">Jadwal Imam dan Muazin untuk hari {{ strtolower($slide['judul']) }} belum diatur.</p>
+                                        @endforelse
+                                    @else
+                                        <div class="grid grid-cols-1 gap-3 {{ count($slide['kelompok']) > 1 ? 'sm:grid-cols-2' : '' }}">
+                                            @foreach ($slide['kelompok'] as $kelompok)
+                                                <div class="rounded-xl border border-green-100 bg-white/90 p-3.5 shadow-sm">
+                                                    <div class="flex items-center justify-between gap-2">
+                                                        <p class="text-xs font-semibold uppercase text-green-800">{{ $kelompok['label'] }}</p>
+                                                        <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">{{ $kelompok['anggota']->count() }} petugas</span>
+                                                    </div>
+                                                    @if ($kelompok['anggota']->isNotEmpty())
+                                                        <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+                                                            @foreach ($kelompok['anggota'] as $anggota)
+                                                                <li class="flex min-w-0 items-center gap-2.5 rounded-lg bg-green-50/70 px-2.5 py-2 text-sm font-medium text-gray-700">
+                                                                    @if ($anggota->foto)
+                                                                        <button type="button" data-foto="{{ Storage::url($anggota->foto) }}" data-nama="{{ $anggota->nama }}" onclick="bukaModalFotoJadwal(this)" aria-label="Lihat foto {{ $anggota->nama }}" class="shrink-0 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400">
+                                                                            <img src="{{ Storage::url($anggota->foto) }}" alt="Foto {{ $anggota->nama }}" class="h-9 w-9 rounded-full border border-green-200 object-cover transition hover:scale-105">
+                                                                        </button>
+                                                                    @else
+                                                                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-700 text-xs font-bold uppercase text-white shadow-sm" aria-hidden="true">{{ mb_substr(trim($anggota->nama), 0, 1) }}</span>
+                                                                    @endif
+                                                                    <span class="min-w-0 leading-snug">{{ $anggota->nama }}</span>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @else
+                                                        <p class="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-400">Belum ada petugas.</p>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between px-1">
+                    <div class="flex items-center gap-1.5" data-jadwal-dots aria-label="Pilih jadwal">
+                        @foreach ($slidesJadwal as $slide)
+                            <button type="button" data-jadwal-dot="{{ $loop->index }}" aria-label="Lihat {{ $slide['kategori'] }} {{ $slide['judul'] }}"
+                                    class="h-2 rounded-full bg-green-200 transition-all duration-300"></button>
+                        @endforeach
+                    </div>
+                    <span class="text-xs font-semibold tabular-nums text-green-800" data-jadwal-count></span>
+                </div>
+            @else
+                <div class="rounded-2xl border border-green-200 bg-white p-6 text-center text-sm text-gray-500 shadow-lg">
+                    Jadwal belum tersedia.
+                </div>
+            @endif
         </div>
 
         <a href="{{ route('jadwal') }}"
@@ -1117,7 +1333,37 @@
     </div>
 </div>
 
+<!-- ================= MODAL FOTO PETUGAS ================= -->
+<div id="modal-foto-jadwal" class="fixed inset-0 z-[110] hidden" role="dialog" aria-modal="true" aria-label="Foto petugas">
+    <button type="button" class="absolute inset-0 bg-black/80" aria-label="Tutup foto" onclick="tutupModalFotoJadwal()"></button>
+    <div class="relative flex h-full items-center justify-center p-6">
+        <button type="button" onclick="tutupModalFotoJadwal()" aria-label="Tutup foto"
+                class="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-2xl text-white transition hover:bg-white/25">&times;</button>
+        <div class="max-w-3xl text-center">
+            <img id="modal-foto-jadwal-img" src="" alt="" class="max-h-[78vh] max-w-full rounded-2xl object-contain shadow-2xl">
+            <p id="modal-foto-jadwal-nama" class="mt-4 text-sm font-medium text-white"></p>
+        </div>
+    </div>
+</div>
+
 <script>
+    function bukaModalFotoJadwal(button) {
+        const modal = document.getElementById('modal-foto-jadwal');
+        const image = document.getElementById('modal-foto-jadwal-img');
+        const name = button.dataset.nama || 'Foto petugas';
+        image.src = button.dataset.foto;
+        image.alt = `Foto ${name}`;
+        document.getElementById('modal-foto-jadwal-nama').textContent = name;
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function tutupModalFotoJadwal() {
+        document.getElementById('modal-foto-jadwal').classList.add('hidden');
+        document.getElementById('modal-foto-jadwal-img').src = '';
+        document.body.classList.remove('overflow-hidden');
+    }
+
     function pilihWaktuSholat(idHari, index) {
         const idWaktuAktif = idHari + '-waktu-' + index;
 
@@ -1270,12 +1516,78 @@
         document.body.classList.remove('overflow-hidden');
     }
 
+    function inisialisasiCarouselJadwal() {
+        const carousel = document.getElementById('jadwal-carousel');
+        if (!carousel) return;
+
+        const viewport = carousel.querySelector('[data-jadwal-viewport]');
+        const track = carousel.querySelector('[data-jadwal-track]');
+        const slides = Array.from(carousel.querySelectorAll('.piket-slide'));
+        const previousButton = carousel.querySelector('[data-jadwal-prev]');
+        const nextButton = carousel.querySelector('[data-jadwal-next]');
+        const dots = Array.from(carousel.querySelectorAll('[data-jadwal-dot]'));
+        const count = carousel.querySelector('[data-jadwal-count]');
+        if (!viewport || !track || slides.length === 0) return;
+
+        let activeIndex = 0;
+        let timer;
+
+        function updateCarousel() {
+            const slideOffset = slides[activeIndex].offsetLeft - slides[0].offsetLeft;
+            track.style.transform = `translateX(-${slideOffset}px)`;
+            viewport.style.height = `${slides[activeIndex].offsetHeight}px`;
+            count.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            dots.forEach((dot, index) => {
+                const active = index === activeIndex;
+                dot.classList.toggle('w-6', active);
+                dot.classList.toggle('w-2', !active);
+                dot.classList.toggle('bg-green-800', active);
+                dot.classList.toggle('bg-green-200', !active);
+                dot.setAttribute('aria-current', active ? 'true' : 'false');
+            });
+        }
+
+        function moveCarousel(direction) {
+            activeIndex = (activeIndex + direction + slides.length) % slides.length;
+            updateCarousel();
+        }
+
+        function startAutoplay() {
+            if (timer || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            timer = window.setInterval(() => moveCarousel(1), 3500);
+        }
+
+        function stopAutoplay() {
+            window.clearInterval(timer);
+            timer = undefined;
+        }
+
+        previousButton.addEventListener('click', () => moveCarousel(-1));
+        nextButton.addEventListener('click', () => moveCarousel(1));
+        dots.forEach((dot) => {
+            dot.addEventListener('click', () => {
+                activeIndex = Number(dot.dataset.jadwalDot);
+                updateCarousel();
+            });
+        });
+        carousel.addEventListener('mouseenter', stopAutoplay);
+        carousel.addEventListener('mouseleave', startAutoplay);
+        carousel.addEventListener('focusin', stopAutoplay);
+        carousel.addEventListener('focusout', startAutoplay);
+        window.addEventListener('resize', updateCarousel);
+        updateCarousel();
+        startAutoplay();
+    }
+
+    inisialisasiCarouselJadwal();
+
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             tutupModalKegiatan();
             tutupModalVisiMisi();
             tutupModalPengurus();
             tutupModalGaleri();
+            tutupModalFotoJadwal();
         }
     });
 </script>

@@ -42,22 +42,28 @@ class LandingController extends Controller
             ->take(9)
             ->get();
 
+        $hariIni = strtolower(now()->translatedFormat('l'));
+        $pasaranIni = $this->pasaranHariIni();
+
         $jadwalImamMuazin = JadwalImamMuazin::with(['imam', 'muazin'])
+            ->where('hari', $hariIni)
             ->orderByRaw("FIELD(hari, 'senin','selasa','rabu','kamis','jumat','sabtu','minggu')")
             ->orderByRaw("FIELD(waktu_sholat, 'subuh','dzuhur','ashar','maghrib','isya','jumat')")
             ->get();
 
-        $jadwalJumat = JadwalJumat::with(['khatib', 'imam', 'bilal'])
-            ->get()
-            ->sortBy(fn ($item) => array_search($item->pasaran, ['legi', 'pahing', 'pon', 'wage', 'kliwon']));
+        $jadwalJumat = $hariIni === 'jumat'
+            ? JadwalJumat::with(['khatib', 'imam', 'bilal'])
+                ->where('pasaran', $pasaranIni)
+                ->get()
+            : collect();
 
         $jadwalBilal = JadwalBilal::with('anggota')
-            ->get()
-            ->sortBy(fn ($item) => array_search($item->pasaran, ['legi', 'pahing', 'pon', 'wage', 'kliwon']));
+            ->where('pasaran', $pasaranIni)
+            ->get();
 
         $jadwalPiket = JadwalPiketKebersihan::with('anggota')
-            ->get()
-            ->sortBy(fn ($item) => array_search($item->hari, ['senin','selasa','rabu','kamis','jumat','sabtu','minggu']));
+            ->where('hari', $hariIni)
+            ->get();
 
         // Kegiatan terbaru untuk bagian Kegiatan Masjid
         $kegiatan = Kegiatan::query()
@@ -87,7 +93,9 @@ class LandingController extends Controller
             'jumlahPengumuman',
             'jumlahJadwal',
             'jumlahKegiatan',
-            'jumlahInventaris'
+            'jumlahInventaris',
+            'hariIni',
+            'pasaranIni'
         ));
     }
 
@@ -138,5 +146,13 @@ class LandingController extends Controller
         $daftarKategori = $inventaris->pluck('kategori')->unique()->sort()->values();
 
         return view('inventaris-publik', compact('profil', 'inventaris', 'daftarKategori'));
+    }
+
+    private function pasaranHariIni(): string
+    {
+        $tanggal = now();
+        $jdn = gregoriantojd((int) $tanggal->format('n'), (int) $tanggal->format('j'), (int) $tanggal->format('Y'));
+
+        return JadwalBilal::PASARAN_URUTAN[$jdn % 5];
     }
 }
