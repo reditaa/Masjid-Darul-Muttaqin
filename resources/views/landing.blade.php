@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masjid Darul Muttaqin</title>
-    <link rel="icon" type="image/jpeg" href="{{ asset('images/logo-irmas.jpeg') }}">
+    <link rel="icon" href="{{ $profil && $profil->favicon ? Storage::url($profil->favicon) : asset('images/logo-irmas.jpeg') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
 

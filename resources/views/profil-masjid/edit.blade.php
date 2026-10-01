@@ -126,6 +126,35 @@
                         @enderror
                         <p class="text-gray-400 text-xs mt-2 text-center">Rekomendasi: gambar persegi (misal 256×256px), maks 2MB. Dipakai di navbar & footer.</p>
                     </div>
+
+                    {{-- Favicon browser --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">
+                            🌐 Ikon Browser (Favicon)
+                        </label>
+                        <div class="relative group cursor-pointer w-40 mx-auto" onclick="document.getElementById('input_favicon').click()">
+                            <div id="preview_favicon"
+                                 class="w-40 h-40 rounded-2xl overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center transition group-hover:border-green-400 group-hover:bg-green-50">
+                                @if($profil->favicon)
+                                    <img src="{{ Storage::url($profil->favicon) }}" id="img_favicon" class="w-20 h-20 rounded-xl object-cover">
+                                @else
+                                    <div id="img_favicon" class="text-center text-gray-400">
+                                        <i class="fas fa-globe text-3xl mb-1 block"></i>
+                                        <p class="text-xs">Klik untuk upload favicon</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="absolute bottom-0 right-0 bg-green-600 text-white text-xs w-8 h-8 rounded-full shadow flex items-center justify-center group-hover:bg-green-700 transition">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        </div>
+                        <input type="file" id="input_favicon" name="favicon" accept="image/png,image/jpeg,image/webp,image/x-icon" class="hidden"
+                               onchange="previewImage(this, 'preview_favicon', 'img_favicon')">
+                        @error('favicon')
+                            <p class="text-red-500 text-xs mt-2 text-center">{{ $message }}</p>
+                        @enderror
+                        <p class="text-gray-400 text-xs mt-2 text-center">Gambar persegi, disarankan PNG 256×256px, maks 1MB. Digunakan sebagai ikon tab browser.</p>
+                    </div>
                 </div>
             </div>
 

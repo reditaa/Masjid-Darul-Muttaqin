@@ -35,6 +35,7 @@ class ProfilMasjidController extends Controller
             'visi'            => 'nullable|string',
             'misi'            => 'nullable|string',
             'logo'            => 'nullable|image|max:2048',
+            'favicon'         => 'nullable|image|max:1024',
             'foto_hero'       => 'nullable|image|max:4096',
             'foto_utama'      => 'nullable|image|max:4096',
             'tahun_berdiri'   => 'nullable|integer|min:1900|max:' . date('Y'),
@@ -73,6 +74,13 @@ class ProfilMasjidController extends Controller
                 Storage::disk('public')->delete($profil->logo);
             }
             $validated['logo'] = $request->file('logo')->store('profil', 'public');
+        }
+
+        if ($request->hasFile('favicon')) {
+            if ($profil->favicon) {
+                Storage::disk('public')->delete($profil->favicon);
+            }
+            $validated['favicon'] = $request->file('favicon')->store('profil', 'public');
         }
 
         // Handle foto hero upload
