@@ -60,12 +60,16 @@ class PengurusController extends Controller
     public function update(Request $request, Pengurus $pengurus)
     {
         $validated = $this->validateData($request, $pengurus->id);
+        $request->validate(['hapus_foto' => 'nullable|boolean']);
 
         if ($request->hasFile('foto')) {
             if ($pengurus->foto) {
                 Storage::disk('public')->delete($pengurus->foto);
             }
             $validated['foto'] = $request->file('foto')->store('pengurus', 'public');
+        } elseif ($request->boolean('hapus_foto') && $pengurus->foto) {
+            Storage::disk('public')->delete($pengurus->foto);
+            $validated['foto'] = null;
         }
 
         $pengurus->update($validated);

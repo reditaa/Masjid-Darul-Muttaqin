@@ -78,11 +78,20 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Foto</label>
+                        <input type="hidden" name="hapus_foto" id="hapus-foto" value="0">
                         @if ($pengurus->foto)
-                            <img src="{{ Storage::url($pengurus->foto) }}" class="w-16 h-16 rounded-full object-cover mb-2">
+                            <div id="foto-saat-ini" class="mt-2 flex items-center gap-3">
+                                <img id="preview-foto" src="{{ Storage::url($pengurus->foto) }}" alt="Foto {{ $pengurus->nama }}" class="w-16 h-16 rounded-full object-cover">
+                                <button type="button" id="hapus-foto-btn"
+                                        class="px-3 py-2 rounded-md bg-red-100 text-red-700 text-sm font-medium hover:bg-red-200 transition">
+                                    Hapus Foto
+                                </button>
+                            </div>
+                        @else
+                            <img id="preview-foto" src="" alt="Pratinjau foto" class="hidden mt-2 w-16 h-16 rounded-full object-cover">
                         @endif
-                        <input type="file" name="foto" accept="image/*" class="mt-1 block w-full">
-                        <p class="text-xs text-gray-500 mt-1">Kosongkan kalau tidak ingin mengganti foto.</p>
+                        <input type="file" name="foto" id="input-foto" accept="image/*" class="mt-3 block w-full">
+                        <p id="status-foto" class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengganti foto.</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -161,4 +170,32 @@
             </div>
         </div>
     </div>
+<script>
+    const hapusFotoInput = document.getElementById('hapus-foto');
+    const hapusFotoButton = document.getElementById('hapus-foto-btn');
+    const inputFoto = document.getElementById('input-foto');
+    const previewFoto = document.getElementById('preview-foto');
+    const fotoSaatIni = document.getElementById('foto-saat-ini');
+    const statusFoto = document.getElementById('status-foto');
+
+    hapusFotoButton?.addEventListener('click', function () {
+        if (!confirm('Hapus foto anggota ini setelah data disimpan?')) return;
+
+        hapusFotoInput.value = '1';
+        fotoSaatIni?.classList.add('hidden');
+        statusFoto.textContent = 'Foto akan dihapus saat Anda menekan Update.';
+    });
+
+    inputFoto?.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        hapusFotoInput.value = '0';
+        previewFoto.src = URL.createObjectURL(file);
+        previewFoto.classList.remove('hidden');
+        fotoSaatIni?.classList.add('hidden');
+        statusFoto.textContent = 'Foto baru akan digunakan setelah data disimpan.';
+    });
+</script>
+
 </x-app-layout>
