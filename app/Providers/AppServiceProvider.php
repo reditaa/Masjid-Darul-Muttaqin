@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\ProfilMasjid;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,7 +23,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('layouts.app', function ($view) {
-            $view->with('faviconPath', ProfilMasjid::value('favicon'));
+            $faviconPath = Schema::hasColumn('profil_masjid', 'favicon')
+                ? ProfilMasjid::value('favicon')
+                : null;
+
+            $view->with('faviconPath', $faviconPath);
         });
     }
 }
